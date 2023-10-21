@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { EntitySubscriberProperty } from './subscriberProperty.entity';
+import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
 
 @Entity()
 export class BillingAccount {

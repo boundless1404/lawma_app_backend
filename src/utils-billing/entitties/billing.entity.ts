@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { EntitySubscriberProfile } from './entitySubscriberProfile.entity';
-import { EntitySubscriberProperty } from './subscriberProperty.entity';
+import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
 
 @Entity()
 export class Billing {

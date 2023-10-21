@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Lga } from './lga.entity';
 import { LgaWard } from './lgaWard.entity';
-import { EntitySubscriberProperty } from './subscriberProperty.entity';
+import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
 
 @Entity()
 export class Street {

@@ -36,3 +36,8 @@ export enum SubscriberPropertyRoleEnum {
   OWNER = 'owner',
   CUSTODIAN = 'custodian',
 }
+
+export enum ProfileTypes {
+  ENTITY_USER_PROFILE = 'entity_user_profile',
+  ENTITY_SUBSCRIBER_PROFILE = 'entity_subscriber_profile',
+}

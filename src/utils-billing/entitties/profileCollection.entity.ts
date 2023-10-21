@@ -1,3 +1,4 @@
+import { ProfileTypes } from './../../lib/enums';
 import {
   Column,
   CreateDateColumn,
@@ -11,7 +12,7 @@ export class ProfileCollection {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'enum', enum: ProfileTypes })
   profileType: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
