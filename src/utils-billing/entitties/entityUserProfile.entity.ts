@@ -27,6 +27,9 @@ export class EntityUserProfile {
   @Column({ type: 'varchar', unique: true })
   phone: string;
 
+  @Column({ type: 'boolean', default: false })
+  isAdmin: boolean;
+
   // foreign key
   @Column({ type: 'bigint' })
   entityProfileId: string;

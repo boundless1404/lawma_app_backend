@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "CommonJS",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -10,6 +10,10 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    // "moduleResolution": "NodeNext",
+    "paths": {
+      "@/*": ["*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,

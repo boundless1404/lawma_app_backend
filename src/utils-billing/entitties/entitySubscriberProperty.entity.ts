@@ -13,6 +13,7 @@ import { PropertyType } from './propertyTypes.entity';
 import { PropertySubscriber } from './propertySubscriber.entity';
 import { Billing } from './billing.entity';
 import { BillingAccount } from './account.entity';
+import { Payment } from './payments.entity';
 
 @Entity()
 export class EntitySubscriberProperty {
@@ -67,4 +68,7 @@ export class EntitySubscriberProperty {
     (billingAccount) => billingAccount.entitySubscriberProperty,
   )
   billingAccount: BillingAccount;
+
+  @OneToMany(() => Payment, (payment) => payment.entitySubscriberProperty)
+  payments: Payment[];
 }
