@@ -39,3 +39,7 @@ lerna-debug.log*
 
 # trash
 /trash
+
+# notes
+*.note.md
+# logs

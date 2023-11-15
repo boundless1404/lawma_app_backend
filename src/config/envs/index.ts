@@ -8,7 +8,6 @@ export type ProcessEnv = {
   SERVER_HOST: string;
   SERVER_PORT: string;
   APP_KEY: string;
-  MAX_AUTH_FAILURE_BEFORE_BLACKLIST: number;
   JWT_SECRET: string;
   JWT_EXPIRY: string;
   DATABASE_URL?: string;
@@ -24,6 +23,8 @@ export type ProcessEnv = {
   DEFAULT_USER_PASSWORD: string;
   API_ACCESS_TOKEN_EXPIRY: string;
   BREVO_API_KEY: string;
+  AUTH_SERVER_API_ACCESS_TOKEN: string;
+  AUTH_SERVER_URL: string;
 };
 
 config({

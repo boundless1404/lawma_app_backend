@@ -13,7 +13,10 @@ export class ProfileCollection {
   id: string;
 
   @Column({ type: 'enum', enum: ProfileTypes })
-  profileType: string;
+  profileType: ProfileTypes;
+
+  @Column()
+  isAdmin: boolean;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: string;

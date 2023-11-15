@@ -24,11 +24,11 @@ export class EntityUserProfile {
   @Column({ type: 'varchar', unique: true })
   email: string;
 
-  @Column({ type: 'varchar', unique: true })
+  @Column({ type: 'varchar', unique: true, nullable: true })
   phone: string;
 
-  @Column({ type: 'boolean', default: false })
-  isAdmin: boolean;
+  // @Column({ type: 'boolean', default: false })
+  // isAdmin: boolean;
 
   // foreign key
   @Column({ type: 'bigint' })

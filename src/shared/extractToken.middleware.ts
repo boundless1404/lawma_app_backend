@@ -4,7 +4,7 @@ import {
   Injectable,
   NestMiddleware,
 } from '@nestjs/common';
-import { AuthPayload, PlatformRequest } from 'src/lib/types';
+import { AuthTokenPayload, PlatformRequest } from 'src/lib/types';
 import { SharedService } from './shared.service';
 
 @Injectable()
@@ -20,15 +20,10 @@ export class ExtractTokenMiddleWare implements NestMiddleware {
         const authToken = auth.split(' ')[1];
         const authPayload = (await this.sharedService.veryfyJwtToken(
           authToken,
-        )) as AuthPayload;
+        )) as AuthTokenPayload;
 
         if (authPayload) {
           if ('userData' in authPayload && 'email' in authPayload.userData) {
-            req.authPayload = authPayload;
-          } else if (
-            'apiData' in authPayload &&
-            'appId' in authPayload.apiData
-          ) {
             req.authPayload = authPayload;
           }
         }

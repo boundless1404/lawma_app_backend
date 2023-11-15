@@ -1,6 +1,7 @@
 import { dirname, join } from 'path';
 import pino from 'pino';
 import findPackageJson from 'find-package-json';
+import { BadRequestException } from '@nestjs/common';
 
 export const pathFromSrc = (path: string) => {
   return join(__dirname, '../../', path);
@@ -42,4 +43,8 @@ export const getLoggerFor = (destination = 'logs/uwebsockets.log') => {
 
 export const getWorkerLogger = () => {
   return getLoggerFor('logs/workers.log');
+};
+
+export const throwBadRequest = (message: string) => {
+  return new BadRequestException(message);
 };
