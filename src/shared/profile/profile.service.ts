@@ -54,7 +54,7 @@ export class ProfileService {
               profile.profileTypeId === options.profileTypeId
             : profile.isAdmin === true;
         }) ||
-        // if non is found return the first
+        // if none is found return the first
         profileSummaries[0];
     }
 

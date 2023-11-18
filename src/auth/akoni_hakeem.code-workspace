@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../../mother-ship-nest"
+		},
+		{
+			"path": "../../../lawma_app_frontend"
 		}
 	],
 	"settings": {

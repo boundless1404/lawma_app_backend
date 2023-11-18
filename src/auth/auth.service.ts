@@ -140,6 +140,8 @@ export class AuthService {
           entityProfile.id,
         );
       }
+
+      // TODO: implement else branch
     });
 
     return authTokenPayload;

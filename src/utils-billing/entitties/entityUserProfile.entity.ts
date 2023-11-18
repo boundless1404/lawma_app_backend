@@ -1,9 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { EntityProfile } from './entityProfile.entity';
 
@@ -26,6 +28,12 @@ export class EntityUserProfile {
 
   @Column({ type: 'varchar', unique: true, nullable: true })
   phone: string;
+
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
 
   // @Column({ type: 'boolean', default: false })
   // isAdmin: boolean;
