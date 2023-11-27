@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { EntityProfile } from './entityProfile.entity';
-import { PropertySubscriber } from './propertySubscriber.entity';
+import { PropertySubscription } from './propertySubscription.entity';
 import { Billing } from './billing.entity';
 
 @Entity()
@@ -51,11 +51,8 @@ export class EntitySubscriberProfile {
   entityProfile: EntityProfile;
 
   @OneToMany(
-    () => PropertySubscriber,
+    () => PropertySubscription,
     (propertySubscriber) => propertySubscriber.entitySubscriberProfile,
   )
-  propertySubscribers: PropertySubscriber[];
-
-  @OneToMany(() => Billing, (billing) => billing.entitySubscriberProfile)
-  billings: Billing[];
+  propertySubscribers: PropertySubscription[];
 }

@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Lga } from './lga.entity';
 import { LgaWard } from './lgaWard.entity';
-import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
+import { PropertySubscription } from './propertySubscription.entity';
 
 @Entity()
 export class Street {
@@ -33,6 +33,6 @@ export class Street {
   @ManyToOne(() => LgaWard, (lgaWard) => lgaWard.streets)
   lgaWard: LgaWard;
 
-  @OneToMany(() => EntitySubscriberProperty, (property) => property.street)
-  properties: EntitySubscriberProperty[];
+  @OneToMany(() => PropertySubscription, (property) => property.street)
+  propertySubscriptions: PropertySubscription[];
 }

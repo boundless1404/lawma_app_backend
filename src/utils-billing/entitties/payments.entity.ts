@@ -6,6 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
+import { PropertySubscription } from './propertySubscription.entity';
 
 @Entity()
 export class Payment {
@@ -26,13 +27,13 @@ export class Payment {
 
   // foreign keys
   @Column({ type: 'bigint' })
-  entitySubscriberPropertyId: string;
+  propertySubscriptionId: string;
 
   // relations
   @ManyToOne(
-    () => EntitySubscriberProperty,
+    () => PropertySubscription,
     (entitySubscriberProperty) => entitySubscriberProperty.payments,
   )
-  @JoinColumn({ name: 'entitySubscriberPropertyId' })
-  entitySubscriberProperty: EntitySubscriberProperty;
+  @JoinColumn({ name: 'propertySubscriptionId' })
+  propertySubscription: PropertySubscription;
 }

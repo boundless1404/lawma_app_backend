@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { EntitySubscriberProfile } from './entitySubscriberProfile.entity';
-import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
+import { PropertySubscription } from './propertySubscription.entity';
 
 @Entity()
 export class Billing {
@@ -24,23 +24,16 @@ export class Billing {
 
   // foreign keys
   @Column({ type: 'bigint' })
-  entitySubscriberProfileId: string;
+  propertySubscriptionId: string;
 
-  @Column({ type: 'bigint' })
-  entitySubscriberProertyId: string;
+  // @Column({ type: 'bigint' })
+  // entitySubscriptionId: string;
 
   // relationss
   @ManyToOne(
-    () => EntitySubscriberProperty,
-    (entitySubscriberPropery) => entitySubscriberPropery.billings,
+    () => PropertySubscription,
+    (propertySubscription) => propertySubscription.billings,
   )
-  @JoinColumn({ name: 'entitySubscriberProertyId' })
-  entitySubscriberProperty: EntitySubscriberProperty;
-
-  @ManyToOne(
-    () => EntitySubscriberProfile,
-    (entitySubscriberProfile) => entitySubscriberProfile.billings,
-  )
-  @JoinColumn({ name: 'entitySubscriberProfileId' })
-  entitySubscriberProfile: EntitySubscriberProfile;
+  @JoinColumn({ name: 'propertySubscriptionId' })
+  propertySubscription: PropertySubscription;
 }

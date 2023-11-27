@@ -32,7 +32,7 @@ export enum AppVerificationPivot {
   AUTHENTICATIOR_APP = 'authenticator_app',
 }
 
-export enum SubscriberPropertyRoleEnum {
+export enum SubscriberProfileRoleEnum {
   OWNER = 'owner',
   CUSTODIAN = 'custodian',
 }

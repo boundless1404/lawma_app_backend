@@ -5,15 +5,17 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Street } from './street.entity';
 import { PropertyType } from './propertyTypes.entity';
-import { PropertySubscriber } from './propertySubscriber.entity';
+import { PropertySubscription } from './propertySubscription.entity';
 import { Billing } from './billing.entity';
-import { BillingAccount } from './account.entity';
+import { BillingAccount } from './billingAccount.entity';
 import { Payment } from './payments.entity';
+import { PropertySubscriptionUnit } from './PropertySubscriptionUnit.entity';
 
 @Entity()
 export class EntitySubscriberProperty {
@@ -23,11 +25,11 @@ export class EntitySubscriberProperty {
   @Column({ type: 'varchar' })
   name: string;
 
-  @Column({ type: 'integer' })
-  streetNumber: number;
+  // @Column({ type: 'bigint' })
+  // oldCode: string;
 
-  @Column({ type: 'bigint' })
-  oldCode: string;
+  @Column({ type: 'bigint', nullable: true })
+  ownerEntitySubscriberProfileId: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: string;
@@ -37,16 +39,9 @@ export class EntitySubscriberProperty {
 
   // foreign keys
   @Column({ type: 'bigint' })
-  streetId: string;
-
-  @Column({ type: 'bigint' })
   propertyTypeId: string;
 
   // relations
-  @ManyToOne(() => Street, (street) => street.properties)
-  @JoinColumn({ name: 'streetId' })
-  street: Street;
-
   @ManyToOne(
     () => PropertyType,
     (propertyType) => propertyType.subscriberProperties,
@@ -54,21 +49,13 @@ export class EntitySubscriberProperty {
   @JoinColumn({ name: 'propertyTypeId' })
   properyType: PropertyType;
 
-  @OneToMany(
-    () => PropertySubscriber,
-    (propertySubscriber) => propertySubscriber.entitySubscriberProperty,
-  )
-  propertySubscribers: PropertySubscriber[];
-
-  @OneToMany(() => Billing, (billing) => billing.entitySubscriberProperty)
-  billings: Billing[];
-
   @ManyToOne(
-    () => BillingAccount,
-    (billingAccount) => billingAccount.entitySubscriberProperty,
+    () => PropertySubscriptionUnit,
+    (propertySubscriptionUnit) =>
+      propertySubscriptionUnit.entitySubscriberProperty,
   )
-  billingAccount: BillingAccount;
+  propertySubscriptionUnits: PropertySubscriptionUnit[];
 
-  @OneToMany(() => Payment, (payment) => payment.entitySubscriberProperty)
+  @OneToMany(() => Payment, (payment) => payment.propertySubscription)
   payments: Payment[];
 }
