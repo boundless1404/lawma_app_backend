@@ -43,3 +43,6 @@ lerna-debug.log*
 # notes
 *.note.md
 # logs
+
+# vscode
+.vscode/
