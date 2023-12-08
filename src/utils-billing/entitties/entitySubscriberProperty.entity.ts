@@ -5,25 +5,18 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Street } from './street.entity';
 import { PropertyType } from './propertyTypes.entity';
-import { PropertySubscription } from './propertySubscription.entity';
-import { Billing } from './billing.entity';
-import { BillingAccount } from './billingAccount.entity';
 import { Payment } from './payments.entity';
 import { PropertySubscriptionUnit } from './PropertySubscriptionUnit.entity';
+import { EntitySubscriberProfile } from './entitySubscriberProfile.entity';
 
 @Entity()
 export class EntitySubscriberProperty {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: string;
-
-  @Column({ type: 'varchar' })
-  name: string;
 
   // @Column({ type: 'bigint' })
   // oldCode: string;
@@ -58,4 +51,11 @@ export class EntitySubscriberProperty {
 
   @OneToMany(() => Payment, (payment) => payment.propertySubscription)
   payments: Payment[];
+
+  @ManyToOne(
+    () => EntitySubscriberProfile,
+    (entitySubscriber) => entitySubscriber.entitySubscriberProperty,
+  )
+  @JoinColumn({ name: 'ownerEntitySubscriberProfileId' })
+  entitySubscriberProfile: EntitySubscriberProfile;
 }

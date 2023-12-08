@@ -43,7 +43,7 @@ export class EntityProfileSignUpDto {
 
 export class SignInDto {
   @IsNotEmpty()
-  @IsString()
+  @IsEmail()
   email: string;
 
   // TODO: Implement password policy

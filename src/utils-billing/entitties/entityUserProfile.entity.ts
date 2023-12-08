@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { EntityProfile } from './entityProfile.entity';
+import { PhoneCode } from './phoneCode.entity';
 
 @Entity()
 export class EntityUserProfile {
@@ -42,6 +43,9 @@ export class EntityUserProfile {
   @Column({ type: 'bigint' })
   entityProfileId: string;
 
+  @Column({ type: 'bigint', nullable: true })
+  phoneCodeId: string;
+
   // relations
   @ManyToOne(
     () => EntityProfile,
@@ -49,4 +53,8 @@ export class EntityUserProfile {
   )
   @JoinColumn({ name: 'entityProfileId' })
   entityProfile: EntityProfile;
+
+  @ManyToOne(() => PhoneCode, (phoneCode) => phoneCode.entityUserProfiles)
+  @JoinColumn({ name: 'phoneCodeId' })
+  phoneCode: PhoneCode;
 }

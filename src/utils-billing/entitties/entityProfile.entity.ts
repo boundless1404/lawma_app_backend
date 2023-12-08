@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { EntityProfilePreference } from './entityProfilePreference.entity';
-import { EntitySubscriberProfile } from './entitySubscriberProfile.entity';
 import { EntityUserProfile } from './entityUserProfile.entity';
+import { PropertySubscription } from './propertySubscription.entity';
 
 @Entity()
 export class EntityProfile {
@@ -17,6 +17,8 @@ export class EntityProfile {
   @Column({ type: 'varchar', nullable: false })
   name: string;
 
+  // TODO: add lga / ward id
+
   // relations
   @OneToOne(
     () => EntityProfilePreference,
@@ -24,15 +26,21 @@ export class EntityProfile {
   )
   entityProfilePreference: EntityProfilePreference;
 
-  @OneToMany(
-    () => EntitySubscriberProfile,
-    (entitySubscriberProfile) => entitySubscriberProfile.entityProfile,
-  )
-  entitySubscriberProfiles: EntitySubscriberProfile[];
+  // @OneToMany(
+  //   () => EntitySubscriberProfile,
+  //   (entitySubscriberProfile) => entitySubscriberProfile.entityProfile,
+  // )
+  // entitySubscriberProfiles: EntitySubscriberProfile[];
 
   @OneToMany(
     () => EntityUserProfile,
     (entityUserProfile) => entityUserProfile.entityProfile,
   )
   entityUserProfiles: EntityUserProfile[];
+
+  @OneToMany(
+    () => PropertySubscription,
+    (propertySubscription) => propertySubscription.entityProfile,
+  )
+  propertySubscriptions: PropertySubscription[];
 }

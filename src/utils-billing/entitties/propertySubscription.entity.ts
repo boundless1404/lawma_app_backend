@@ -15,20 +15,24 @@ import { PropertySubscriptionUnit } from './PropertySubscriptionUnit.entity';
 import { BillingAccount } from './billingAccount.entity';
 import { Billing } from './billing.entity';
 import { Payment } from './payments.entity';
+import { EntityProfile } from './entityProfile.entity';
 
 @Entity()
 export class PropertySubscription {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: string;
 
+  @Column({ type: 'varchar' })
+  propertySubscriptionName: string;
+
   @Column({ type: 'enum', enum: SubscriberProfileRoleEnum })
-  subscriberPropertyRole: SubscriberProfileRoleEnum;
+  subscriberProfileRole: SubscriberProfileRoleEnum;
 
   @Column({ type: 'bigint', nullable: true })
   oldCode: string;
 
-  @Column({ type: 'integer' })
-  streetNumber: number;
+  @Column({ type: 'varchar' })
+  streetNumber: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
@@ -41,7 +45,10 @@ export class PropertySubscription {
   streetId: string;
 
   @Column({ type: 'bigint' })
-  entitySubscriberProfileId: number;
+  entitySubscriberProfileId: string;
+
+  @Column({ type: 'bigint' })
+  entityProfileId: string;
 
   // relations
   @ManyToOne(() => Street, (street) => street.propertySubscriptions)
@@ -72,4 +79,11 @@ export class PropertySubscription {
 
   @OneToMany(() => Payment, (payment) => payment.propertySubscription)
   payments: Payment[];
+
+  @ManyToOne(
+    () => EntityProfile,
+    (entityProfile) => entityProfile.propertySubscriptions,
+  )
+  @JoinColumn({ name: 'entityProfileId' })
+  entityProfile: EntityProfile;
 }

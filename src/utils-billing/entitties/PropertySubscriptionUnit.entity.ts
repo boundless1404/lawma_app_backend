@@ -5,10 +5,10 @@ import { PropertySubscription } from './propertySubscription.entity';
 @Entity()
 export class PropertySubscriptionUnit {
   @PrimaryColumn({ type: 'bigint' })
-  propertySubscriptionId: PropertySubscription;
+  propertySubscriptionId: string;
 
   @PrimaryColumn({ type: 'bigint' })
-  entiySubscriberPropertyId: EntitySubscriberProperty;
+  entiySubscriberPropertyId: string;
 
   @Column({ type: 'integer' })
   propertyUnits: number;

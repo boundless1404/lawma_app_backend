@@ -13,10 +13,10 @@ export class BillingAccount {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: string;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'numeric', default: '0' })
   totalBillings: string;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'numeric', default: '0' })
   totalPayments: string;
 
   @UpdateDateColumn({ type: 'timestamptz' })
