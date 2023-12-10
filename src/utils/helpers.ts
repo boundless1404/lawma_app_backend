@@ -51,3 +51,7 @@ export const throwBadRequest = (message: string) => {
 export const throwForbidden = (message: string) => {
   throw new HttpException(message, HttpStatus.FORBIDDEN);
 };
+
+export const throwUnathorized = (message: string) => {
+  throw new HttpException(message, HttpStatus.UNAUTHORIZED);
+};

@@ -1,4 +1,4 @@
-import { AuthPayload, PlatformRequest } from './../lib/types';
+import { AuthTokenPayload, PlatformRequest } from './../lib/types';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const GetAuthPayload = createParamDecorator(
@@ -14,7 +14,6 @@ export const GetAuthPayload = createParamDecorator(
     return {
       userData: request.authPayload?.userData,
       profile: request.authPayload?.profile,
-      apiData: request.authPayload?.apiData,
-    } as AuthPayload;
+    } as AuthTokenPayload;
   },
 );

@@ -8,14 +8,14 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { EntityProfile } from './entityProfile.entity';
-import { PropertySubscriber } from './propertySubscriber.entity';
-import { Billing } from './billing.entity';
+import { PropertySubscription } from './propertySubscription.entity';
+import { PhoneCode } from './phoneCode.entity';
+import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
 
 @Entity()
 export class EntitySubscriberProfile {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id: number;
+  id: string;
 
   @Column({ type: 'varchar' })
   firstName: string;
@@ -39,23 +39,34 @@ export class EntitySubscriberProfile {
   updatedAt: Date;
 
   // foreign key
-  @Column({ type: 'bigint' })
-  entityProfileId: string;
+  // @Column({ type: 'bigint' })
+  // entityProfileId: string;
+
+  @Column({ type: 'bigint', nullable: true })
+  phoneCodeId: string;
 
   // relations
-  @ManyToOne(
-    () => EntityProfile,
-    (entityProfile) => entityProfile.entitySubscriberProfiles,
-  )
-  @JoinColumn({ name: 'entityProfileId' })
-  entityProfile: EntityProfile;
+  // @ManyToOne(
+  //   () => EntityProfile,
+  //   (entityProfile) => entityProfile.entitySubscriberProfiles,
+  // )
+  // @JoinColumn({ name: 'entityProfileId' })
+  // entityProfile: EntityProfile;
 
   @OneToMany(
-    () => PropertySubscriber,
+    () => PropertySubscription,
     (propertySubscriber) => propertySubscriber.entitySubscriberProfile,
   )
-  propertySubscribers: PropertySubscriber[];
+  propertySubscribers: PropertySubscription[];
 
-  @OneToMany(() => Billing, (billing) => billing.entitySubscriberProfile)
-  billings: Billing[];
+  @ManyToOne(() => PhoneCode, (phoneCode) => phoneCode.entitySubscriberProfiles)
+  @JoinColumn({ name: 'phoneCodeId' })
+  phoneCode: PhoneCode;
+
+  @OneToMany(
+    () => EntitySubscriberProperty,
+    (entitySubscriberProperty) =>
+      entitySubscriberProperty.entitySubscriberProfile,
+  )
+  entitySubscriberProperty: EntitySubscriberProperty[];
 }

@@ -12,7 +12,7 @@ import {
   MTNSmsOptions,
   MTNSmsResponse,
   MTNRegisterCallbackUrlOptions,
-  AuthPayload,
+  AuthTokenPayload,
 } from 'src/lib/types';
 import axios from 'axios';
 
@@ -36,18 +36,14 @@ export class SharedService {
   }
 
   signPayload(
-    payload: string | Buffer | AuthPayload,
+    payload: string | Buffer | AuthTokenPayload,
     // expiresIn?: string | number | JwtSignOptions,
   ): string {
     const stringifiedPayload =
       typeof payload === 'string' ? payload : JSON.stringify(payload);
-    const token = this.jwtService.sign(
-      stringifiedPayload,
-      //   {
-      //   expiresIn,
-      //   secret: this.config.get('JWT_SECRET'),
-      // }
-    );
+    const token = this.jwtService.sign(stringifiedPayload, {
+      secret: this.config.get('JWT_SECRET'),
+    });
     return token;
   }
 

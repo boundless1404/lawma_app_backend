@@ -8,25 +8,21 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Street } from './street.entity';
 import { PropertyType } from './propertyTypes.entity';
-import { PropertySubscriber } from './propertySubscriber.entity';
-import { Billing } from './billing.entity';
-import { BillingAccount } from './account.entity';
+import { Payment } from './payments.entity';
+import { PropertySubscriptionUnit } from './PropertySubscriptionUnit.entity';
+import { EntitySubscriberProfile } from './entitySubscriberProfile.entity';
 
 @Entity()
 export class EntitySubscriberProperty {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: string;
 
-  @Column({ type: 'varchar' })
-  name: string;
+  // @Column({ type: 'bigint' })
+  // oldCode: string;
 
-  @Column({ type: 'integer' })
-  streetNumber: number;
-
-  @Column({ type: 'bigint' })
-  oldCode: string;
+  @Column({ type: 'bigint', nullable: true })
+  ownerEntitySubscriberProfileId: string;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: string;
@@ -36,35 +32,30 @@ export class EntitySubscriberProperty {
 
   // foreign keys
   @Column({ type: 'bigint' })
-  streetId: string;
-
-  @Column({ type: 'bigint' })
   propertyTypeId: string;
 
   // relations
-  @ManyToOne(() => Street, (street) => street.properties)
-  @JoinColumn({ name: 'streetId' })
-  street: Street;
-
   @ManyToOne(
     () => PropertyType,
     (propertyType) => propertyType.subscriberProperties,
   )
   @JoinColumn({ name: 'propertyTypeId' })
-  properyType: PropertyType;
-
-  @OneToMany(
-    () => PropertySubscriber,
-    (propertySubscriber) => propertySubscriber.entitySubscriberProperty,
-  )
-  propertySubscribers: PropertySubscriber[];
-
-  @OneToMany(() => Billing, (billing) => billing.entitySubscriberProperty)
-  billings: Billing[];
+  propertyType: PropertyType;
 
   @ManyToOne(
-    () => BillingAccount,
-    (billingAccount) => billingAccount.entitySubscriberProperty,
+    () => PropertySubscriptionUnit,
+    (propertySubscriptionUnit) =>
+      propertySubscriptionUnit.entitySubscriberProperty,
   )
-  billingAccount: BillingAccount;
+  propertySubscriptionUnits: PropertySubscriptionUnit[];
+
+  @OneToMany(() => Payment, (payment) => payment.propertySubscription)
+  payments: Payment[];
+
+  @ManyToOne(
+    () => EntitySubscriberProfile,
+    (entitySubscriber) => entitySubscriber.entitySubscriberProperty,
+  )
+  @JoinColumn({ name: 'ownerEntitySubscriberProfileId' })
+  entitySubscriberProfile: EntitySubscriberProfile;
 }

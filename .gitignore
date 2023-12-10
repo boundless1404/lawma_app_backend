@@ -36,3 +36,13 @@ lerna-debug.log*
 
 # env
 .env
+
+# trash
+/trash
+
+# notes
+*.note.md
+# logs
+
+# vscode
+.vscode/

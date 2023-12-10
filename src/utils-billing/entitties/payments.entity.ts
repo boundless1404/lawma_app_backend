@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
+import { PropertySubscription } from './propertySubscription.entity';
 
 @Entity()
 export class Payment {
@@ -12,8 +20,20 @@ export class Payment {
   date: Date;
 
   @Column({ type: 'varchar' })
-  payer: string;
+  payerName: string;
 
   @Column({ type: 'varchar', nullable: true })
   comments: string;
+
+  // foreign keys
+  @Column({ type: 'bigint' })
+  propertySubscriptionId: string;
+
+  // relations
+  @ManyToOne(
+    () => PropertySubscription,
+    (entitySubscriberProperty) => entitySubscriberProperty.payments,
+  )
+  @JoinColumn({ name: 'propertySubscriptionId' })
+  propertySubscription: PropertySubscription;
 }

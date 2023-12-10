@@ -1,5 +1,8 @@
 // import { User } from 'src/auth/entities/User.entity';
 
+import { UserData } from '../auth/userData';
+import { ProfileTypes } from './enums';
+
 export enum FileUploadExtensions {
   PDF = 'pdf',
   WORD_DOC = 'doc',
@@ -43,35 +46,23 @@ export enum ContentTypes {
 }
 
 export interface PlatformRequest extends Request {
-  authPayload: AuthPayload;
+  authPayload: AuthTokenPayload;
 }
 
-export interface AuthPayload {
+export interface AuthTokenPayload {
   userData?: AuthenticatedUserData;
-  profile?: unknown;
-  apiData?: AuthenticatedApiData;
+  profile?: ProfileSummary;
   exp?: number | unknown;
 }
 
 export interface AuthenticatedUserData {
   id: string;
   firstName: string;
+  middleName?: string;
   lastName: string;
   email: string;
+  phone: string;
 }
-
-export interface AuthenticatedApiData {
-  appId: string;
-  appName: string;
-}
-
-// // * Remove unwanted fields from User entity
-// export type AuthResponse = Omit<
-//   User,
-//   'createdAt' | 'updatedAt' | 'deletedAt'
-// > & {
-//   isVerified: boolean;
-// };
 
 export interface BrevoSmtpEmail {
   to: { email: string }[];
@@ -169,3 +160,10 @@ export interface MTNRegisterCallbackUrlOptions {
   deliveryReportUrl: string;
   serviceCode: string;
 }
+
+export type ProfileSummary = {
+  id: string;
+  profileTypeId: string;
+  profileType: ProfileTypes;
+  entityProfileId?: string;
+};

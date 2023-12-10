@@ -20,7 +20,7 @@ if (databaseConfig.url) {
 }
 
 const defaultDataSourceOptions: TypeOrmDataSourceOptions = {
-  applicationName: 'Goodtalent Payroll',
+  applicationName: 'lawma_app',
   name: 'default',
   type: 'postgres',
   ...omit(databaseConfig, ['maxPoolConnCount']),

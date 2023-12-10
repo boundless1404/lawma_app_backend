@@ -1,11 +1,14 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { EntityProfile } from './entityProfile.entity';
+import { PhoneCode } from './phoneCode.entity';
 
 @Entity()
 export class EntityUserProfile {
@@ -24,12 +27,24 @@ export class EntityUserProfile {
   @Column({ type: 'varchar', unique: true })
   email: string;
 
-  @Column({ type: 'varchar', unique: true })
+  @Column({ type: 'varchar', unique: true, nullable: true })
   phone: string;
+
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
+
+  // @Column({ type: 'boolean', default: false })
+  // isAdmin: boolean;
 
   // foreign key
   @Column({ type: 'bigint' })
   entityProfileId: string;
+
+  @Column({ type: 'bigint', nullable: true })
+  phoneCodeId: string;
 
   // relations
   @ManyToOne(
@@ -38,4 +53,8 @@ export class EntityUserProfile {
   )
   @JoinColumn({ name: 'entityProfileId' })
   entityProfile: EntityProfile;
+
+  @ManyToOne(() => PhoneCode, (phoneCode) => phoneCode.entityUserProfiles)
+  @JoinColumn({ name: 'phoneCodeId' })
+  phoneCode: PhoneCode;
 }

@@ -2,21 +2,21 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
+  ManyToOne as OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
+import { PropertySubscription } from './propertySubscription.entity';
 
 @Entity()
 export class BillingAccount {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: string;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'numeric', default: '0' })
   totalBillings: string;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'numeric', default: '0' })
   totalPayments: string;
 
   @UpdateDateColumn({ type: 'timestamptz' })
@@ -24,13 +24,13 @@ export class BillingAccount {
 
   // foreign keys
   @Column({ type: 'bigint' })
-  entitySubscriberPropertyId: string;
+  propertySubscriptionId: string;
 
   // relations
-  @ManyToOne(
-    () => EntitySubscriberProperty,
+  @OneToOne(
+    () => PropertySubscription,
     (entitySubscriberProperty) => entitySubscriberProperty.billingAccount,
   )
-  @JoinColumn({ name: 'entitySubscriberPropertyId' })
-  entitySubscriberProperty: EntitySubscriberProperty;
+  @JoinColumn({ name: 'propertySubscriptionId' })
+  propertySubscription: PropertySubscription;
 }
