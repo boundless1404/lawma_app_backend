@@ -2,6 +2,7 @@ import { SubscriberProfileRoleEnum } from '../../lib/enums';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -39,6 +40,9 @@ export class PropertySubscription {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
+
+  @DeleteDateColumn({ type: 'timestamptz' })
+  deletedAt: Date;
 
   // foreign keys
   @Column({ type: 'bigint' })

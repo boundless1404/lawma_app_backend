@@ -121,3 +121,21 @@ export class CreatePropertyTypesDto {
   @IsNumber()
   unitPrice: number;
 }
+
+export class PostPaymentDto {
+  @IsNotEmpty()
+  @IsNumberString()
+  amount: string;
+
+  @IsNotEmpty()
+  @IsString()
+  payerName: string;
+
+  @IsOptional()
+  @IsString()
+  comments: string;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  propertySubscriptionId: string;
+}

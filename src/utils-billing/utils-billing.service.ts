@@ -7,6 +7,7 @@ import {
   CreateStreetDto,
   CreateSubscriptionDto,
   CreateUserDto,
+  PostPaymentDto,
 } from './dtos/dto';
 import { ProfileTypes, SubscriberProfileRoleEnum } from '../lib/enums';
 import { throwBadRequest } from '../utils/helpers';
@@ -24,6 +25,7 @@ import { MonthNames } from '../lib/projectConstants';
 import { bignumber } from 'mathjs';
 import { LgaWard } from './entitties/lgaWard.entity';
 import { Lga } from './entitties/lga.entity';
+import { Payment } from './entitties/payments.entity';
 
 @Injectable()
 export class UtilsBillingService {
@@ -114,20 +116,23 @@ export class UtilsBillingService {
       : SubscriberProfileRoleEnum.CUSTODIAN;
 
     await this.dbManager.transaction(async (transactionManager) => {
-      // create property subscription
       // create subscriber property
-      // create property subscription unit
       let subscriberProperty = transactionManager.create(
         EntitySubscriberProperty,
         {
           propertyTypeId: createSubscriptionDto.propertyTypeId,
-          ownerEntitySubscriberProfileId:
-            createSubscriptionDto.propertySubscriberProfileId,
+          ...(createSubscriptionDto.isOwner
+            ? {
+                ownerEntitySubscriberProfileId:
+                  createSubscriptionDto.propertySubscriberProfileId,
+              }
+            : {}),
         },
       );
 
       subscriberProperty = await transactionManager.save(subscriberProperty);
 
+      // create property subscription
       let propertySubscription = transactionManager.create(
         PropertySubscription,
         {
@@ -147,6 +152,7 @@ export class UtilsBillingService {
       );
       const propertySubscriptionId = propertySubscription.id;
 
+      // create property unit
       const propertySubscriptionUnit = transactionManager.create(
         PropertySubscriptionUnit,
         {
@@ -165,6 +171,35 @@ export class UtilsBillingService {
 
       await transactionManager.save(billingAccount);
     });
+  }
+
+  async getSubscriptions(
+    entityProfileId: string,
+    { limit, page }: { limit: number; page: number } = { limit: 10, page: 1 },
+  ) {
+    //
+    const propertySubscriptions = await this.dbManager.find(
+      PropertySubscription,
+      {
+        where: {
+          entityProfileId,
+        },
+        take: limit,
+        skip: (page - 1) * limit,
+        relations: {
+          propertySubscriptionUnits: {
+            entitySubscriberProperty: {
+              propertyType: true,
+            },
+          },
+          billingAccount: true,
+          entitySubscriberProfile: true,
+          street: true,
+        },
+      },
+    );
+
+    return propertySubscriptions;
   }
 
   async createPropertyTypes(
@@ -270,6 +305,29 @@ export class UtilsBillingService {
 
       await transactionalEntityManager.save(billingAccount);
     });
+  }
+
+  async postPayment(postPaymentDto: PostPaymentDto, entityProfileId: string) {
+    //
+    const propertySubscription = await this.dbManager.findOne(
+      PropertySubscription,
+      {
+        where: {
+          id: postPaymentDto.propertySubscriptionId,
+          entityProfileId,
+        },
+      },
+    );
+
+    if (!propertySubscription) {
+      throwBadRequest('Property subscription not found.');
+    }
+
+    const payment = this.dbManager.create(Payment, {
+      ...postPaymentDto,
+    });
+
+    await this.dbManager.save(payment);
   }
 
   async createStreet(
