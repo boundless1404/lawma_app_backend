@@ -30,5 +30,9 @@ export class UtilsBillingController {
     @GetAuthPayload() authPayload: AuthTokenPayload,
   ) {
     //
+    await this.utilService.createPropertySubscription(
+      createSubscriptionDto,
+      authPayload,
+    );
   }
 }

@@ -77,3 +77,47 @@ export class CreateSubscriptionDto {
   @IsBoolean()
   isOwner: boolean;
 }
+
+export class CreateStreetDto {
+  @IsNotEmpty()
+  @IsString()
+  @Max(50)
+  name: string;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  lgaId: string;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  lgaWardId: string;
+}
+
+export class CreateLgaDto {
+  @IsNotEmpty()
+  @IsString()
+  @Max(50)
+  name: string;
+}
+
+export class CreateLgaWardDto {
+  @IsNotEmpty()
+  @IsString()
+  @Max(50)
+  name: string;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  lgaId: string;
+}
+
+export class CreatePropertyTypesDto {
+  @IsNotEmpty()
+  @IsString()
+  @Max(50)
+  name: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  unitPrice: number;
+}

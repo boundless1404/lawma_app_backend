@@ -9,6 +9,7 @@ import {
 import { Lga } from './lga.entity';
 import { LgaWard } from './lgaWard.entity';
 import { PropertySubscription } from './propertySubscription.entity';
+import { EntityProfile } from './entityProfile.entity';
 
 @Entity()
 export class Street {
@@ -25,6 +26,9 @@ export class Street {
   @Column({ type: 'bigint' })
   lgaWardId: string;
 
+  @Column({ type: 'bigint' })
+  entityProfileId: string;
+
   // relations
   @ManyToOne(() => Lga, (lga) => lga.streets)
   @JoinColumn({ name: 'lgaId' })
@@ -35,4 +39,8 @@ export class Street {
 
   @OneToMany(() => PropertySubscription, (property) => property.street)
   propertySubscriptions: PropertySubscription[];
+
+  @ManyToOne(() => EntityProfile, (entityProfile) => entityProfile.streets)
+  @JoinColumn({ name: 'entityProfileId' })
+  entityProfile: EntityProfile;
 }

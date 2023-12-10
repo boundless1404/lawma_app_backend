@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -8,6 +9,8 @@ import {
 import { EntityProfilePreference } from './entityProfilePreference.entity';
 import { EntityUserProfile } from './entityUserProfile.entity';
 import { PropertySubscription } from './propertySubscription.entity';
+import { Street } from './street.entity';
+import { PropertyType } from './propertyTypes.entity';
 
 @Entity()
 export class EntityProfile {
@@ -43,4 +46,10 @@ export class EntityProfile {
     (propertySubscription) => propertySubscription.entityProfile,
   )
   propertySubscriptions: PropertySubscription[];
+
+  @OneToMany(() => Street, (street) => street.entityProfile)
+  streets: Street[];
+
+  @ManyToOne(() => PropertyType, (propertyType) => propertyType.entityProfile)
+  propertyTypes: PropertyType[];
 }
