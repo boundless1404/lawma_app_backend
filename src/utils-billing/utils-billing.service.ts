@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, EntityManager } from 'typeorm';
+import { DataSource, EntityManager, ILike } from 'typeorm';
 import {
   CreateLgaDto,
   CreateLgaWardDto,
@@ -210,6 +210,7 @@ export class UtilsBillingService {
     const existingPropertyType = await this.getPropertyTypeOrThrowError({
       name: createPropertyTypesDto.name,
       unitPrice: String(createPropertyTypesDto.unitPrice),
+      throwError: false,
     });
 
     if (existingPropertyType) {
@@ -334,48 +335,123 @@ export class UtilsBillingService {
     createStreetDto: CreateStreetDto,
     authPayload: AuthTokenPayload,
   ) {
+    const entityProfileId = authPayload.profile.entityProfileId;
+    const lgaWardId = createStreetDto.lgaWardId;
+
+    // check if street with name already exists
     let street = await this.dbManager.findOne(Street, {
       where: {
         name: createStreetDto.name,
+        lgaWardId,
+        entityProfileId,
       },
     });
-    if (street) {
-      throwBadRequest('Street already exists.');
+
+    if (!street) {
+      // street does not exist, create new street
+
+      // verify lgaWard and lga exist
+      await this.getLgaWardOrThrowError({
+        lgaWardId,
+      });
+
+      street = this.dbManager.create(Street, {
+        name: createStreetDto.name,
+        lgaWardId,
+        entityProfileId,
+      });
+
+      await this.dbManager.save(street);
     }
 
-    // verify lgaWard and lga exist
-    await this.getLgaOrThrowError({ lgaId: createStreetDto.lgaId });
-
-    await this.getLgaWardOrThrowError({ lgaWardId: createStreetDto.lgaWardId });
-
-    street = this.dbManager.create(Street, {
-      name: createStreetDto.name,
-      lgaId: createStreetDto.lgaId,
-      lgaWardId: createStreetDto.lgaWardId,
-      entityProfileId: authPayload.profile.entityProfileId,
-    });
-
-    await this.dbManager.save(street);
+    return street;
   }
 
   async createLgaWard(createLgaWardDto: CreateLgaWardDto) {
     await this.getLgaOrThrowError({ lgaId: createLgaWardDto.lgaId });
+    const lgaId = createLgaWardDto.lgaId;
 
-    // verify lga exists
-    const lgaWard = this.dbManager.create(LgaWard, {
-      name: createLgaWardDto.name,
-      lgaId: createLgaWardDto.lgaId,
+    // verify lgaWard does not already exist
+    let lgaWard = await this.dbManager.findOne(LgaWard, {
+      where: {
+        name: createLgaWardDto.name,
+        lgaId,
+      },
     });
 
-    await this.dbManager.save(lgaWard);
+    if (!lgaWard) {
+      lgaWard = this.dbManager.create(LgaWard, {
+        name: createLgaWardDto.name,
+        lgaId,
+      });
+
+      lgaWard = await this.dbManager.save(lgaWard);
+    }
+    return lgaWard;
   }
 
   async createLga(createLgaDto: CreateLgaDto) {
-    const lga = this.dbManager.create(Lga, {
-      name: createLgaDto.name,
+    // verify lga does not exist
+    let lga = await this.getLgaOrThrowError({
+      name: ILike(`%${createLgaDto.name}%`) as unknown as string,
+      throwError: false,
     });
 
-    await this.dbManager.save(lga);
+    if (!lga) {
+      lga = this.dbManager.create(Lga, {
+        name: createLgaDto.name,
+      });
+
+      await this.dbManager.save(lga);
+    }
+
+    return lga;
+  }
+
+  async getLgas(query?: string) {
+    const lgas = query
+      ? await this.dbManager.find(Lga, {
+          where: {
+            name: ILike(`%${query}%`),
+          },
+        })
+      : await this.dbManager.find(Lga);
+
+    return lgas;
+  }
+
+  async getLgaWards({ query, lgaId }: { query?: string; lgaId?: string }) {
+    const lgaWards =
+      query || lgaId
+        ? await this.dbManager.find(LgaWard, {
+            where: {
+              ...(query ? { name: ILike(`%${query}%`) } : {}),
+              ...(lgaId ? { lgaId } : {}),
+            },
+          })
+        : await this.dbManager.find(LgaWard);
+    return lgaWards;
+  }
+
+  async getStreets(
+    entityProfileId: string,
+    { query, lgaWardId }: { query?: string; lgaWardId?: string },
+  ) {
+    const streets =
+      query || lgaWardId
+        ? await this.dbManager.find(Street, {
+            where: {
+              ...(query ? { name: ILike(`%${query}%`) } : {}),
+              ...(lgaWardId ? { lgaWardId } : {}),
+              entityProfileId,
+            },
+          })
+        : await this.dbManager.find(Street, {
+            where: {
+              entityProfileId,
+            },
+          });
+    return streets;
   }
 
   //
@@ -398,6 +474,8 @@ export class UtilsBillingService {
     if (throwError) {
       throwBadRequest('Lga ward not found.');
     }
+
+    return lgaWard;
   }
 
   async getLgaOrThrowError({
@@ -419,6 +497,8 @@ export class UtilsBillingService {
     if (throwError) {
       throwBadRequest('Lga not found.');
     }
+
+    return lga;
   }
 
   getMonthName(month?: number) {

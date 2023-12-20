@@ -39,20 +39,10 @@ export class EntitySubscriberProfile {
   updatedAt: Date;
 
   // foreign key
-  // @Column({ type: 'bigint' })
-  // entityProfileId: string;
-
   @Column({ type: 'bigint', nullable: true })
   phoneCodeId: string;
 
   // relations
-  // @ManyToOne(
-  //   () => EntityProfile,
-  //   (entityProfile) => entityProfile.entitySubscriberProfiles,
-  // )
-  // @JoinColumn({ name: 'entityProfileId' })
-  // entityProfile: EntityProfile;
-
   @OneToMany(
     () => PropertySubscription,
     (propertySubscriber) => propertySubscriber.entitySubscriberProfile,
