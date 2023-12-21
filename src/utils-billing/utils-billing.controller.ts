@@ -5,15 +5,18 @@ import { AuthTokenPayload } from '../lib/types';
 import {
   CreateLgaDto,
   CreateLgaWardDto,
+  CreatePropertyTypesDto,
   CreateStreetDto,
   CreateSubscriptionDto,
   CreateUserDto,
   GetLgaQuery,
   GetLgaWardQuery,
   GetStreetQuery,
+  GetPropertyTypeQuery,
 } from './dtos/dto';
 import { UtilsBillingService } from './utils-billing.service';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
+import { query } from 'express';
 
 @Controller('utils-billing')
 export class UtilsBillingController {
@@ -92,6 +95,31 @@ export class UtilsBillingController {
       {
         ...query,
       },
+    );
+  }
+
+  @Post('property-type')
+  @UseGuards(IsAuthenticated)
+  async createPropertyType(
+    @Body() createPropertyTypeDto: CreatePropertyTypesDto,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    //
+    await this.utilService.createPropertyType(
+      createPropertyTypeDto,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Get('property-type')
+  @UseGuards(IsAuthenticated)
+  async getPropertyTypes(
+    @Query() query: GetPropertyTypeQuery,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.getPropertyTypes(
+      authPayload.profile.entityProfileId,
+      { ...query },
     );
   }
 }

@@ -7,7 +7,6 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
-  Max,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -118,8 +117,8 @@ export class CreatePropertyTypesDto {
   name: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  unitPrice: number;
+  @IsNumberString()
+  unitPrice: string;
 }
 
 export class PostPaymentDto {
@@ -164,4 +163,14 @@ export class GetStreetQuery {
   @IsOptional()
   @IsNumberString()
   lgaWardId: string;
+}
+
+export class GetPropertyTypeQuery {
+  @IsOptional()
+  @IsString()
+  name: string;
+
+  @IsOptional()
+  @IsNumberString()
+  unitPrice: string;
 }

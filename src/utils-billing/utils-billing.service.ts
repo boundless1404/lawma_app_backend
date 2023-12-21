@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, EntityManager, ILike } from 'typeorm';
+import { DataSource, EntityManager, FindOperator, ILike } from 'typeorm';
 import {
   CreateLgaDto,
   CreateLgaWardDto,
@@ -68,6 +68,7 @@ export class UtilsBillingService {
         entityProfileId,
       });
 
+      // TODO: create user in central user manager
       await this.dbManager.save(entityUserProfile);
     } else if (profileType === ProfileTypes.ENTITY_SUBSCRIBER_PROFILE) {
       const entitySubscriberProfile = this.dbManager.create(
@@ -77,6 +78,7 @@ export class UtilsBillingService {
         },
       );
 
+      // TODO: create user in central user manager
       await this.dbManager.save(entitySubscriberProfile);
     }
   }
@@ -202,14 +204,14 @@ export class UtilsBillingService {
     return propertySubscriptions;
   }
 
-  async createPropertyTypes(
+  async createPropertyType(
     createPropertyTypesDto: CreatePropertyTypesDto,
     entityProfileId: string,
   ) {
     //
     const existingPropertyType = await this.getPropertyTypeOrThrowError({
-      name: createPropertyTypesDto.name,
-      unitPrice: String(createPropertyTypesDto.unitPrice),
+      name: ILike(`%${createPropertyTypesDto.name}%`),
+      unitPrice: createPropertyTypesDto.unitPrice,
       throwError: false,
     });
 
@@ -218,12 +220,36 @@ export class UtilsBillingService {
     }
 
     const propertyType = this.dbManager.create(PropertyType, {
-      unitPrice: String(createPropertyTypesDto.unitPrice),
+      unitPrice: createPropertyTypesDto.unitPrice,
       name: createPropertyTypesDto.name,
       entityProfileId,
     });
 
     await this.dbManager.save(propertyType);
+  }
+
+  async getPropertyTypes(
+    entityProfileId: string,
+    { name, unitPrice }: { name?: string; unitPrice?: string } = {},
+  ) {
+    //
+
+    const propertyTypes =
+      name || unitPrice
+        ? await this.dbManager.find(PropertyType, {
+            where: {
+              entityProfileId,
+              ...(name ? { name } : {}),
+              ...(unitPrice ? { unitPrice } : {}),
+            },
+          })
+        : await this.dbManager.find(PropertyType, {
+            where: {
+              entityProfileId,
+            },
+          });
+
+    return propertyTypes;
   }
 
   async generateBilling(propertySubscriptionId: string) {
@@ -341,7 +367,7 @@ export class UtilsBillingService {
     // check if street with name already exists
     let street = await this.dbManager.findOne(Street, {
       where: {
-        name: createStreetDto.name,
+        name: ILike(`%${createStreetDto.name}%`),
         lgaWardId,
         entityProfileId,
       },
@@ -372,11 +398,9 @@ export class UtilsBillingService {
     const lgaId = createLgaWardDto.lgaId;
 
     // verify lgaWard does not already exist
-    let lgaWard = await this.dbManager.findOne(LgaWard, {
-      where: {
-        name: createLgaWardDto.name,
-        lgaId,
-      },
+    let lgaWard = await this.getLgaWardOrThrowError({
+      name: ILike(`%${createLgaWardDto.name}%`),
+      throwError: false,
     });
 
     if (!lgaWard) {
@@ -393,7 +417,7 @@ export class UtilsBillingService {
   async createLga(createLgaDto: CreateLgaDto) {
     // verify lga does not exist
     let lga = await this.getLgaOrThrowError({
-      name: ILike(`%${createLgaDto.name}%`) as unknown as string,
+      name: ILike(`%${createLgaDto.name}%`),
       throwError: false,
     });
 
@@ -460,7 +484,7 @@ export class UtilsBillingService {
     lgaWardId,
     throwError = true,
   }: {
-    name?: string;
+    name?: string | FindOperator<string>;
     lgaWardId?: string;
     throwError?: boolean;
   }) {
@@ -483,7 +507,7 @@ export class UtilsBillingService {
     lgaId,
     throwError = true,
   }: {
-    name?: string;
+    name?: string | FindOperator<string>;
     lgaId?: string;
     throwError?: boolean;
   }) {
@@ -534,7 +558,7 @@ export class UtilsBillingService {
     unitPrice,
     throwError = true,
   }: {
-    name?: string;
+    name?: string | FindOperator<string>;
     propertyTypeId?: string;
     unitPrice?: string;
     throwError?: boolean;
@@ -558,7 +582,7 @@ export class UtilsBillingService {
     streetId,
     throwError = true,
   }: {
-    name?: string;
+    name?: string | FindOperator<string>;
     streetId?: string;
     throwError?: boolean;
   }) {
