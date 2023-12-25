@@ -7,6 +7,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -75,7 +76,7 @@ export class PropertySubscription {
   @OneToMany(() => Billing, (billing) => billing.propertySubscription)
   billings: Billing[];
 
-  @OneToMany(
+  @OneToOne(
     () => BillingAccount,
     (billingAccount) => billingAccount.propertySubscription,
   )

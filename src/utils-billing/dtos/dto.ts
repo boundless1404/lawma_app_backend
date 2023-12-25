@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsNumberString,
   IsOptional,
+  IsPositive,
   IsString,
 } from 'class-validator';
 
@@ -37,7 +38,7 @@ export class CreateUserDto {
   @IsString()
   phoneCodeId: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsEnum(ProfileTypes)
   profileType: ProfileTypes;
 }
@@ -173,4 +174,26 @@ export class GetPropertyTypeQuery {
   @IsOptional()
   @IsNumberString()
   unitPrice: string;
+}
+
+export class GetPhoneCodesQuery {
+  @IsOptional()
+  @IsString()
+  id: string;
+
+  @IsOptional()
+  @IsString()
+  query: string;
+}
+
+export class GetSubscriptionQuery {
+  @IsOptional()
+  @IsNumber()
+  // @IsPositive()
+  limit: number;
+
+  @IsOptional()
+  @IsNumber()
+  // @IsPositive()
+  page: number;
 }

@@ -46,7 +46,7 @@ export class EntitySubscriberProperty {
   @JoinColumn({ name: 'propertyTypeId' })
   propertyType: PropertyType;
 
-  @ManyToOne(
+  @OneToMany(
     () => PropertySubscriptionUnit,
     (propertySubscriptionUnit) =>
       propertySubscriptionUnit.entitySubscriberProperty,

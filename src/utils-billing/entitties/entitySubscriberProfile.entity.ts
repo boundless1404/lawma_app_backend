@@ -11,6 +11,8 @@ import {
 import { PropertySubscription } from './propertySubscription.entity';
 import { PhoneCode } from './phoneCode.entity';
 import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
+import { EntityProfile } from './entityProfile.entity';
+import { EntityUserProfile } from './entityUserProfile.entity';
 
 @Entity()
 export class EntitySubscriberProfile {
@@ -42,6 +44,12 @@ export class EntitySubscriberProfile {
   @Column({ type: 'bigint', nullable: true })
   phoneCodeId: string;
 
+  @Column({ type: 'bigint', nullable: true })
+  createdByEntityUserProfileId: string;
+
+  @Column({ type: 'bigint', nullable: true })
+  createdByEntityProfileId: string;
+
   // relations
   @OneToMany(
     () => PropertySubscription,
@@ -59,4 +67,18 @@ export class EntitySubscriberProfile {
       entitySubscriberProperty.entitySubscriberProfile,
   )
   entitySubscriberProperty: EntitySubscriberProperty[];
+
+  @ManyToOne(
+    () => EntityProfile,
+    (entityProfile) => entityProfile.entitySubscriberProfiles,
+  )
+  @JoinColumn({ name: 'createdByEntityProfileId' })
+  entityProfile: EntityProfile;
+
+  @ManyToOne(
+    () => EntityUserProfile,
+    (entityUserProfile) => entityUserProfile.createdEntitySubscriberProfiles,
+  )
+  @JoinColumn({ name: 'createdByEntityUserProfileId' })
+  entityUserProfile: EntityUserProfile;
 }

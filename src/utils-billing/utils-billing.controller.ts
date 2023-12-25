@@ -13,10 +13,13 @@ import {
   GetLgaWardQuery,
   GetStreetQuery,
   GetPropertyTypeQuery,
+  GetPhoneCodesQuery,
+  GetSubscriptionQuery,
 } from './dtos/dto';
 import { UtilsBillingService } from './utils-billing.service';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
 import { query } from 'express';
+import { ProfileTypes } from '../lib/enums';
 
 @Controller('utils-billing')
 export class UtilsBillingController {
@@ -36,6 +39,26 @@ export class UtilsBillingController {
     await this.utilService.createUser(createUserDto, authPayload);
   }
 
+  @Post('subscriber-user')
+  @UseGuards(IsAuthenticated)
+  async createSubscriberUser(
+    @Body() createUserDto: CreateUserDto,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    // update the profileType
+    createUserDto.profileType = ProfileTypes.ENTITY_SUBSCRIBER_PROFILE;
+    await this.utilService.createUser(createUserDto, authPayload);
+  }
+
+  @Get('subscriber-user')
+  @UseGuards(IsAuthenticated)
+  async getSubscriberUser(@GetAuthPayload() authPayload: AuthTokenPayload) {
+    //
+    return await this.utilService.getEntityUserSubscriber(
+      authPayload.profile.entityProfileId,
+    );
+  }
+
   @Post('subscription')
   @UseGuards(new IsEntityUserAdmin())
   async createSubscription(
@@ -46,6 +69,19 @@ export class UtilsBillingController {
     await this.utilService.createPropertySubscription(
       createSubscriptionDto,
       authPayload,
+    );
+  }
+
+  @Get('subscription')
+  @UseGuards(IsAuthenticated)
+  async getSubscriptions(
+    @Query() getSubscriptionQuery: GetSubscriptionQuery,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    //
+    return await this.utilService.getSubscriptions(
+      authPayload.profile.entityProfileId,
+      getSubscriptionQuery,
     );
   }
 
@@ -121,5 +157,11 @@ export class UtilsBillingController {
       authPayload.profile.entityProfileId,
       { ...query },
     );
+  }
+
+  @Get('phone-code')
+  @UseGuards(IsAuthenticated)
+  async getPhoneCodes(@Query() query: GetPhoneCodesQuery) {
+    return await this.utilService.getPhoneCode(query);
   }
 }

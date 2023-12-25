@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { DataSource, EntityManager, FindOperator, ILike } from 'typeorm';
 import {
   CreateLgaDto,
@@ -10,10 +10,10 @@ import {
   PostPaymentDto,
 } from './dtos/dto';
 import { ProfileTypes, SubscriberProfileRoleEnum } from '../lib/enums';
-import { throwBadRequest } from '../utils/helpers';
+import { throwBadRequest, throwForbidden } from '../utils/helpers';
 import { EntitySubscriberProfile } from './entitties/entitySubscriberProfile.entity';
 import { EntityUserProfile } from './entitties/entityUserProfile.entity';
-import { AuthTokenPayload } from '../lib/types';
+import { AuthTokenPayload, AuthenticatedUserData } from '../lib/types';
 import { Street } from './entitties/street.entity';
 import { PropertyType } from './entitties/propertyTypes.entity';
 import { PropertySubscription } from './entitties/propertySubscription.entity';
@@ -26,10 +26,14 @@ import { bignumber } from 'mathjs';
 import { LgaWard } from './entitties/lgaWard.entity';
 import { Lga } from './entitties/lga.entity';
 import { Payment } from './entitties/payments.entity';
+import { RequestService } from '../shared/request/request.service';
+import { ProfileCollection } from './entitties/profileCollection.entity';
+import { PhoneCode } from './entitties/phoneCode.entity';
 
 @Injectable()
 export class UtilsBillingService {
   constructor(
+    private requestService: RequestService,
     public dbManager: EntityManager,
     private dataSource?: DataSource,
   ) {
@@ -62,25 +66,96 @@ export class UtilsBillingService {
     delete createUserDto.profileType;
 
     const entityProfileId = authPayload.profile.entityProfileId;
+    const phoneCode = await this.getPhoneCodeOrThrow({
+      phoneCodeId: createUserDto.phoneCodeId,
+    });
+
+    // create user in central user manager
+    const authServerRequestPath = `/project/app/signup`;
+
+    const defaultPassword = 'no-password';
+    const phoneNumber = createUserDto.phone;
+    const response = await this.requestService.requestAuth(
+      authServerRequestPath,
+      {
+        body: {
+          firstName: createUserDto.firstName,
+          lastName: createUserDto.lastName,
+          email: createUserDto.email,
+          password: defaultPassword,
+          ...(phoneNumber ? { phone: `${phoneNumber}` } : {}),
+          ...(phoneNumber ? { phoneCode: `${phoneCode.name}` } : {}),
+        },
+        method: 'POST',
+      },
+    );
+
+    if (response.status !== 201) {
+      throw new HttpException('User creation failed', 500);
+    }
+    const userData:
+      | undefined
+      | (AuthenticatedUserData & {
+          isVerified?: boolean;
+          isNewUser?: boolean;
+          userCreatedInApp?: boolean;
+        }) = response.data;
+
+    if (!userData) {
+      throw new HttpException('User creation failed', 500);
+    }
+
+    if (!userData.isNewUser && !userData.userCreatedInApp) {
+      throwForbidden('User already exist!');
+    }
+
+    let userProfile: EntityUserProfile | EntitySubscriberProfile;
     if (profileType === ProfileTypes.ENTITY_USER_PROFILE) {
-      const entityUserProfile = this.dbManager.create(EntityUserProfile, {
+      userProfile = this.dbManager.create(EntityUserProfile, {
         ...createUserDto,
         entityProfileId,
       });
 
-      // TODO: create user in central user manager
-      await this.dbManager.save(entityUserProfile);
+      await this.dbManager.save(userProfile);
     } else if (profileType === ProfileTypes.ENTITY_SUBSCRIBER_PROFILE) {
-      const entitySubscriberProfile = this.dbManager.create(
-        EntitySubscriberProfile,
-        {
-          ...createUserDto,
-        },
-      );
+      userProfile = this.dbManager.create(EntitySubscriberProfile, {
+        ...createUserDto,
+        createdByEntityProfileId: entityProfileId,
+        createdByEntityUserProfileId: authPayload.profile.profileTypeId,
+      });
 
-      // TODO: create user in central user manager
-      await this.dbManager.save(entitySubscriberProfile);
+      await this.dbManager.save(userProfile);
     }
+
+    const profileCollection = this.dbManager.create(ProfileCollection, {
+      profileType,
+      userId: userData.id,
+      isAdmin: false,
+      profileTypeId: userProfile.id,
+    });
+
+    await this.dbManager.save(profileCollection);
+  }
+
+  async getEntityUserSubscriber(
+    entityProfileId: string,
+    {
+      query,
+      page,
+      count = 10,
+    }: { query?: string; page?: number; count?: number } = {},
+  ) {
+    let entitySubscriberProfiles: EntitySubscriberProfile[] = [];
+    entitySubscriberProfiles = await this.dbManager.find(
+      EntitySubscriberProfile,
+      {
+        where: {
+          createdByEntityProfileId: entityProfileId,
+        },
+      },
+    );
+
+    return entitySubscriberProfiles;
   }
 
   async createPropertySubscription(
@@ -177,7 +252,7 @@ export class UtilsBillingService {
 
   async getSubscriptions(
     entityProfileId: string,
-    { limit, page }: { limit: number; page: number } = { limit: 10, page: 1 },
+    { limit = 10, page = 1 }: { limit?: number; page?: number } = {},
   ) {
     //
     const propertySubscriptions = await this.dbManager.find(
@@ -195,13 +270,54 @@ export class UtilsBillingService {
             },
           },
           billingAccount: true,
-          entitySubscriberProfile: true,
+          entitySubscriberProfile: {
+            phoneCode: true,
+          },
           street: true,
         },
       },
     );
 
-    return propertySubscriptions;
+    const mappedResponse = propertySubscriptions.map((sub) => {
+      return {
+        propertySubscriptionId: sub.id,
+        propertySubscriptionName: sub.propertySubscriptionName,
+        oldCode: sub.oldCode,
+        streetNumber: sub.streetNumber,
+        createdAt: sub.createdAt,
+        streetId: sub.streetId,
+        entitySubscriberProfileId: sub.entitySubscriberProfileId,
+        propertySubscriptionUnits: sub.propertySubscriptionUnits?.map(
+          (unit) => {
+            return {
+              entitySubscriberPropertyId: unit.entitySubscriberProperty?.id,
+              createdAt: unit.entitySubscriberProperty?.createdAt,
+              propertyType: {
+                ...unit.entitySubscriberProperty?.propertyType,
+                updatedAt: undefined,
+                entityProfileId: undefined,
+              },
+            };
+          },
+        ),
+        arrears: (() => {
+          let arr =
+            Number(sub.billingAccount.totalBillings || '0') -
+            Number(sub.billingAccount.totalPayments || '0');
+          arr = arr < 0 ? 0 : arr;
+          return arr;
+        })(),
+        entitySubscriberProfile: {
+          ...sub.entitySubscriberProfile,
+          updatedAt: undefined,
+          phone: sub.entitySubscriberProfile?.phone,
+          phoneCode: sub.entitySubscriberProfile?.phoneCode?.name,
+        },
+        streetName: sub.street?.name,
+      };
+    });
+
+    return mappedResponse;
   }
 
   async createPropertyType(
@@ -478,7 +594,48 @@ export class UtilsBillingService {
     return streets;
   }
 
+  async getPhoneCode({
+    query,
+    phoneCodeId,
+  }: { query?: string; phoneCodeId?: string } = {}) {
+    if (phoneCodeId) {
+      const phoneCode = await this.dbManager.findOne(PhoneCode, {
+        where: { id: phoneCodeId },
+      });
+
+      return phoneCode;
+    }
+
+    const phoneCodes = query
+      ? await this.dbManager.find(PhoneCode, {
+          where: {
+            name: ILike(`%${query}%`),
+          },
+        })
+      : await this.dbManager.find(PhoneCode);
+
+    return phoneCodes;
+  }
+
   //
+  async getPhoneCodeOrThrow({
+    phoneCodeId,
+    name,
+    throwError = true,
+  }: { phoneCodeId?: string; name?: string; throwError?: boolean } = {}) {
+    const phoneCode = await this.dbManager.findOne(PhoneCode, {
+      where: {
+        ...(phoneCodeId ? { id: phoneCodeId } : { name: ILike(`%${name}%`) }),
+      },
+    });
+
+    throwError = !phoneCode && throwError;
+    if (throwError) {
+      throwBadRequest('Phone code not found.');
+    }
+    return phoneCode;
+  }
+
   async getLgaWardOrThrowError({
     name,
     lgaWardId,
