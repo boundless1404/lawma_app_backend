@@ -199,12 +199,12 @@ export class GetSubscriptionQuery {
   page: number;
 }
 
-export class GeneratePrintBillingDto {
+export class GenerateBillingDto {
   @IsOptional()
   @IsString()
   streetId: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   propertySuscriptionId: string;
 
@@ -217,8 +217,30 @@ export class GeneratePrintBillingDto {
   month: string;
 
   @IsOptional()
-  @IsEnum(['print', 'generate'])
-  type: 'print' | 'generate';
+  @IsBoolean()
+  forAllProperties: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  forPropertiesOnStreet: boolean;
+}
+
+export class GetBillingQuery {
+  @IsOptional()
+  @IsString()
+  streetId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertySuscriptionId: string;
+
+  @IsOptional()
+  @IsString()
+  year: string;
+
+  @IsOptional()
+  @IsString()
+  month: string;
 
   @IsOptional()
   @IsBoolean()
@@ -227,4 +249,28 @@ export class GeneratePrintBillingDto {
   @IsOptional()
   @IsBoolean()
   forPropertiesOnStreet: boolean;
+}
+
+export class GetPaymentsQuery {
+  @IsOptional()
+  @IsString()
+  month: string;
+
+  @IsOptional()
+  @IsString()
+  year: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertySubscriptionId: string;
+}
+
+export class GetBillingAccountArrear {
+  @IsOptional()
+  @IsNumber()
+  page: number;
+
+  @IsOptional()
+  @IsNumber()
+  limit: number;
 }
