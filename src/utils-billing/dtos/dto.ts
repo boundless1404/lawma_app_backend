@@ -8,6 +8,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  isNotEmpty,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -196,4 +197,80 @@ export class GetSubscriptionQuery {
   @IsNumber()
   // @IsPositive()
   page: number;
+}
+
+export class GenerateBillingDto {
+  @IsOptional()
+  @IsString()
+  streetId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertySuscriptionId: string;
+
+  @IsOptional()
+  @IsString()
+  year: string;
+
+  @IsOptional()
+  @IsString()
+  month: string;
+
+  @IsOptional()
+  @IsBoolean()
+  forAllProperties: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  forPropertiesOnStreet: boolean;
+}
+
+export class GetBillingQuery {
+  @IsOptional()
+  @IsString()
+  streetId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertySuscriptionId: string;
+
+  @IsOptional()
+  @IsString()
+  year: string;
+
+  @IsOptional()
+  @IsString()
+  month: string;
+
+  @IsOptional()
+  @IsBoolean()
+  forAllProperties: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  forPropertiesOnStreet: boolean;
+}
+
+export class GetPaymentsQuery {
+  @IsOptional()
+  @IsString()
+  month: string;
+
+  @IsOptional()
+  @IsString()
+  year: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertySubscriptionId: string;
+}
+
+export class GetBillingAccountArrear {
+  @IsOptional()
+  @IsNumber()
+  page: number;
+
+  @IsOptional()
+  @IsNumber()
+  limit: number;
 }

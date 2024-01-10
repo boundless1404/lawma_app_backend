@@ -7,6 +7,8 @@ import {
   CreateStreetDto,
   CreateSubscriptionDto,
   CreateUserDto,
+  GenerateBillingDto,
+  GetBillingQuery,
   PostPaymentDto,
 } from './dtos/dto';
 import { ProfileTypes, SubscriberProfileRoleEnum } from '../lib/enums';
@@ -252,7 +254,11 @@ export class UtilsBillingService {
 
   async getSubscriptions(
     entityProfileId: string,
-    { limit = 10, page = 1 }: { limit?: number; page?: number } = {},
+    {
+      limit = 10,
+      page = 1,
+      streetId,
+    }: { limit?: number; page?: number; streetId?: string } = {},
   ) {
     //
     const propertySubscriptions = await this.dbManager.find(
@@ -260,6 +266,7 @@ export class UtilsBillingService {
       {
         where: {
           entityProfileId,
+          ...(streetId ? { streetId } : {}),
         },
         take: limit,
         skip: (page - 1) * limit,
@@ -368,7 +375,144 @@ export class UtilsBillingService {
     return propertyTypes;
   }
 
-  async generateBilling(propertySubscriptionId: string) {
+  async getBillingsByMonth(
+    propertySubscriptionId: string,
+    month: string,
+    year: string,
+    entityProfileId?: string,
+  ) {
+    //
+    const billings = await this.dbManager.find(Billing, {
+      where: {
+        propertySubscriptionId,
+        month,
+        year,
+        ...(entityProfileId ? { entityProfileId } : {}),
+      },
+      relations: {
+        propertySubscription: {
+          propertySubscriptionUnits: true,
+          billingAccount: true,
+          payments: true,
+        },
+      },
+    });
+
+    const mappedBilling = billings.map((bill) => {
+      return {
+        billing: {
+          id: bill.id,
+          amount: bill.amount,
+          month: bill.month,
+          year: bill.year,
+        },
+        arreas: bill.propertySubscription.billingAccount.totalBillings,
+        propertySubscriptionUnits:
+          bill.propertySubscription.propertySubscriptionUnits.map(
+            (propertySubscriptionUnit) => {
+              return {
+                propertyType:
+                  propertySubscriptionUnit.entitySubscriberProperty.propertyType
+                    .name,
+                unitPrice:
+                  propertySubscriptionUnit.entitySubscriberProperty.propertyType
+                    .unitPrice,
+                unitCount: propertySubscriptionUnit.propertyUnits,
+              };
+            },
+          ),
+        lastPayment: {
+          amount: bill.propertySubscription.payments.pop()?.amount,
+          date: bill.propertySubscription.payments.pop()?.createdAt,
+        },
+      };
+    });
+
+    return mappedBilling;
+  }
+
+  async generateBilling(
+    generatePrintBIllingDto: GenerateBillingDto,
+    entityProfileId: string,
+  ) {
+    // check if to generate for all properties
+    if (generatePrintBIllingDto.forAllProperties) {
+      throwBadRequest('This is currently not available.');
+    } else if (generatePrintBIllingDto.forPropertiesOnStreet) {
+      // TODO: handle this
+      const properties = await this.dbManager.find(PropertySubscription, {
+        where: {
+          streetId: generatePrintBIllingDto.streetId,
+          entityProfileId,
+        },
+      });
+
+      await Promise.all(
+        properties.map(async (prop) => {
+          await this.generateMonthBilling(
+            prop.id,
+            generatePrintBIllingDto.month,
+            generatePrintBIllingDto.year,
+          );
+        }),
+      );
+    } else {
+      //
+      await this.generateMonthBilling(
+        generatePrintBIllingDto.propertySuscriptionId,
+        generatePrintBIllingDto.month,
+        generatePrintBIllingDto.year,
+      );
+    }
+  }
+
+  async getBilling(
+    generatePrintBIllingDto: GetBillingQuery,
+    entityProfileId: string,
+  ) {
+    //
+    if (generatePrintBIllingDto.forAllProperties) {
+      //
+      throwBadRequest('This is currently not available.');
+    } else if (
+      generatePrintBIllingDto.forPropertiesOnStreet ||
+      generatePrintBIllingDto.streetId
+    ) {
+      const properties = await this.dbManager.find(PropertySubscription, {
+        where: {
+          streetId: generatePrintBIllingDto.streetId,
+          entityProfileId,
+        },
+      });
+
+      const billings = await Promise.all(
+        properties.map(async (prop) => {
+          await this.getBillingsByMonth(
+            prop.id,
+            generatePrintBIllingDto.month,
+            generatePrintBIllingDto.year,
+          );
+        }),
+      );
+
+      return billings;
+    } else {
+      const billings = await this.getBillingsByMonth(
+        generatePrintBIllingDto.propertySuscriptionId,
+        generatePrintBIllingDto.month,
+        generatePrintBIllingDto.month,
+        entityProfileId,
+      );
+
+      return billings;
+    }
+  }
+
+  async generateMonthBilling(
+    propertySubscriptionId: string,
+    month: string,
+    year?: string,
+  ) {
     //
     const propertySubscription = await this.dbManager.findOne(
       PropertySubscription,
@@ -395,8 +539,8 @@ export class UtilsBillingService {
     const billing = await this.dbManager.findOne(Billing, {
       where: {
         propertySubscriptionId: propertySubscription.id,
-        month: this.getMonthName(),
-        year: new Date().getFullYear().toString(),
+        month: month || this.getMonthName(),
+        year: year || new Date().getFullYear().toString(),
       },
     });
 
@@ -418,24 +562,15 @@ export class UtilsBillingService {
       },
     );
 
-    const billingAmount = propertySubscriptionUnits.reduce(
-      (total, propertySubscriptionUnit) => {
-        return (
-          total +
-          propertySubscriptionUnit.propertyUnits *
-            (Number(
-              propertySubscriptionUnit.entitySubscriberProperty.propertyType
-                .unitPrice,
-            ) || 0)
-        );
-      },
-      0,
+    const billingAmount = this.calculateBillingAmount(
+      propertySubscriptionUnits,
     );
+
     await this.dbManager.transaction(async (transactionalEntityManager) => {
       const currentBilling = transactionalEntityManager.create(Billing, {
         propertySubscriptionId: propertySubscription.id,
-        month: this.getMonthName(),
-        year: new Date().getFullYear().toString(),
+        month: month || this.getMonthName(),
+        year: year || new Date().getFullYear().toString(),
         amount: billingAmount.toString(),
       });
       await transactionalEntityManager.save(currentBilling);
@@ -448,6 +583,73 @@ export class UtilsBillingService {
 
       await transactionalEntityManager.save(billingAccount);
     });
+  }
+
+  calculateBillingAmount(propertyUnits: PropertySubscriptionUnit[]) {
+    return propertyUnits.reduce((total, propertySubscriptionUnit) => {
+      return (
+        total +
+        propertySubscriptionUnit.propertyUnits *
+          (Number(
+            propertySubscriptionUnit.entitySubscriberProperty.propertyType
+              .unitPrice,
+          ) || 0)
+      );
+    }, 0);
+  }
+
+  async getBillingAccountArrears(
+    entityProfileId: string,
+    {
+      limit = 5,
+      page = 1,
+      month = this.getMonthName(),
+      year = new Date().getFullYear().toString(),
+    }: { limit?: number; page?: number; month?: string; year?: string } = {},
+  ) {
+    const streetsOwnedByEntity = await this.dbManager.find(Street, {
+      where: {
+        entityProfileId,
+        ...(month
+          ? {
+              propertySubscriptions: {
+                billings: {
+                  month,
+                  year,
+                },
+              },
+            }
+          : {}),
+      },
+      relations: {
+        propertySubscriptions: {
+          billingAccount: true,
+          billings: true,
+        },
+      },
+      take: limit,
+      skip: (page - 1) * limit,
+    });
+
+    const mappedStreetsAndArrears = streetsOwnedByEntity.map((street) => {
+      return {
+        streetId: street.id,
+        streetName: street.name,
+        totalBilling: street.propertySubscriptions.reduce((total, sub) => {
+          return total + Number(sub.billingAccount.totalBillings || 0);
+        }, 0),
+        arrears: street.propertySubscriptions.reduce((total, sub) => {
+          const currentArrears =
+            Number(sub.billingAccount.totalBillings || 0) -
+            Number(sub.billingAccount.totalPayments || 0);
+
+          total += currentArrears > 0 ? currentArrears : 0;
+          return total;
+        }, 0),
+      };
+    });
+
+    return mappedStreetsAndArrears;
   }
 
   async postPayment(postPaymentDto: PostPaymentDto, entityProfileId: string) {
@@ -471,6 +673,44 @@ export class UtilsBillingService {
     });
 
     await this.dbManager.save(payment);
+  }
+
+  async getPayments({
+    propertySubscriptionId,
+    entityProfileId,
+    year,
+    month,
+  }: {
+    propertySubscriptionId: string;
+    entityProfileId: string;
+    year?: string;
+    month?: string;
+  }) {
+    //
+    if (month && year) {
+      const payments = await this.dbManager.findOne(Payment, {
+        where: {
+          propertySubscriptionId: propertySubscriptionId,
+          propertySubscription: {
+            entityProfileId: entityProfileId,
+          },
+        },
+      });
+
+      return payments;
+    }
+
+    const payments = await this.dbManager.find(Payment, {
+      where: {
+        propertySubscriptionId: propertySubscriptionId,
+        propertySubscription: {
+          entityProfileId: entityProfileId,
+        },
+        ...(year ? { year } : {}),
+      },
+    });
+
+    return payments;
   }
 
   async createStreet(

@@ -15,10 +15,13 @@ import {
   GetPropertyTypeQuery,
   GetPhoneCodesQuery,
   GetSubscriptionQuery,
+  GenerateBillingDto,
+  GetPaymentsQuery,
+  GetBillingQuery,
+  PostPaymentDto,
 } from './dtos/dto';
 import { UtilsBillingService } from './utils-billing.service';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
-import { query } from 'express';
 import { ProfileTypes } from '../lib/enums';
 
 @Controller('utils-billing')
@@ -83,6 +86,67 @@ export class UtilsBillingController {
       authPayload.profile.entityProfileId,
       getSubscriptionQuery,
     );
+  }
+
+  @Post('billing')
+  @UseGuards(IsAuthenticated)
+  async generateBilling(
+    @Body() generateBillingDto: GenerateBillingDto,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.generateBilling(
+      generateBillingDto,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Get('billing')
+  @UseGuards(IsAuthenticated)
+  async getBilling(
+    @Query() getBillingQuery: GetBillingQuery,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.getBilling(
+      getBillingQuery,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Get('billing-account/arrears')
+  @UseGuards(IsAuthenticated)
+  async getBillingAccountArrears(
+    @Query() query: { page: number; limit: number },
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getBillingAccountArrears(
+      authPayload.profile.entityProfileId,
+      query,
+    );
+  }
+
+  @Post('payment')
+  @UseGuards(IsAuthenticated)
+  async postPayment(
+    @Body() postPaymentDto: PostPaymentDto,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    await this.utilService.postPayment(
+      postPaymentDto,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Get('payment')
+  @UseGuards(IsAuthenticated)
+  async getPayments(
+    @Query()
+    query: GetPaymentsQuery,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getPayments({
+      ...query,
+      entityProfileId: authPayload.profile.entityProfileId,
+    });
   }
 
   @Post('lga')
