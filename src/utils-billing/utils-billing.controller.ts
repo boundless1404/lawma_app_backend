@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { IsEntityUserAdmin } from '../shared/isEntityUserAdmin.guard';
 import { GetAuthPayload } from '../shared/getAuthenticatedUserPayload.decorator';
 import { AuthTokenPayload } from '../lib/types';
@@ -112,7 +120,7 @@ export class UtilsBillingController {
     );
   }
 
-  @Get('billing-account/arrears')
+  @Get('billing/account/arrears')
   @UseGuards(IsAuthenticated)
   async getBillingAccountArrears(
     @Query() query: { page: number; limit: number },
@@ -121,6 +129,31 @@ export class UtilsBillingController {
     return this.utilService.getBillingAccountArrears(
       authPayload.profile.entityProfileId,
       query,
+    );
+  }
+
+  @Get('billing/account/street/:streetId/defaulter')
+  @UseGuards(IsAuthenticated)
+  async getBillingPaymentDefaulters(
+    @Param('streetId') streetId: string,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getBillingDetailsOrDefaulters(
+      authPayload.profile.entityProfileId,
+      { streetId },
+    );
+  }
+
+  @Get('billing/account/street/:streetId/detail')
+  @UseGuards(IsAuthenticated)
+  async getBillingDetails(
+    @Param('streetId') streetId: string,
+    @Query() { billingMonth }: { billingMonth: string },
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getBillingDetailsOrDefaulters(
+      authPayload.profile.entityProfileId,
+      { streetId, billingMonth },
     );
   }
 
@@ -227,5 +260,13 @@ export class UtilsBillingController {
   @UseGuards(IsAuthenticated)
   async getPhoneCodes(@Query() query: GetPhoneCodesQuery) {
     return await this.utilService.getPhoneCode(query);
+  }
+
+  @Get('/dashboard/metrics')
+  @UseGuards(IsAuthenticated)
+  async getDashboardMetrics(@GetAuthPayload() authPayload: AuthTokenPayload) {
+    return await this.utilService.getDashboardMetrics(
+      authPayload.profile.entityProfileId,
+    );
   }
 }

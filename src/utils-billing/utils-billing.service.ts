@@ -1,5 +1,5 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { DataSource, EntityManager, FindOperator, ILike } from 'typeorm';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
+import { DataSource, EntityManager, FindOperator, ILike, Raw } from 'typeorm';
 import {
   CreateLgaDto,
   CreateLgaWardDto,
@@ -31,6 +31,7 @@ import { Payment } from './entitties/payments.entity';
 import { RequestService } from '../shared/request/request.service';
 import { ProfileCollection } from './entitties/profileCollection.entity';
 import { PhoneCode } from './entitties/phoneCode.entity';
+import { pick } from 'lodash';
 
 @Injectable()
 export class UtilsBillingService {
@@ -652,6 +653,267 @@ export class UtilsBillingService {
     return mappedStreetsAndArrears;
   }
 
+  async getBillingDetailsOrDefaulters(
+    entityProfileId: string,
+    {
+      streetId,
+      billingMonth,
+      billingYear = new Date().getFullYear(),
+    }: { streetId: string; billingMonth?: string; billingYear?: number },
+  ) {
+    //
+    const street = await this.getStreetOrThrowError({
+      streetId,
+      entityProfileId,
+      throwError: true,
+    });
+
+    // TODO: validate billing month
+
+    let billingDetails: {
+      streetName: string;
+      PropertySubscriptionId: string;
+      propertyName: string;
+      currentBilling: string;
+      arrears: number;
+      totalBilling?: string;
+    }[] = [];
+    if (!billingMonth) {
+      const propertySubscriptions = await this.dbManager.find(
+        PropertySubscription,
+        {
+          where: {
+            streetId,
+            billingAccount: {
+              totalBillings: Raw(
+                () => `"totalBillings" - "totalPayments" > '0' :: numeric`,
+              ),
+            },
+          },
+          relations: {
+            billings: true,
+            billingAccount: true,
+          },
+        },
+      );
+
+      billingDetails = propertySubscriptions.map((propertySubscription) => {
+        let arrears = bignumber(
+          propertySubscription.billingAccount.totalBillings,
+        )
+          .sub(propertySubscription.billingAccount.totalPayments)
+          .toNumber();
+
+        arrears = arrears >= 0 ? arrears : 0;
+        return {
+          streetName: street.name,
+          PropertySubscriptionId: propertySubscription.id,
+          propertyName: propertySubscription.propertySubscriptionName,
+          currentBilling: propertySubscription.billings?.[0].amount,
+          arrears,
+        };
+      });
+    } else {
+      billingDetails = (
+        await this.dbManager
+          .createQueryBuilder(PropertySubscription, 'propertySubscription')
+          .select((qb) => {
+            return qb
+              .from(Street, 'street')
+              .select('street.name', 'streetName')
+              .where('street.id = :streetId', { streetId });
+          }, 'streetName')
+          .addSelect('propertySubscription.id', 'propertySubscriptionId')
+          .addSelect(
+            'propertySubscription.propertySubscriptionName',
+            'propertyName',
+          )
+          .addSelect(
+            (qb) =>
+              qb
+                .from(BillingAccount, 'billingAccount')
+                .select(
+                  `billingAccount.totalBillings :: numeric - billingAccount.totalPayments :: numeric - coalesce((
+                    ${this.dbManager
+                      .createQueryBuilder(Billing, 'billing')
+                      .select('billing.amount', 'amount')
+                      .where(`billing.month = :billingMonth`)
+                      .andWhere(`billing.year = '${billingYear}'`, {
+                        billingMonth,
+                      })
+                      .andWhere(
+                        'billing.propertySubscriptionId = "propertySubscription"."id"',
+                      )
+                      .getQuery()}
+                  ) :: numeric, 0)`,
+                  'arrears',
+                )
+                .where(
+                  `billingAccount.propertySubscriptionId = "propertySubscription"."id"`,
+                ),
+            'arrears',
+          )
+          .addSelect(
+            (qb) =>
+              qb
+                .from(Billing, 'billing')
+                .select('billing.amount', 'amount')
+                .where(`billing.month = :billingMonth`)
+                .andWhere(`billing.year = '${billingYear}'`, { billingMonth })
+                .andWhere(
+                  'billing.propertySubscriptionId = "propertySubscription"."id"',
+                ),
+            'currentBilling',
+          )
+          .addSelect(
+            (qb) =>
+              qb
+                .from(BillingAccount, 'billingAccount')
+                .select(
+                  `billingAccount.totalBillings - billingAccount.totalPayments`,
+                  'totalBilling',
+                )
+                .where(
+                  `billingAccount.propertySubscriptionId = "propertySubscription"."id"`,
+                ),
+            'totalBilling',
+          )
+          .where('propertySubscription.streetId = :streetId', {
+            streetId,
+            billingMonth,
+          })
+          .getRawMany()
+      ).map((result) =>
+        pick(result, [
+          'streetName',
+          'propertySubscriptionId',
+          'propertyName',
+          'arrears',
+          'currentBilling',
+          'totalBilling',
+        ]),
+      ) as unknown as {
+        streetName: string;
+        PropertySubscriptionId: string;
+        propertyName: string;
+        currentBilling: string;
+        arrears: number;
+        totalBilling?: string;
+      }[];
+    }
+
+    return billingDetails;
+  }
+
+  async getDashboardMetrics(entityProfileId: string) {
+    // get number of streets
+    // get number of subscribers
+    // get number of properties
+
+    const dashboardMetrics = {
+      streetCount: 0,
+      subscriberCount: 0,
+      properitesCount: 0,
+      totalBillings: 0,
+      totalPayments: 0,
+      billingAcrossMonths: [],
+      paymentsAcrossMonths: [],
+    };
+
+    try {
+      dashboardMetrics.streetCount = await this.dbManager.count(Street, {
+        where: {
+          entityProfileId,
+        },
+      });
+    } catch (err) {
+      Logger.log('An error occured while calculating street count', err);
+    }
+
+    try {
+      dashboardMetrics.subscriberCount = await this.dbManager.count(
+        PropertySubscription,
+        {
+          where: {
+            entityProfileId,
+          },
+        },
+      );
+    } catch (err) {
+      Logger.log('An error occured while calculating subscriber count', err);
+    }
+
+    try {
+      dashboardMetrics.properitesCount = await this.dbManager.count(
+        PropertySubscriptionUnit,
+        {
+          where: {
+            propertySubscription: {
+              entityProfileId,
+            },
+          },
+        },
+      );
+    } catch (err) {
+      Logger.log('An error occured while calculating properites count', err);
+    }
+
+    // get total billings
+    // get total payments
+    const month = MonthNames[new Date().getMonth() + 1];
+    try {
+      const billingAcrossMonths = await this.dbManager.find(Billing, {
+        where: {
+          propertySubscription: {
+            entityProfileId,
+          },
+          year: new Date().getFullYear().toString(),
+        },
+      });
+
+      dashboardMetrics.totalBillings = billingAcrossMonths.reduce(
+        (acc, curr) => {
+          dashboardMetrics.billingAcrossMonths.push({
+            month: curr.month,
+            amount: curr.amount,
+          });
+          return bignumber(acc).add(curr.amount).toNumber();
+        },
+        0,
+      );
+    } catch (err) {
+      Logger.log('An error occured while calculating total billings', err);
+    }
+
+    try {
+      const paymentsAcrossMonths = await this.dbManager.find(Payment, {
+        where: {
+          propertySubscription: {
+            entityProfileId,
+          },
+          createdAt: Raw(($alias) => `extract(month from ${$alias}) = :month`, {
+            month: this.getMonthNumber(month),
+          }),
+        },
+      });
+
+      dashboardMetrics.totalPayments = paymentsAcrossMonths.reduce(
+        (acc, curr) => {
+          dashboardMetrics.paymentsAcrossMonths.push({
+            month: this.getMonthName(new Date().getMonth() + 1),
+            amount: curr.amount,
+          });
+          return bignumber(acc).add(curr.amount).toNumber();
+        },
+        0,
+      );
+    } catch (err) {
+      Logger.log('An error occured while calculating total payments', err);
+    }
+
+    return dashboardMetrics;
+  }
+
   async postPayment(postPaymentDto: PostPaymentDto, entityProfileId: string) {
     //
     const propertySubscription = await this.dbManager.findOne(
@@ -675,10 +937,15 @@ export class UtilsBillingService {
     await this.dbManager.save(payment);
   }
 
+  getMonthNumber(monthName: string) {
+    const monthNumber = Object.values(MonthNames).indexOf(monthName) + 1;
+    return monthNumber;
+  }
+
   async getPayments({
     propertySubscriptionId,
     entityProfileId,
-    year,
+    year = new Date().getFullYear().toString(),
     month,
   }: {
     propertySubscriptionId: string;
@@ -687,30 +954,52 @@ export class UtilsBillingService {
     month?: string;
   }) {
     //
+
+    let payments: Payment[] = [];
     if (month && year) {
-      const payments = await this.dbManager.findOne(Payment, {
+      payments = await this.dbManager.find(Payment, {
+        where: {
+          ...(propertySubscriptionId ? { propertySubscriptionId } : {}),
+          paymentDate: Raw(
+            ($alias) => `extract(month from ${$alias}) = :month`,
+            {
+              month: this.getMonthNumber(month),
+            },
+          ),
+          propertySubscription: {
+            entityProfileId: entityProfileId,
+          },
+        },
+        relations: {
+          propertySubscription: true,
+        },
+      });
+    } else {
+      payments = await this.dbManager.find(Payment, {
         where: {
           propertySubscriptionId: propertySubscriptionId,
           propertySubscription: {
             entityProfileId: entityProfileId,
           },
+          ...(year ? { year } : {}),
+        },
+        relations: {
+          propertySubscription: true,
         },
       });
-
-      return payments;
     }
 
-    const payments = await this.dbManager.find(Payment, {
-      where: {
-        propertySubscriptionId: propertySubscriptionId,
-        propertySubscription: {
-          entityProfileId: entityProfileId,
-        },
-        ...(year ? { year } : {}),
-      },
-    });
-
-    return payments;
+    return payments.map((payment) => ({
+      id: payment.id,
+      amount: payment.amount,
+      paymentDate: payment.paymentDate,
+      propertySubscriptionId: payment.propertySubscriptionId,
+      payerName: payment.payerName,
+      year: new Date(payment.paymentDate).getFullYear().toString(),
+      month: MonthNames[new Date(payment.paymentDate).getMonth() + 1],
+      propertySubscriptionName:
+        payment.propertySubscription.propertySubscriptionName,
+    }));
   }
 
   async createStreet(
@@ -977,15 +1266,18 @@ export class UtilsBillingService {
   async getStreetOrThrowError({
     name,
     streetId,
+    entityProfileId,
     throwError = true,
   }: {
     name?: string | FindOperator<string>;
     streetId?: string;
+    entityProfileId?: string;
     throwError?: boolean;
   }) {
     const street = await this.dbManager.findOne(Street, {
       where: {
         ...(name ? { name } : { id: streetId }),
+        ...(entityProfileId ? { entityProfileId } : {}),
       },
     });
 
