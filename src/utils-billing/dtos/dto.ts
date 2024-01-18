@@ -1,6 +1,7 @@
 import { ProfileTypes } from '@/src/lib/enums';
 import {
   IsBoolean,
+  IsDateString,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -139,6 +140,10 @@ export class PostPaymentDto {
   @IsNotEmpty()
   @IsNumberString()
   propertySubscriptionId: string;
+
+  @IsNotEmpty()
+  @IsDateString()
+  paymentDate: string;
 }
 
 export class GetLgaQuery {
@@ -260,7 +265,7 @@ export class GetPaymentsQuery {
   @IsString()
   year: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   propertySubscriptionId: string;
 }
