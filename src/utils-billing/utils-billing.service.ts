@@ -32,6 +32,7 @@ import { RequestService } from '../shared/request/request.service';
 import { ProfileCollection } from './entitties/profileCollection.entity';
 import { PhoneCode } from './entitties/phoneCode.entity';
 import { pick } from 'lodash';
+import { isNumberString } from 'class-validator';
 
 @Injectable()
 export class UtilsBillingService {
@@ -256,21 +257,62 @@ export class UtilsBillingService {
   async getSubscriptions(
     entityProfileId: string,
     {
-      limit = 10,
+      rowsPerPage = 10,
       page = 1,
       streetId,
-    }: { limit?: number; page?: number; streetId?: string } = {},
+      descending,
+      filter,
+      sortBy,
+    }: {
+      rowsPerPage?: number;
+      limit?: number;
+      page?: number;
+      streetId?: string;
+      descending?: boolean;
+      filter?: string;
+      sortBy?: string;
+    } = {},
   ) {
     //
-    const propertySubscriptions = await this.dbManager.find(
-      PropertySubscription,
-      {
-        where: {
-          entityProfileId,
-          ...(streetId ? { streetId } : {}),
-        },
-        take: limit,
-        skip: (page - 1) * limit,
+    // let filterBy = filter ? JSON.parse(filter) : null;
+    const [propertySubscriptions, rowsNumber] =
+      await this.dbManager.findAndCount(PropertySubscription, {
+        where: filter
+          ? isNumberString(filter)
+            ? [
+                // {
+                //   entityProfileId,
+                //   // billingAccount: {
+                //   //   totalBillings: Raw(
+                //   //     ($alias) => `${$alias} >= "totalPayments" + ${filter}`,
+                //   //   ),
+                //   // },
+                // },
+                {
+                  entityProfileId,
+                  oldCode: filter,
+                },
+                {
+                  entityProfileId,
+                  id: filter,
+                },
+              ]
+            : [
+                {
+                  entityProfileId,
+                  street: { name: ILike(`%${filter}%`) },
+                },
+                {
+                  entityProfileId,
+                  propertySubscriptionName: ILike(`%${filter}%`),
+                },
+              ]
+          : {
+              entityProfileId,
+              ...(streetId ? { streetId } : {}),
+            },
+        take: rowsPerPage,
+        skip: (page - 1) * rowsPerPage,
         relations: {
           propertySubscriptionUnits: {
             entitySubscriberProperty: {
@@ -283,8 +325,8 @@ export class UtilsBillingService {
           },
           street: true,
         },
-      },
-    );
+        ...(sortBy ? { order: { [sortBy]: descending ? 'DESC' : 'ASC' } } : {}),
+      });
 
     const mappedResponse = propertySubscriptions.map((sub) => {
       return {
@@ -325,7 +367,11 @@ export class UtilsBillingService {
       };
     });
 
-    return mappedResponse;
+    return {
+      data: mappedResponse,
+      pagination: { rowsNumber, rowsPerPage, page, sortBy, descending },
+      filter,
+    };
   }
 
   async createPropertyType(
@@ -448,21 +494,30 @@ export class UtilsBillingService {
         },
       });
 
-      await Promise.all(
-        properties.map(async (prop) => {
-          await this.generateMonthBilling(
-            prop.id,
-            generatePrintBIllingDto.month,
-            generatePrintBIllingDto.year,
-          );
-        }),
-      );
+      await this.dbManager.transaction(async (transactionManager) => {
+        await Promise.all(
+          properties.map(async (prop) => {
+            await this.generateMonthBilling(
+              prop.id,
+              generatePrintBIllingDto.month,
+              {
+                year: generatePrintBIllingDto.year,
+                throwError: false,
+                transactionManager,
+              },
+            );
+          }),
+        );
+      });
     } else {
       //
       await this.generateMonthBilling(
         generatePrintBIllingDto.propertySuscriptionId,
         generatePrintBIllingDto.month,
-        generatePrintBIllingDto.year,
+        {
+          year: generatePrintBIllingDto.year,
+          transactionManager: this.dbManager,
+        },
       );
     }
   }
@@ -512,22 +567,29 @@ export class UtilsBillingService {
   async generateMonthBilling(
     propertySubscriptionId: string,
     month: string,
-    year?: string,
+    {
+      year,
+      throwError = true,
+      transactionManager,
+    }: {
+      year?: string;
+      throwError?: boolean;
+      transactionManager: EntityManager;
+    },
   ) {
     //
-    const propertySubscription = await this.dbManager.findOne(
-      PropertySubscription,
-      {
-        where: {
-          id: propertySubscriptionId,
-        },
+
+    const dbManager = transactionManager;
+    const propertySubscription = await dbManager.findOne(PropertySubscription, {
+      where: {
+        id: propertySubscriptionId,
       },
-    );
+    });
     if (!propertySubscription) {
       throwBadRequest('Property subscription not found.');
     }
 
-    const billingAccount = await this.dbManager.findOne(BillingAccount, {
+    const billingAccount = await dbManager.findOne(BillingAccount, {
       where: {
         propertySubscriptionId,
       },
@@ -537,7 +599,7 @@ export class UtilsBillingService {
       throwBadRequest('Billing account not found.');
     }
 
-    const billing = await this.dbManager.findOne(Billing, {
+    const billingAlreadyGenerated = await dbManager.findOne(Billing, {
       where: {
         propertySubscriptionId: propertySubscription.id,
         month: month || this.getMonthName(),
@@ -545,11 +607,16 @@ export class UtilsBillingService {
       },
     });
 
-    if (billing) {
-      throwBadRequest('Billing already generated.');
+    if (billingAlreadyGenerated) {
+      if (!throwError) {
+        return null;
+      }
+      throwBadRequest(
+        `Billing already generated for ${propertySubscription.propertySubscriptionName}.`,
+      );
     }
 
-    const propertySubscriptionUnits = await this.dbManager.find(
+    const propertySubscriptionUnits = await dbManager.find(
       PropertySubscriptionUnit,
       {
         where: {
@@ -567,23 +634,21 @@ export class UtilsBillingService {
       propertySubscriptionUnits,
     );
 
-    await this.dbManager.transaction(async (transactionalEntityManager) => {
-      const currentBilling = transactionalEntityManager.create(Billing, {
-        propertySubscriptionId: propertySubscription.id,
-        month: month || this.getMonthName(),
-        year: year || new Date().getFullYear().toString(),
-        amount: billingAmount.toString(),
-      });
-      await transactionalEntityManager.save(currentBilling);
-
-      // update billing account
-      // TODO: use bigNumber form math js
-      billingAccount.totalBillings = bignumber(billingAccount.totalBillings)
-        .add(currentBilling.amount)
-        .toString();
-
-      await transactionalEntityManager.save(billingAccount);
+    const currentBilling = dbManager.create(Billing, {
+      propertySubscriptionId: propertySubscription.id,
+      month: month || this.getMonthName(),
+      year: year || new Date().getFullYear().toString(),
+      amount: billingAmount.toString(),
     });
+    await dbManager.save(currentBilling);
+
+    // update billing account
+    // TODO: use bigNumber form math js
+    billingAccount.totalBillings = bignumber(billingAccount.totalBillings)
+      .add(currentBilling.amount)
+      .toString();
+
+    await dbManager.save(billingAccount);
   }
 
   calculateBillingAmount(propertyUnits: PropertySubscriptionUnit[]) {
@@ -709,31 +774,31 @@ export class UtilsBillingService {
           streetName: street.name,
           PropertySubscriptionId: propertySubscription.id,
           propertyName: propertySubscription.propertySubscriptionName,
-          currentBilling: propertySubscription.billings?.[0].amount,
+          currentBilling: propertySubscription.billings?.[0]?.amount || '0',
           arrears,
         };
       });
     } else {
-      billingDetails = (
-        await this.dbManager
-          .createQueryBuilder(PropertySubscription, 'propertySubscription')
-          .select((qb) => {
-            return qb
-              .from(Street, 'street')
-              .select('street.name', 'streetName')
-              .where('street.id = :streetId', { streetId });
-          }, 'streetName')
-          .addSelect('propertySubscription.id', 'propertySubscriptionId')
-          .addSelect(
-            'propertySubscription.propertySubscriptionName',
-            'propertyName',
-          )
-          .addSelect(
-            (qb) =>
-              qb
-                .from(BillingAccount, 'billingAccount')
-                .select(
-                  `billingAccount.totalBillings :: numeric - billingAccount.totalPayments :: numeric - coalesce((
+      billingDetails = await this.dbManager
+        .createQueryBuilder(PropertySubscription, 'propertySubscription')
+        .select((qb) => {
+          return qb
+            .from(Street, 'street')
+            .select('street.name', 'streetName')
+            .where('street.id = :streetId', { streetId });
+        }, 'streetName')
+        .addSelect('propertySubscription.streetNumber', 'streetNumber')
+        .addSelect('propertySubscription.id', 'propertySubscriptionId')
+        .addSelect(
+          'propertySubscription.propertySubscriptionName',
+          'propertyName',
+        )
+        .addSelect(
+          (qb) =>
+            qb
+              .from(BillingAccount, 'billingAccount')
+              .select(
+                `case when "billingAccount"."totalBillings" :: numeric - "billingAccount"."totalPayments" :: numeric - coalesce((
                     ${this.dbManager
                       .createQueryBuilder(Billing, 'billing')
                       .select('billing.amount', 'amount')
@@ -745,64 +810,151 @@ export class UtilsBillingService {
                         'billing.propertySubscriptionId = "propertySubscription"."id"',
                       )
                       .getQuery()}
-                  ) :: numeric, 0)`,
-                  'arrears',
-                )
-                .where(
-                  `billingAccount.propertySubscriptionId = "propertySubscription"."id"`,
-                ),
-            'arrears',
-          )
-          .addSelect(
-            (qb) =>
-              qb
-                .from(Billing, 'billing')
-                .select('billing.amount', 'amount')
-                .where(`billing.month = :billingMonth`)
-                .andWhere(`billing.year = '${billingYear}'`, { billingMonth })
-                .andWhere(
-                  'billing.propertySubscriptionId = "propertySubscription"."id"',
-                ),
-            'currentBilling',
-          )
-          .addSelect(
-            (qb) =>
-              qb
-                .from(BillingAccount, 'billingAccount')
-                .select(
-                  `billingAccount.totalBillings - billingAccount.totalPayments`,
-                  'totalBilling',
-                )
-                .where(
-                  `billingAccount.propertySubscriptionId = "propertySubscription"."id"`,
-                ),
-            'totalBilling',
-          )
-          .where('propertySubscription.streetId = :streetId', {
-            streetId,
-            billingMonth,
-          })
-          .getRawMany()
-      ).map((result) =>
-        pick(result, [
-          'streetName',
-          'propertySubscriptionId',
-          'propertyName',
+                  ) :: numeric, 0) > 0
+                  then "billingAccount"."totalBillings" :: numeric - "billingAccount"."totalPayments" :: numeric - coalesce((
+                    ${this.dbManager
+                      .createQueryBuilder(Billing, 'billing')
+                      .select('billing.amount', 'amount')
+                      .where(`billing.month = :billingMonth`)
+                      .andWhere(`billing.year = '${billingYear}'`, {
+                        billingMonth,
+                      })
+                      .andWhere(
+                        'billing.propertySubscriptionId = "propertySubscription"."id"',
+                      )
+                      .getQuery()}
+                  ) :: numeric, 0)
+                  else 0
+                  end
+                  `,
+                'arrears',
+              )
+              .where(
+                `billingAccount.propertySubscriptionId = "propertySubscription"."id"`,
+              ),
           'arrears',
+        )
+        .addSelect(
+          (qb) =>
+            qb
+              .from(Billing, 'billing')
+              .select('billing.amount', 'amount')
+              .where(`billing.month = :billingMonth`)
+              .andWhere(`billing.year = '${billingYear}'`, { billingMonth })
+              .andWhere(
+                'billing.propertySubscriptionId = "propertySubscription"."id"',
+              ),
           'currentBilling',
+        )
+        .addSelect(
+          (qb) =>
+            qb
+              .from(BillingAccount, 'billingAccount')
+              .select(
+                `case when "billingAccount"."totalBillings" - "billingAccount"."totalPayments" < 0 
+                    then 0
+                    else "billingAccount"."totalBillings" - "billingAccount"."totalPayments"
+                    end
+                    `,
+                'totalBilling',
+              )
+              .where(
+                `billingAccount.propertySubscriptionId = "propertySubscription"."id"`,
+              ),
           'totalBilling',
-        ]),
-      ) as unknown as {
-        streetName: string;
-        PropertySubscriptionId: string;
-        propertyName: string;
-        currentBilling: string;
-        arrears: number;
-        totalBilling?: string;
-      }[];
+        )
+        .addSelect((qb) => {
+          return qb
+            .from(PropertySubscriptionUnit, 'propertySubscriptionUnit')
+            .select(
+              `json_agg(json_build_object(
+                'propertyUnits', "propertySubscriptionUnit"."propertyUnits",
+                'propertyType', (select "subQuery"."propertyTypeName" from (${this.dbManager
+                  .createQueryBuilder(
+                    EntitySubscriberProperty,
+                    'entitySubscriberProperty',
+                  )
+                  .select(
+                    (qb) =>
+                      qb
+                        .from(PropertyType, 'propertyType')
+                        .select('propertyType.name', 'propertyTypeName')
+                        .where(
+                          'propertyType.id = "entitySubscriberProperty"."propertyTypeId"',
+                        ),
+                    'propertyTypeName',
+                  )
+                  .where(
+                    'entitySubscriberProperty.id = "propertySubscriptionUnit"."entiySubscriberPropertyId"',
+                  )
+                  .getSql()}) as "subQuery"),
+              'propertyTypeUnitPrice', (select "subQuery"."unitPrice" from (${this.dbManager
+                .createQueryBuilder(
+                  EntitySubscriberProperty,
+                  'entitySubscriberProperty',
+                )
+                .select(
+                  (qb) =>
+                    qb
+                      .from(PropertyType, 'propertyType')
+                      .select('propertyType.unitPrice', 'unitPrice')
+                      .where(
+                        'propertyType.id = "entitySubscriberProperty"."propertyTypeId"',
+                      ),
+                  'unitPrice',
+                )
+                .where(
+                  'entitySubscriberProperty.id = "propertySubscriptionUnit"."entiySubscriberPropertyId"',
+                )
+                .getSql()}) as "subQuery")
+              ))
+              `,
+              'propertyUnits',
+            )
+            .where(
+              'propertySubscriptionUnit.propertySubscriptionId = "propertySubscription"."id"',
+            );
+        }, 'propertyUnits')
+        .addSelect(
+          (qb) =>
+            qb
+              .from(Payment, 'payment')
+              .select('payment.amount')
+              .where(
+                'payment.propertySubscriptionId = "propertySubscription"."id"',
+              )
+              .orderBy('payment.createdAt', 'DESC')
+              .limit(1),
+          'lastPayment',
+        )
+        .where('propertySubscription.streetId = :streetId', {
+          streetId,
+          billingMonth,
+        })
+        .getRawMany();
     }
 
-    return billingDetails;
+    return billingDetails.map((result) => {
+      result['currentBilling'] = result['currentBilling'] || '0';
+      return pick(result, [
+        'streetName',
+        'propertySubscriptionId',
+        'propertyName',
+        'arrears',
+        'currentBilling',
+        'totalBilling',
+        'lastPayment',
+        'propertyUnits',
+        'streetNumber',
+      ]);
+    }) as unknown as {
+      streetName: string;
+      PropertySubscriptionId: string;
+      propertyName: string;
+      currentBilling: string;
+      arrears: number;
+      totalBilling?: string;
+    }[];
   }
 
   async getDashboardMetrics(entityProfileId: string) {
@@ -923,6 +1075,9 @@ export class UtilsBillingService {
           id: postPaymentDto.propertySubscriptionId,
           entityProfileId,
         },
+        relations: {
+          billingAccount: true,
+        },
       },
     );
 
@@ -930,11 +1085,21 @@ export class UtilsBillingService {
       throwBadRequest('Property subscription not found.');
     }
 
-    const payment = this.dbManager.create(Payment, {
-      ...postPaymentDto,
-    });
+    const billingAccount = propertySubscription.billingAccount;
+    const totalPayments = bignumber(billingAccount.totalPayments)
+      .add(postPaymentDto.amount)
+      .toNumber();
 
-    await this.dbManager.save(payment);
+    billingAccount.totalPayments = String(totalPayments);
+
+    await this.dbManager.transaction(async (transactionManager) => {
+      const payment = transactionManager.create(Payment, {
+        ...postPaymentDto,
+      });
+
+      await transactionManager.save(payment);
+      await transactionManager.save(billingAccount);
+    });
   }
 
   getMonthNumber(monthName: string) {

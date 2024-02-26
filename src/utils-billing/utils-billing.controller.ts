@@ -92,7 +92,14 @@ export class UtilsBillingController {
     //
     return await this.utilService.getSubscriptions(
       authPayload.profile.entityProfileId,
-      getSubscriptionQuery,
+      {
+        rowsPerPage: Number(getSubscriptionQuery.rowsPerPage || 10),
+        page: Number(getSubscriptionQuery.page || 1),
+        descending: JSON.parse(getSubscriptionQuery.descending || 'false'),
+        filter: getSubscriptionQuery.filter,
+        sortBy: getSubscriptionQuery.sortBy,
+        streetId: getSubscriptionQuery.streetId,
+      },
     );
   }
 
