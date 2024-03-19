@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { IsEntityUserAdmin } from '../shared/isEntityUserAdmin.guard';
 import { GetAuthPayload } from '../shared/getAuthenticatedUserPayload.decorator';
 import { AuthTokenPayload } from '../lib/types';
@@ -15,11 +23,13 @@ import {
   GetPropertyTypeQuery,
   GetPhoneCodesQuery,
   GetSubscriptionQuery,
-  GeneratePrintBillingDto,
+  GenerateBillingDto,
+  GetPaymentsQuery,
+  GetBillingQuery,
+  PostPaymentDto,
 } from './dtos/dto';
 import { UtilsBillingService } from './utils-billing.service';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
-import { query } from 'express';
 import { ProfileTypes } from '../lib/enums';
 
 @Controller('utils-billing')
@@ -82,20 +92,101 @@ export class UtilsBillingController {
     //
     return await this.utilService.getSubscriptions(
       authPayload.profile.entityProfileId,
-      getSubscriptionQuery,
+      {
+        rowsPerPage: Number(getSubscriptionQuery.rowsPerPage || 10),
+        page: Number(getSubscriptionQuery.page || 1),
+        descending: JSON.parse(getSubscriptionQuery.descending || 'false'),
+        filter: getSubscriptionQuery.filter,
+        sortBy: getSubscriptionQuery.sortBy,
+        streetId: getSubscriptionQuery.streetId,
+      },
     );
   }
 
   @Post('billing')
   @UseGuards(IsAuthenticated)
-  async generatePrintBilling(
-    @Body() generatePrintBillingDto: GeneratePrintBillingDto,
+  async generateBilling(
+    @Body() generateBillingDto: GenerateBillingDto,
     @GetAuthPayload() authPayload: AuthTokenPayload,
   ) {
-    await this.utilService.generatePrintBilling(
-      generatePrintBillingDto,
+    return await this.utilService.generateBilling(
+      generateBillingDto,
       authPayload.profile.entityProfileId,
     );
+  }
+
+  @Get('billing')
+  @UseGuards(IsAuthenticated)
+  async getBilling(
+    @Query() getBillingQuery: GetBillingQuery,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.getBilling(
+      getBillingQuery,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Get('billing/account/arrears')
+  @UseGuards(IsAuthenticated)
+  async getBillingAccountArrears(
+    @Query() query: { page: number; limit: number },
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getBillingAccountArrears(
+      authPayload.profile.entityProfileId,
+      query,
+    );
+  }
+
+  @Get('billing/account/street/:streetId/defaulter')
+  @UseGuards(IsAuthenticated)
+  async getBillingPaymentDefaulters(
+    @Param('streetId') streetId: string,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getBillingDetailsOrDefaulters(
+      authPayload.profile.entityProfileId,
+      { streetId },
+    );
+  }
+
+  @Get('billing/account/street/:streetId/detail')
+  @UseGuards(IsAuthenticated)
+  async getBillingDetails(
+    @Param('streetId') streetId: string,
+    @Query() { billingMonth }: { billingMonth: string },
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getBillingDetailsOrDefaulters(
+      authPayload.profile.entityProfileId,
+      { streetId, billingMonth },
+    );
+  }
+
+  @Post('payment')
+  @UseGuards(IsAuthenticated)
+  async postPayment(
+    @Body() postPaymentDto: PostPaymentDto,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    await this.utilService.postPayment(
+      postPaymentDto,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Get('payment')
+  @UseGuards(IsAuthenticated)
+  async getPayments(
+    @Query()
+    query: GetPaymentsQuery,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getPayments({
+      ...query,
+      entityProfileId: authPayload.profile.entityProfileId,
+    });
   }
 
   @Post('lga')
@@ -176,5 +267,13 @@ export class UtilsBillingController {
   @UseGuards(IsAuthenticated)
   async getPhoneCodes(@Query() query: GetPhoneCodesQuery) {
     return await this.utilService.getPhoneCode(query);
+  }
+
+  @Get('/dashboard/metrics')
+  @UseGuards(IsAuthenticated)
+  async getDashboardMetrics(@GetAuthPayload() authPayload: AuthTokenPayload) {
+    return await this.utilService.getDashboardMetrics(
+      authPayload.profile.entityProfileId,
+    );
   }
 }

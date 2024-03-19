@@ -30,7 +30,7 @@ export class PropertySubscription {
   @Column({ type: 'enum', enum: SubscriberProfileRoleEnum })
   subscriberProfileRole: SubscriberProfileRoleEnum;
 
-  @Column({ type: 'bigint', nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   oldCode: string;
 
   @Column({ type: 'varchar' })

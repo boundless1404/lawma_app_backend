@@ -1,0 +1,29 @@
+[
+  {
+    "Code": "2369",
+    "Acount Name": "Alhaji Fatai Ipaye",
+    "Property Number/Street": "59         Oluwagbebe Street, Shasha, ",
+    "Property Units": "1 Duplex /1 Flat. /1 Shop.",
+    "TotalBill": "314500",
+    "Total Payment": "284000",
+    "Balance": "30500"
+  },
+  {
+    "Code": "1091",
+    "Acount Name": "Alhaji Animashaun ",
+    "Property Number/Street": "4          Oluwagbebe Street, Shasha, ",
+    "Property Units": "1 Flat. /2 MiniFlat",
+    "TotalBill": "457830",
+    "Total Payment": "419930",
+    "Balance": "37900"
+  },
+  {
+    "Code": "1089",
+    "Acount Name": "Mrs Medina ",
+    "Property Number/Street": "2.         Oluwagbebe Street, Shasha, ",
+    "Property Units": "12 Room. /1 Shop.",
+    "TotalBill": "495500",
+    "Total Payment": "310900",
+    "Balance": "184600"
+  }
+]

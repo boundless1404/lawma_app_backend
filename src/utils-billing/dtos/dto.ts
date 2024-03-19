@@ -1,14 +1,14 @@
 import { ProfileTypes } from '@/src/lib/enums';
 import {
   IsBoolean,
+  IsBooleanString,
+  IsDateString,
   IsEnum,
   IsNotEmpty,
   IsNumber,
   IsNumberString,
   IsOptional,
-  IsPositive,
   IsString,
-  isNotEmpty,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -139,6 +139,10 @@ export class PostPaymentDto {
   @IsNotEmpty()
   @IsNumberString()
   propertySubscriptionId: string;
+
+  @IsNotEmpty()
+  @IsDateString()
+  paymentDate: string;
 }
 
 export class GetLgaQuery {
@@ -189,17 +193,35 @@ export class GetPhoneCodesQuery {
 
 export class GetSubscriptionQuery {
   @IsOptional()
-  @IsNumber()
-  // @IsPositive()
-  limit: number;
+  @IsNumberString()
+  rowsPerPage: string;
 
   @IsOptional()
   @IsNumber()
-  // @IsPositive()
+  limit: number;
+
+  @IsOptional()
+  @IsString()
+  sortBy: string;
+
+  @IsOptional()
+  @IsBooleanString()
+  descending: string;
+
+  @IsOptional()
+  @IsNumberString()
   page: number;
+
+  @IsOptional()
+  @IsString()
+  filter?: string;
+
+  @IsOptional()
+  @IsNumberString()
+  streetId: string;
 }
 
-export class GeneratePrintBillingDto {
+export class GenerateBillingDto {
   @IsOptional()
   @IsString()
   streetId: string;
@@ -217,8 +239,30 @@ export class GeneratePrintBillingDto {
   month: string;
 
   @IsOptional()
-  @IsEnum(['print', 'generate'])
-  type: 'print' | 'generate';
+  @IsBoolean()
+  forAllProperties: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  forPropertiesOnStreet: boolean;
+}
+
+export class GetBillingQuery {
+  @IsOptional()
+  @IsString()
+  streetId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertySuscriptionId: string;
+
+  @IsOptional()
+  @IsString()
+  year: string;
+
+  @IsOptional()
+  @IsString()
+  month: string;
 
   @IsOptional()
   @IsBoolean()
@@ -227,4 +271,28 @@ export class GeneratePrintBillingDto {
   @IsOptional()
   @IsBoolean()
   forPropertiesOnStreet: boolean;
+}
+
+export class GetPaymentsQuery {
+  @IsOptional()
+  @IsString()
+  month: string;
+
+  @IsOptional()
+  @IsString()
+  year: string;
+
+  @IsOptional()
+  @IsString()
+  propertySubscriptionId: string;
+}
+
+export class GetBillingAccountArrear {
+  @IsOptional()
+  @IsNumber()
+  page: number;
+
+  @IsOptional()
+  @IsNumber()
+  limit: number;
 }
