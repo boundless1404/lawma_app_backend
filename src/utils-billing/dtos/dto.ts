@@ -1,15 +1,14 @@
 import { ProfileTypes } from '@/src/lib/enums';
 import {
   IsBoolean,
+  IsBooleanString,
   IsDateString,
   IsEnum,
   IsNotEmpty,
   IsNumber,
   IsNumberString,
   IsOptional,
-  IsPositive,
   IsString,
-  isNotEmpty,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -194,14 +193,32 @@ export class GetPhoneCodesQuery {
 
 export class GetSubscriptionQuery {
   @IsOptional()
-  @IsNumber()
-  // @IsPositive()
-  limit: number;
+  @IsNumberString()
+  rowsPerPage: string;
 
   @IsOptional()
   @IsNumber()
-  // @IsPositive()
+  limit: number;
+
+  @IsOptional()
+  @IsString()
+  sortBy: string;
+
+  @IsOptional()
+  @IsBooleanString()
+  descending: string;
+
+  @IsOptional()
+  @IsNumberString()
   page: number;
+
+  @IsOptional()
+  @IsString()
+  filter?: string;
+
+  @IsOptional()
+  @IsNumberString()
+  streetId: string;
 }
 
 export class GenerateBillingDto {
@@ -209,7 +226,7 @@ export class GenerateBillingDto {
   @IsString()
   streetId: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   propertySuscriptionId: string;
 
