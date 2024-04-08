@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import GRSDebtorListJSON from '../../../lib/grsWasteRecord.json';
+import GRSDebtorListJSON from '../../../lib/grsData.json';
 import { PropertySubscription } from '../../../utils-billing/entitties/propertySubscription.entity';
 import { ProfileTypes, SubscriberProfileRoleEnum } from '../../../lib/enums';
 import { EntityProfile } from '../../../utils-billing/entitties/entityProfile.entity';
@@ -166,6 +166,8 @@ export class PropertySubscriptionSeeding1707468746527
           })) || (await dbManager.save(lgaWard));
 
         for await (const debtor of GRSDebtorListJSON) {
+          console.log(debtor['Code']);
+          debtor['Code'] = String(debtor['Code']);
           //
           let street = new Street();
           street.name = getStreetName(debtor['Property Number/Street']);
@@ -262,8 +264,10 @@ export class PropertySubscriptionSeeding1707468746527
             })) || new BillingAccount();
           // set properties of the billing account
           billingAccount.propertySubscriptionId = propertySubscription.id;
-          billingAccount.totalBillings = debtor['TotalBill']?.trim() || '0';
-          billingAccount.totalPayments = debtor['Total Payment']?.trim() || '0';
+          billingAccount.totalBillings =
+            String(debtor['TotalBill'] || '')?.trim() || '0';
+          billingAccount.totalPayments =
+            String(debtor['Total Payment'] || '')?.trim() || '0';
 
           // Save the billing account to the database
           await dbManager.save(billingAccount);
