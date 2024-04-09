@@ -25,8 +25,8 @@ export class PropertySubscriptionSeeding1707468746527
     try {
       //
       const dbManager = queryRunner.manager;
-      function getStreetNumber(streetData: string) {
-        const streetNumber = streetData
+      function getStreetNumber(streetData: any) {
+        const streetNumber = String(streetData || '')
           ?.trim()
           ?.split(/\s{1,}/)?.[0]
           ?.trim();
@@ -34,7 +34,9 @@ export class PropertySubscriptionSeeding1707468746527
       }
 
       function getStreetName(streetData: string) {
-        const streetDataArray = streetData?.trim()?.split(/\s{1,}/);
+        const streetDataArray = String(streetData || '')
+          ?.trim()
+          ?.split(/\s{1,}/);
         streetDataArray.shift();
         const streetName = streetDataArray.join().trim();
 
