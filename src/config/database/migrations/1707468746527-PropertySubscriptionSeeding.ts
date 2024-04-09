@@ -64,13 +64,14 @@ export class PropertySubscriptionSeeding1707468746527
         return pick(response, ['data', 'headers', 'request', 'status']);
       }
 
-      async function getAddSubscriber(
-        accountName: string,
-        propertyCode: string,
-      ) {
+      async function getAddSubscriber(accountName: any, propertyCode: string) {
         accountName =
-          (accountName?.trim() || '')?.replace(/\s{1,}/g, '_') || '';
-        accountName = (accountName?.trim() || '')?.replace(/[\W\s]{1,}/g, '');
+          (String(accountName || '')?.trim() || '')?.replace(/\s{1,}/g, '_') ||
+          '';
+        accountName = (String(accountName || '')?.trim() || '')?.replace(
+          /[\W\s]{1,}/g,
+          '',
+        );
         propertyCode = (propertyCode?.trim() || '')?.replace(/[\W\s]{1,}/g, '');
         const serverResponse = await requestAuth({
           firstName: accountName || '',
