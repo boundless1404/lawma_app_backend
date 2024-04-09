@@ -783,24 +783,6 @@
     "Balance": 14000
   },
   {
-    "Code": "",
-    "Acount Name": "",
-    "Property Number/Street": "",
-    "Property Units": "",
-    "TotalBill": "",
-    "Total Payment": "",
-    "Balance": ""
-  },
-  {
-    "Code": "op.",
-    "Acount Name": 477800,
-    "Property Number/Street": 381800,
-    "Property Units": 96000,
-    "TotalBill": "",
-    "Total Payment": 0,
-    "Balance": ""
-  },
-  {
     "Code": 408,
     "Acount Name": "Esho Lawal",
     "Property Number/Street": "62D. Boundary Road, Shasha,",
@@ -18756,15 +18738,6 @@
     "Balance": "1000"
   },
   {
-    "Code": 0,
-    "Acount Name": "",
-    "Property Number/Street": "",
-    "Property Units": "",
-    "TotalBill": "",
-    "Total Payment": "",
-    "Balance": ""
-  },
-  {
     "Code": 811,
     "Acount Name": "MEAT EMBASSY",
     "Property Number/Street": "1 Lewis Street, Santos Layout, ",
@@ -19002,7 +18975,7 @@
     "Code": 4223,
     "Acount Name": "LIVEHAPPY EYE CLINIC",
     "Property Number/Street": "'39 Shasha Road, Shasha, ",
-    "Property Units": "",
+    "Property Units": "1 HOSPITAL",
     "TotalBill": "30000",
     "Total Payment": "4000",
     "Balance": "26000"
