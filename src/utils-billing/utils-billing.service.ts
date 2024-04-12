@@ -154,7 +154,7 @@ export class UtilsBillingService {
       EntitySubscriberProfile,
       {
         where: {
-          createdByEntityProfileId: entityProfileId,
+          createdByEntityUserProfileId: entityProfileId,
         },
       },
     );
