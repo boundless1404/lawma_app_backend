@@ -115,6 +115,10 @@ export class CreateLgaWardDto {
 }
 
 export class CreatePropertyTypesDto {
+  @IsOptional()
+  @IsNumberString()
+  id: string;
+
   @IsNotEmpty()
   @IsString()
   // @Max(50)

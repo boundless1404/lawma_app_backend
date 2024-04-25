@@ -381,21 +381,22 @@ export class UtilsBillingService {
     entityProfileId: string,
   ) {
     //
-    const existingPropertyType = await this.getPropertyTypeOrThrowError({
-      name: ILike(`%${createPropertyTypesDto.name}%`),
-      unitPrice: createPropertyTypesDto.unitPrice,
-      throwError: false,
+    let propertyType = await this.dbManager.findOne(PropertyType, {
+      where: {
+        id: createPropertyTypesDto.id,
+      },
     });
 
-    if (existingPropertyType) {
-      return existingPropertyType;
+    if (propertyType) {
+      propertyType.name = createPropertyTypesDto.name;
+      propertyType.unitPrice = createPropertyTypesDto.unitPrice;
+    } else {
+      propertyType = this.dbManager.create(PropertyType, {
+        unitPrice: createPropertyTypesDto.unitPrice,
+        name: createPropertyTypesDto.name,
+        entityProfileId,
+      });
     }
-
-    const propertyType = this.dbManager.create(PropertyType, {
-      unitPrice: createPropertyTypesDto.unitPrice,
-      name: createPropertyTypesDto.name,
-      entityProfileId,
-    });
 
     await this.dbManager.save(propertyType);
   }
