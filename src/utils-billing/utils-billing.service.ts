@@ -10,6 +10,8 @@ import {
   GenerateBillingDto,
   GetBillingQuery,
   PostPaymentDto,
+  SavePropertyUnitsDto,
+  SavePropertyUnitsDetailsDto,
 } from './dtos/dto';
 import { ProfileTypes, SubscriberProfileRoleEnum } from '../lib/enums';
 import { throwBadRequest, throwForbidden } from '../utils/helpers';
@@ -717,6 +719,221 @@ export class UtilsBillingService {
 
     return mappedStreetsAndArrears;
   }
+
+  async getSubscriptionDetails(
+    entityProfileId: string,
+    propertySubscriptionId: string,
+  ) {
+    // get property subsription for the current profile and the provided subscription id
+    if (!entityProfileId || !propertySubscriptionId) {
+      throwBadRequest('Kindly, provide a valid property reference.');
+    }
+    const propertySubscription = await this.dbManager.findOne(
+      PropertySubscription,
+      {
+        where: {
+          id: propertySubscriptionId,
+          entityProfileId,
+        },
+        relations: {
+          payments: true,
+          billingAccount: true,
+          entitySubscriberProfile: {
+            phoneCode: true,
+          },
+          propertySubscriptionUnits: {
+            entitySubscriberProperty: {
+              propertyType: true,
+            },
+          },
+          street: true,
+        },
+      },
+    );
+
+    return propertySubscription;
+  }
+
+  async savePropertyUnits(
+    entityProfileId: string,
+    propertyUnitsDetails: SavePropertyUnitsDetailsDto,
+  ) {
+    // deduplicate record
+    const propertyUnitsTypesDto =
+      propertyUnitsDetails.propertySubscriptionUnits;
+    // check if propertyType has no duplicate
+    // identity and remove possible duplicates
+    const uniquePropertyTypes: { [key: string]: SavePropertyUnitsDto } = {};
+    propertyUnitsDetails.propertySubscriptionUnits =
+      propertyUnitsTypesDto.filter((eachUnitTypeDto) => {
+        if (eachUnitTypeDto.propertyType.trim() === '') {
+          return false;
+        }
+        const isUnique = !uniquePropertyTypes[eachUnitTypeDto.propertyType];
+        if (isUnique) {
+          uniquePropertyTypes[eachUnitTypeDto.propertyType] = eachUnitTypeDto;
+        }
+
+        return isUnique;
+      });
+
+    //
+    const propertySubscription = await this.dbManager.findOne(
+      PropertySubscription,
+      {
+        where: {
+          id: propertyUnitsDetails.propertySubscriptionId,
+          entityProfileId,
+        },
+        relations: {
+          propertySubscriptionUnits: {
+            entitySubscriberProperty: {
+              propertyType: true,
+            },
+          },
+        },
+      },
+    );
+
+    if (!propertySubscription) {
+      throwBadRequest('Invalide Parameters received.');
+    }
+
+    const savedPropertyUnits = propertySubscription.propertySubscriptionUnits;
+
+    const exitingPropertyUnitTypes: SavePropertyUnitsDto[] = [];
+
+    const propertyUnitsToRemove: PropertySubscriptionUnit[] = [];
+    const existingPropertyUnitsAndType = savedPropertyUnits.filter(
+      (eachPropertyUnit) => {
+        const existingUnitMatch =
+          propertyUnitsDetails.propertySubscriptionUnits.findIndex(
+            (eachSubcriptionUnit) =>
+              eachSubcriptionUnit.propertyTypeId ===
+              eachPropertyUnit.entitySubscriberProperty.propertyType.id,
+          ) !== -1;
+
+        if (!existingUnitMatch) {
+          propertyUnitsToRemove.push(eachPropertyUnit);
+        } else {
+          const propertyUnitDto =
+            propertyUnitsDetails.propertySubscriptionUnits.find(
+              (eachDto) =>
+                eachDto.propertyType.toLocaleLowerCase() ===
+                eachPropertyUnit.entitySubscriberProperty.propertyType.name.toLocaleLowerCase(),
+            );
+          exitingPropertyUnitTypes.push(propertyUnitDto);
+        }
+        return existingUnitMatch;
+      },
+    );
+
+    const newPropertyUnitsTypes =
+      propertyUnitsDetails.propertySubscriptionUnits.filter(
+        (eachUnitDto) =>
+          exitingPropertyUnitTypes.findIndex(
+            (eachUnitType) =>
+              eachUnitType.propertyTypeId === eachUnitDto.propertyTypeId,
+          ) === -1,
+      );
+
+    await this.dbManager.transaction(async (transactionManager) => {
+      // remove associated property unit types that have been removed.
+      for await (const eachPropertyUnitToRemove of propertyUnitsToRemove) {
+        await this.dbManager.delete(PropertySubscriptionUnit, {
+          entiySubscriberPropertyId:
+            eachPropertyUnitToRemove.entiySubscriberPropertyId,
+          propertySubscriptionId:
+            eachPropertyUnitToRemove.propertySubscriptionId,
+        });
+        await this.dbManager.delete(EntitySubscriberProperty, {
+          id: eachPropertyUnitToRemove.entitySubscriberProperty.id,
+        });
+      }
+
+      // update the property unit for existing property unit type
+      for await (const prorpertytype of exitingPropertyUnitTypes) {
+        const propertyUnit = existingPropertyUnitsAndType.find(
+          (eachUnit) =>
+            eachUnit.entitySubscriberProperty.propertyType.name.toLocaleLowerCase() ===
+            prorpertytype.propertyType.toLocaleLowerCase(),
+        );
+
+        if (propertyUnit) {
+          propertyUnit.propertyUnits = Number(prorpertytype.propertyUnit);
+          await this.dbManager.save(propertyUnit);
+        }
+      }
+
+      for await (const propertyType of newPropertyUnitsTypes) {
+        // add new property units
+        // const newPropertyUnitType =
+        //   propertyUnitsDetails.propertySubscriptionUnits.find(
+        //     (eachUnitDto) =>
+        //       eachUnitDto.propertyType === propertyType.propertyType,
+        //   );
+
+        // if (newPropertyUnitType) {
+        //   newPropertyUnitsTypes.push(newPropertyUnitType);
+        // }
+
+        // create a new proeperty type
+        let referencedPropertyType = await this.dbManager.findOne(
+          PropertyType,
+          {
+            where: { id: propertyType.propertyTypeId },
+          },
+        );
+
+        if (!referencedPropertyType) {
+          referencedPropertyType = transactionManager.create(PropertyType, {
+            name: propertyType.propertyType,
+            unitPrice: propertyType.unitPrice,
+            entityProfileId,
+          });
+
+          referencedPropertyType = await transactionManager.save(
+            referencedPropertyType,
+          );
+        }
+
+        // create entity subscriber property
+        let entitySubscriberProperty = transactionManager.create(
+          EntitySubscriberProperty,
+          {
+            ownerEntitySubscriberProfileId:
+              propertySubscription.entitySubscriberProfileId,
+            propertyTypeId: referencedPropertyType.id,
+          },
+        );
+
+        entitySubscriberProperty = await transactionManager.save(
+          entitySubscriberProperty,
+        );
+
+        // create the entity subscription property unit
+        const propertySubscriptionUnit = transactionManager.create(
+          PropertySubscriptionUnit,
+          {
+            propertySubscriptionId: propertySubscription.id,
+            entiySubscriberPropertyId: entitySubscriberProperty.id,
+            propertyUnits: Number(propertyType.propertyUnit),
+          },
+        );
+
+        await transactionManager.save(propertySubscriptionUnit);
+      }
+    });
+  }
+
+  // async getPropertyTypes({ entityProfileId, queryTerm }:{entityProfileId: string, queryTerm: string}) {
+  //   const propertyTypes = await this.dbManager.find(PropertyType, {
+  //     where: {
+  //       ...(queryTerm ? { name: ILike(`%${queryTerm}%`)} : {}),
+  //       { entityProfileId}
+  //     }
+  //   })
+  // }
 
   async getBillingDetailsOrDefaulters(
     entityProfileId: string,

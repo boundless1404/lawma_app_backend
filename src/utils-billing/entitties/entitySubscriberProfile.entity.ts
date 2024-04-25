@@ -66,7 +66,7 @@ export class EntitySubscriberProfile {
     (entitySubscriberProperty) =>
       entitySubscriberProperty.entitySubscriberProfile,
   )
-  entitySubscriberProperty: EntitySubscriberProperty[];
+  entitySubscriberProperties: EntitySubscriberProperty[];
 
   @ManyToOne(
     () => EntityProfile,
