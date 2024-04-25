@@ -10,7 +10,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { PropertyType } from './propertyTypes.entity';
-import { Payment } from './payments.entity';
 import { PropertySubscriptionUnit } from './PropertySubscriptionUnit.entity';
 import { EntitySubscriberProfile } from './entitySubscriberProfile.entity';
 
@@ -53,12 +52,12 @@ export class EntitySubscriberProperty {
   )
   propertySubscriptionUnits: PropertySubscriptionUnit[];
 
-  @OneToMany(() => Payment, (payment) => payment.propertySubscription)
-  payments: Payment[];
+  // @OneToMany(() => Payment, (payment) => payment.propertySubscription)
+  // payments: Payment[];
 
   @ManyToOne(
     () => EntitySubscriberProfile,
-    (entitySubscriber) => entitySubscriber.entitySubscriberProperty,
+    (entitySubscriber) => entitySubscriber.entitySubscriberProperties,
   )
   @JoinColumn({ name: 'ownerEntitySubscriberProfileId' })
   entitySubscriberProfile: EntitySubscriberProfile;
