@@ -313,8 +313,9 @@ export class UtilsBillingService {
               entityProfileId,
               ...(streetId ? { streetId } : {}),
             },
-        take: rowsPerPage,
-        skip: (page - 1) * rowsPerPage,
+        ...(!streetId
+          ? { take: rowsPerPage, skip: (page - 1) * rowsPerPage }
+          : {}),
         relations: {
           propertySubscriptionUnits: {
             entitySubscriberProperty: {
