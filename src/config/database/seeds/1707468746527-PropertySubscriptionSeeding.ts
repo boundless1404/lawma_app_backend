@@ -1,21 +1,21 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import GRSDebtorListJSON from '../../lib/grsData.json';
-import { PropertySubscription } from '../../utils-billing/entitties/propertySubscription.entity';
-import { ProfileTypes, SubscriberProfileRoleEnum } from '../../lib/enums';
-import { EntityProfile } from '../../utils-billing/entitties/entityProfile.entity';
-import { EntityUserProfile } from '../../utils-billing/entitties/entityUserProfile.entity';
-import { ProfileCollection } from '../../utils-billing/entitties/profileCollection.entity';
+import GRSDebtorListJSON from '../../../lib/GRSExcel.json';
+import { PropertySubscription } from '../../../utils-billing/entitties/propertySubscription.entity';
+import { ProfileTypes, SubscriberProfileRoleEnum } from '../../../lib/enums';
+import { EntityProfile } from '../../../utils-billing/entitties/entityProfile.entity';
+import { EntityUserProfile } from '../../../utils-billing/entitties/entityUserProfile.entity';
+import { ProfileCollection } from '../../../utils-billing/entitties/profileCollection.entity';
 import axios from 'axios';
 import { isNumber, pick } from 'lodash';
-import { AuthenticatedUserData } from '../../lib/types';
-import { Lga } from '../../utils-billing/entitties/lga.entity';
-import { LgaWard } from '../../utils-billing/entitties/lgaWard.entity';
-import { Street } from '../../utils-billing/entitties/street.entity';
-import { EntitySubscriberProfile } from '../../utils-billing/entitties/entitySubscriberProfile.entity';
-import { PropertyType } from '../../utils-billing/entitties/propertyTypes.entity';
-import { EntitySubscriberProperty } from '../../utils-billing/entitties/entitySubscriberProperty.entity';
-import { PropertySubscriptionUnit } from '../../utils-billing/entitties/PropertySubscriptionUnit.entity';
-import { BillingAccount } from '../../utils-billing/entitties/billingAccount.entity';
+import { AuthenticatedUserData } from '../../../lib/types';
+import { Lga } from '../../../utils-billing/entitties/lga.entity';
+import { LgaWard } from '../../../utils-billing/entitties/lgaWard.entity';
+import { Street } from '../../../utils-billing/entitties/street.entity';
+import { EntitySubscriberProfile } from '../../../utils-billing/entitties/entitySubscriberProfile.entity';
+import { PropertyType } from '../../../utils-billing/entitties/propertyTypes.entity';
+import { EntitySubscriberProperty } from '../../../utils-billing/entitties/entitySubscriberProperty.entity';
+import { PropertySubscriptionUnit } from '../../../utils-billing/entitties/PropertySubscriptionUnit.entity';
+import { BillingAccount } from '../../../utils-billing/entitties/billingAccount.entity';
 import { isNumberString } from 'class-validator';
 
 export class PropertySubscriptionSeeding1707468746527
