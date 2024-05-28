@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -27,6 +28,7 @@ import {
   GetPaymentsQuery,
   GetBillingQuery,
   PostPaymentDto,
+  SavePropertyUnitsDetailsDto,
 } from './dtos/dto';
 import { UtilsBillingService } from './utils-billing.service';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
@@ -101,6 +103,32 @@ export class UtilsBillingController {
         streetId: getSubscriptionQuery.streetId,
       },
     );
+  }
+
+  @Get('subscription/details')
+  @UseGuards(IsAuthenticated)
+  async getSubscriptionDetails(
+    @Query() query: Record<string, string>,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.getSubscriptionDetails(
+      authPayload.profile.entityProfileId,
+      query.propertySubscriptionId,
+    );
+  }
+
+  @Put('subscription/property-units')
+  @UseGuards(IsAuthenticated)
+  async savePropertyUnits(
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+    @Body() propertyUnits: SavePropertyUnitsDetailsDto,
+  ) {
+    await this.utilService.savePropertyUnits(
+      authPayload.profile.entityProfileId,
+      propertyUnits,
+    );
+
+    return;
   }
 
   @Post('billing')

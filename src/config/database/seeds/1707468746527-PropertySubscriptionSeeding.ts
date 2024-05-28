@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import GRSDebtorListJSON from '../../../lib/grsWasteRecord.json';
+import GRSDebtorListJSON from '../../../lib/GRSExcel.json';
 import { PropertySubscription } from '../../../utils-billing/entitties/propertySubscription.entity';
 import { ProfileTypes, SubscriberProfileRoleEnum } from '../../../lib/enums';
 import { EntityProfile } from '../../../utils-billing/entitties/entityProfile.entity';
@@ -25,8 +25,8 @@ export class PropertySubscriptionSeeding1707468746527
     try {
       //
       const dbManager = queryRunner.manager;
-      function getStreetNumber(streetData: string) {
-        const streetNumber = streetData
+      function getStreetNumber(streetData: any) {
+        const streetNumber = String(streetData || '')
           ?.trim()
           ?.split(/\s{1,}/)?.[0]
           ?.trim();
@@ -34,7 +34,9 @@ export class PropertySubscriptionSeeding1707468746527
       }
 
       function getStreetName(streetData: string) {
-        const streetDataArray = streetData?.trim()?.split(/\s{1,}/);
+        const streetDataArray = String(streetData || '')
+          ?.trim()
+          ?.split(/\s{1,}/);
         streetDataArray.shift();
         const streetName = streetDataArray.join().trim();
 
@@ -62,13 +64,14 @@ export class PropertySubscriptionSeeding1707468746527
         return pick(response, ['data', 'headers', 'request', 'status']);
       }
 
-      async function getAddSubscriber(
-        accountName: string,
-        propertyCode: string,
-      ) {
+      async function getAddSubscriber(accountName: any, propertyCode: string) {
         accountName =
-          (accountName?.trim() || '')?.replace(/\s{1,}/g, '_') || '';
-        accountName = (accountName?.trim() || '')?.replace(/[\W\s]{1,}/g, '');
+          (String(accountName || '')?.trim() || '')?.replace(/\s{1,}/g, '_') ||
+          '';
+        accountName = (String(accountName || '')?.trim() || '')?.replace(
+          /[\W\s]{1,}/g,
+          '',
+        );
         propertyCode = (propertyCode?.trim() || '')?.replace(/[\W\s]{1,}/g, '');
         const serverResponse = await requestAuth({
           firstName: accountName || '',
@@ -166,6 +169,8 @@ export class PropertySubscriptionSeeding1707468746527
           })) || (await dbManager.save(lgaWard));
 
         for await (const debtor of GRSDebtorListJSON) {
+          console.log(debtor['Code']);
+          debtor['Code'] = String(debtor['Code']);
           //
           let street = new Street();
           street.name = getStreetName(debtor['Property Number/Street']);
@@ -262,8 +267,10 @@ export class PropertySubscriptionSeeding1707468746527
             })) || new BillingAccount();
           // set properties of the billing account
           billingAccount.propertySubscriptionId = propertySubscription.id;
-          billingAccount.totalBillings = debtor['TotalBill']?.trim() || '0';
-          billingAccount.totalPayments = debtor['Total Payment']?.trim() || '0';
+          billingAccount.totalBillings =
+            String(debtor['TotalBill'] || '')?.trim() || '0';
+          billingAccount.totalPayments =
+            String(debtor['Total Payment'] || '')?.trim() || '0';
 
           // Save the billing account to the database
           await dbManager.save(billingAccount);

@@ -1,4 +1,5 @@
 import { ProfileTypes } from '@/src/lib/enums';
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsBooleanString,
@@ -9,6 +10,7 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -113,6 +115,10 @@ export class CreateLgaWardDto {
 }
 
 export class CreatePropertyTypesDto {
+  @IsOptional()
+  @IsNumberString()
+  id: string;
+
   @IsNotEmpty()
   @IsString()
   // @Max(50)
@@ -295,4 +301,32 @@ export class GetBillingAccountArrear {
   @IsOptional()
   @IsNumber()
   limit: number;
+}
+
+export class SavePropertyUnitsDetailsDto {
+  @IsNotEmpty()
+  @IsNumberString()
+  propertySubscriptionId: string;
+
+  @Type(() => SavePropertyUnitsDto)
+  // @ValidateNested()
+  propertySubscriptionUnits: SavePropertyUnitsDto[];
+}
+
+export class SavePropertyUnitsDto {
+  @IsOptional()
+  @IsNumberString()
+  propertyTypeId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertyType: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  propertyUnit: string;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  unitPrice: string;
 }

@@ -1,29 +1,6420 @@
 [
   {
-    "Code": "2369",
-    "Acount Name": "Alhaji Fatai Ipaye",
-    "Property Number/Street": "59         Oluwagbebe Street, Shasha, ",
-    "Property Units": "1 Duplex /1 Flat. /1 Shop.",
-    "TotalBill": "314500",
-    "Total Payment": "284000",
+    "Code": "4242",
+    "Acount Name": "Mrs. Ngozi (Pettty trader)",
+    "Property Number/Street": "\"8, Adelani Lane, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26000",
+    "Total Payment": "5000",
+    "Balance": "21000"
+  },
+  {
+    "Code": " 4245",
+    "Acount Name": "Mrs. Covenant (Varieties shiop)",
+    "Property Number/Street": ".8, Adelani Lane, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "27300",
+    "Total Payment": "2500",
+    "Balance": "24800"
+  },
+  {
+    "Code": " 4231",
+    "Acount Name": "Mrs. Ogbolu Grace Snacks/Minerals)",
+    "Property Number/Street": "8' Adelani Lane, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28300",
+    "Total Payment": "9500",
+    "Balance": "18800"
+  },
+  {
+    "Code": " 4232",
+    "Acount Name": "Saviour Rose (Beer parlour)",
+    "Property Number/Street": "'8 Adelani Lane, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28300",
+    "Total Payment": "9500",
+    "Balance": "18800"
+  },
+  {
+    "Code": " 3988",
+    "Acount Name": "The Conquerors Assembly Church",
+    "Property Number/Street": "3 Adelani Lane, Shasha, ",
+    "Property Units": "1 Church..",
+    "TotalBill": "144000",
+    "Total Payment": "123000",
+    "Balance": "21000"
+  },
+  {
+    "Code": " 90",
+    "Acount Name": "Adelani House ",
+    "Property Number/Street": "1 Adelani Lane, Shasha, ",
+    "Property Units": "1 Shop. /5 Room_Parlour",
+    "TotalBill": "413900",
+    "Total Payment": "321040",
+    "Balance": "92860"
+  },
+  {
+    "Code": " 91",
+    "Acount Name": "Kiosks ",
+    "Property Number/Street": "1b Adelani Lane, Shasha, ",
+    "Property Units": "3 Shop.",
+    "TotalBill": "130900",
+    "Total Payment": "86600",
+    "Balance": "44300"
+  },
+  {
+    "Code": " 93",
+    "Acount Name": "Folarin Bolanle ",
+    "Property Number/Street": "5 Adelani Lane, Shasha, ",
+    "Property Units": "9 Room.",
+    "TotalBill": "367150",
+    "Total Payment": "135600",
+    "Balance": "231550"
+  },
+  {
+    "Code": " 94",
+    "Acount Name": "Evangelical Ministry ",
+    "Property Number/Street": "6 Adelani Lane, Shasha, ",
+    "Property Units": "1 Church..",
+    "TotalBill": "280500",
+    "Total Payment": "268500",
+    "Balance": "12000"
+  },
+  {
+    "Code": " 95",
+    "Acount Name": "Olawale Ojo ",
+    "Property Number/Street": "7 Adelani Lane, Shasha, ",
+    "Property Units": "7 Room.",
+    "TotalBill": "272450",
+    "Total Payment": "158200",
+    "Balance": "114250"
+  },
+  {
+    "Code": " 96",
+    "Acount Name": "Mr Adesanya",
+    "Property Number/Street": "8 Adelani Lane, Shasha, ",
+    "Property Units": "5 Shop. /1 Mini Flat",
+    "TotalBill": "449250",
+    "Total Payment": "183500",
+    "Balance": "265750"
+  },
+  {
+    "Code": " 98",
+    "Acount Name": "Mrs. Adeyemi Agbeke .A.",
+    "Property Number/Street": "1 Adeyemi Street, Santos, ",
+    "Property Units": "1 Duplex /1 Room",
+    "TotalBill": "256000",
+    "Total Payment": "244450",
+    "Balance": "11550"
+  },
+  {
+    "Code": " 102",
+    "Acount Name": "Mr Oduba ",
+    "Property Number/Street": "7 Adeyemi Street, Santos, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "205000",
+    "Total Payment": "202000",
+    "Balance": "3000"
+  },
+  {
+    "Code": " 4386",
+    "Acount Name": "Ndubutor Mama Amaka(FIRST BLOCK)",
+    "Property Number/Street": "10 Aduralere Street, Shasha, ",
+    "Property Units": "1 Mini Flat",
+    "TotalBill": "31250",
+    "Total Payment": "0",
+    "Balance": "31250"
+  },
+  {
+    "Code": " 4423",
+    "Acount Name": "Tochukwu Nwankwo",
+    "Property Number/Street": "3, Aduralere Street, Shasha, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "40500",
+    "Total Payment": "25500",
+    "Balance": "15000"
+  },
+  {
+    "Code": " 3175",
+    "Acount Name": "Mr. M.A. Adedigba",
+    "Property Number/Street": "8, Aduralere Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "94150",
+    "Total Payment": "49250",
+    "Balance": "44900"
+  },
+  {
+    "Code": " 3526",
+    "Acount Name": "Frankline Christian Iwuji(Middle block)",
+    "Property Number/Street": "(10.), Aduralere Street, Shasha, ",
+    "Property Units": "1 Room.",
+    "TotalBill": "40250",
+    "Total Payment": "11800",
+    "Balance": "28450"
+  },
+  {
+    "Code": " 104",
+    "Acount Name": "Mr Olufemi Olunaike ",
+    "Property Number/Street": "1 Aduralere Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "63500",
+    "Total Payment": "55500",
+    "Balance": "8000"
+  },
+  {
+    "Code": " 106",
+    "Acount Name": "Mr. Adeleke Kehinde Oyenuga",
+    "Property Number/Street": "4 Aduralere Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "135400",
+    "Total Payment": "131400",
+    "Balance": "4000"
+  },
+  {
+    "Code": " 107",
+    "Acount Name": "Mrs Nuru ",
+    "Property Number/Street": "5 Aduralere Street, Shasha, ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "395800",
+    "Total Payment": "369800",
+    "Balance": "26000"
+  },
+  {
+    "Code": " 111",
+    "Acount Name": "Alhaji Wole Karounwi ",
+    "Property Number/Street": "9 Aduralere Street, Shasha, ",
+    "Property Units": "8 Room. /1 Shop.",
+    "TotalBill": "354400",
+    "Total Payment": "263800",
+    "Balance": "90600"
+  },
+  {
+    "Code": " 113",
+    "Acount Name": "Dr Shola Adeyemi ",
+    "Property Number/Street": "12 Aduralere Street, Shasha, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "186500",
+    "Total Payment": "183500",
+    "Balance": "3000"
+  },
+  {
+    "Code": " 114",
+    "Acount Name": "Mr Adenagbe Seinde ",
+    "Property Number/Street": "14 Aduralere Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "206000",
+    "Total Payment": "152500",
+    "Balance": "53500"
+  },
+  {
+    "Code": " 115",
+    "Acount Name": "Mechanics ",
+    "Property Number/Street": "10a Aduralere Street, Shasha, ",
+    "Property Units": "1 Workshop.",
+    "TotalBill": "173000",
+    "Total Payment": "148000",
+    "Balance": "25000"
+  },
+  {
+    "Code": " 116",
+    "Acount Name": "Mr Balogun ",
+    "Property Number/Street": "1 Afusatu Street, Shasha, ",
+    "Property Units": "1 Room. /1 MiniFlat",
+    "TotalBill": "145500",
+    "Total Payment": "108700",
+    "Balance": "36800"
+  },
+  {
+    "Code": " 119",
+    "Acount Name": "Hassan M. ",
+    "Property Number/Street": "2 Afusatu Street, Shasha, ",
+    "Property Units": "5 Room.",
+    "TotalBill": "201865",
+    "Total Payment": "64115",
+    "Balance": "137750"
+  },
+  {
+    "Code": " 120",
+    "Acount Name": "F.O. Adejumo ",
+    "Property Number/Street": "3 Afusatu Street, Shasha, ",
+    "Property Units": "6 Room.",
+    "TotalBill": "229200",
+    "Total Payment": "159000",
+    "Balance": "70200"
+  },
+  {
+    "Code": " 121",
+    "Acount Name": "Mr Akpan Ene ",
+    "Property Number/Street": "4 Afusatu Street, Shasha, ",
+    "Property Units": "3 Room_Parlour /1 Shop.",
+    "TotalBill": "300200",
+    "Total Payment": "90700",
+    "Balance": "209500"
+  },
+  {
+    "Code": " 123",
+    "Acount Name": "Jimoh Busari ",
+    "Property Number/Street": "3b Afusatu Street, Shasha, ",
+    "Property Units": "9 Room.",
+    "TotalBill": "340350",
+    "Total Payment": "235600",
+    "Balance": "104750"
+  },
+  {
+    "Code": " 124",
+    "Acount Name": "Mr Olu ",
+    "Property Number/Street": "5 Afusatu Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "300400",
+    "Total Payment": "85800",
+    "Balance": "214600"
+  },
+  {
+    "Code": " 125",
+    "Acount Name": "Mrs Adijat ",
+    "Property Number/Street": "6 Afusatu Street, Shasha, ",
+    "Property Units": "6 Room.",
+    "TotalBill": "230500",
+    "Total Payment": "53900",
+    "Balance": "176600"
+  },
+  {
+    "Code": " 126",
+    "Acount Name": "Oyewole S.A",
+    "Property Number/Street": "7 Afusatu Street, Shasha, ",
+    "Property Units": "23 Room.",
+    "TotalBill": "795250",
+    "Total Payment": "628800",
+    "Balance": "166450"
+  },
+  {
+    "Code": " 127",
+    "Acount Name": "Afusatu Adesupo ",
+    "Property Number/Street": "8 Afusatu Street, Shasha, ",
+    "Property Units": "13 Room.",
+    "TotalBill": "572150",
+    "Total Payment": "258840",
+    "Balance": "313310"
+  },
+  {
+    "Code": " 128",
+    "Acount Name": "Adeleye ",
+    "Property Number/Street": "9 Afusatu Street, Shasha, ",
+    "Property Units": "6 Room.",
+    "TotalBill": "270500",
+    "Total Payment": "216100",
+    "Balance": "54400"
+  },
+  {
+    "Code": " 129",
+    "Acount Name": "Mr. Shobayo",
+    "Property Number/Street": "10 Afusatu Street, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "298700",
+    "Total Payment": "294700",
+    "Balance": "4000"
+  },
+  {
+    "Code": " 130",
+    "Acount Name": "Mrs Matimiloju ",
+    "Property Number/Street": "12 Afusatu Street, Shasha, ",
+    "Property Units": "5 Room. /1 MiniFlat /1 Shop.",
+    "TotalBill": "324100",
+    "Total Payment": "270100",
+    "Balance": "54000"
+  },
+  {
+    "Code": " 131",
+    "Acount Name": "Mr Shobowale",
+    "Property Number/Street": "14 Afusatu Street, Shasha, ",
+    "Property Units": "8 Room. /1 Shop.",
+    "TotalBill": "359870",
+    "Total Payment": "329970",
+    "Balance": "29900"
+  },
+  {
+    "Code": " 1635",
+    "Acount Name": "Mr. Olatubusu",
+    "Property Number/Street": "1b Afusatu Street, Shasha, ",
+    "Property Units": "2 Flat. /2 Room. /1 Shop.",
+    "TotalBill": "379300",
+    "Total Payment": "53000",
+    "Balance": "326300"
+  },
+  {
+    "Code": " 3941",
+    "Acount Name": "Mr Musa Adebayo",
+    "Property Number/Street": "(2A) Afusatu Street, Shasha, ",
+    "Property Units": "1 COMPANY..",
+    "TotalBill": "104000",
+    "Total Payment": "62000",
+    "Balance": "42000"
+  },
+  {
+    "Code": " 3134",
+    "Acount Name": "Shop",
+    "Property Number/Street": "2, Afusatu Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26800",
+    "Total Payment": "5500",
+    "Balance": "21300"
+  },
+  {
+    "Code": " 132",
+    "Acount Name": "Nojimu Mubarak Ajimotokan",
+    "Property Number/Street": "Plot 3 Ajimotokan Street, Lagos Abeokuta Road, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "188500",
+    "Total Payment": "75000",
+    "Balance": "113500"
+  },
+  {
+    "Code": " 133",
+    "Acount Name": "Alhaja Ajimotokan  ",
+    "Property Number/Street": "Plot 4 Ajimotokan Street, Lagos Abeokuta Road, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "157100",
+    "Total Payment": "145100",
+    "Balance": "12000"
+  },
+  {
+    "Code": " 135",
+    "Acount Name": "Ajimotokan  ",
+    "Property Number/Street": "Plot 5 Ajimotokan Street, Lagos Abeokuta Road, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "371200",
+    "Total Payment": "282500",
+    "Balance": "88700"
+  },
+  {
+    "Code": " 136",
+    "Acount Name": "Bisi Ajimotokan  ",
+    "Property Number/Street": "Plot 6 Ajimotokan Street, Lagos Abeokuta Road, ",
+    "Property Units": "3 Flat.",
+    "TotalBill": "526800",
+    "Total Payment": "484800",
+    "Balance": "42000"
+  },
+  {
+    "Code": " 138",
+    "Acount Name": "Ajimotokan  ",
+    "Property Number/Street": "Plot 9 Ajimotokan Street, Lagos Abeokuta Road, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "143600",
+    "Total Payment": "141700",
+    "Balance": "1900"
+  },
+  {
+    "Code": " 141",
+    "Acount Name": "Mr E.O.Akinwande ",
+    "Property Number/Street": "2 Alafia Street, Shasha, ",
+    "Property Units": "17 Room.",
+    "TotalBill": "649650",
+    "Total Payment": "396700",
+    "Balance": "252950"
+  },
+  {
+    "Code": " 146",
+    "Acount Name": "Mr Olufemi Adesanya ",
+    "Property Number/Street": "3 Alafia Street, Shasha, ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "517100",
+    "Total Payment": "469100",
+    "Balance": "48000"
+  },
+  {
+    "Code": " 147",
+    "Acount Name": "Mr Festus ",
+    "Property Number/Street": "3a Alafia Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "125650",
+    "Total Payment": "114650",
+    "Balance": "11000"
+  },
+  {
+    "Code": " 148",
+    "Acount Name": "Adio Ogundimu ",
+    "Property Number/Street": "4 Alafia Street, Shasha, ",
+    "Property Units": "14 Room.",
+    "TotalBill": "565400",
+    "Total Payment": "294680",
+    "Balance": "270720"
+  },
+  {
+    "Code": " 149",
+    "Acount Name": "Mr Shoneye ",
+    "Property Number/Street": "5 Alafia Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "102900",
+    "Total Payment": "96150",
+    "Balance": "6750"
+  },
+  {
+    "Code": " 150",
+    "Acount Name": "Mrs Obidairo ",
+    "Property Number/Street": "6 Alafia Street, Shasha, ",
+    "Property Units": "12 Room.",
+    "TotalBill": "476600",
+    "Total Payment": "263600",
+    "Balance": "213000"
+  },
+  {
+    "Code": " 151",
+    "Acount Name": "Elder S.S. Olude Bankole ",
+    "Property Number/Street": "7 Alafia Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "417200",
+    "Total Payment": "365500",
+    "Balance": "51700"
+  },
+  {
+    "Code": " 152",
+    "Acount Name": "Mr Folorunsho Obidairo ",
+    "Property Number/Street": "8 Alafia Street, Shasha, ",
+    "Property Units": "7 Room. /1 Shop.",
+    "TotalBill": "306750",
+    "Total Payment": "192400",
+    "Balance": "114350"
+  },
+  {
+    "Code": " 154",
+    "Acount Name": "Mr & Mrs Akodu ",
+    "Property Number/Street": "9 Alafia Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "144400",
+    "Total Payment": "142400",
+    "Balance": "2000"
+  },
+  {
+    "Code": " 155",
+    "Acount Name": "Mr Sadatu Alamutu ",
+    "Property Number/Street": "10 Alafia Street, Shasha, ",
+    "Property Units": "12 Room.",
+    "TotalBill": "413000",
+    "Total Payment": "398500",
+    "Balance": "14500"
+  },
+  {
+    "Code": " 156",
+    "Acount Name": "Mr U. Zoho ",
+    "Property Number/Street": "11 Alafia Street, Shasha, ",
+    "Property Units": "3 Room",
+    "TotalBill": "203050",
+    "Total Payment": "182550",
+    "Balance": "20500"
+  },
+  {
+    "Code": " 157",
+    "Acount Name": "Mr Eseyin ",
+    "Property Number/Street": "12 Alafia Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "149300",
+    "Total Payment": "140850",
+    "Balance": "8450"
+  },
+  {
+    "Code": " 158",
+    "Acount Name": "Clement Chigbue ",
+    "Property Number/Street": "13 Alafia Street, Shasha, ",
+    "Property Units": "1 Church B",
+    "TotalBill": "145000",
+    "Total Payment": "144000",
+    "Balance": "1000"
+  },
+  {
+    "Code": " 160",
+    "Acount Name": "Tenant ",
+    "Property Number/Street": "15 Alafia Street, Shasha, ",
+    "Property Units": "8 Room_Parlour",
+    "TotalBill": "814400",
+    "Total Payment": "764000",
+    "Balance": "50400"
+  },
+  {
+    "Code": " 161",
+    "Acount Name": "Mr Adisa A ",
+    "Property Number/Street": "16 Alafia Street, Shasha, ",
+    "Property Units": "11 Room.",
+    "TotalBill": "457950",
+    "Total Payment": "417000",
+    "Balance": "40950"
+  },
+  {
+    "Code": " 162",
+    "Acount Name": "Mr Kehinde Ogunjuwon ",
+    "Property Number/Street": "18 Alafia Street, Shasha, ",
+    "Property Units": "17 Room. /1 Shop.",
+    "TotalBill": "701350",
+    "Total Payment": "444000",
+    "Balance": "257350"
+  },
+  {
+    "Code": " 163",
+    "Acount Name": "Mr Olawale Sanni ",
+    "Property Number/Street": "20 Alafia Street, Shasha, ",
+    "Property Units": "3 Room.",
+    "TotalBill": "215650",
+    "Total Payment": "175200",
+    "Balance": "40450"
+  },
+  {
+    "Code": " 164",
+    "Acount Name": "Mr Akinruli Segun ",
+    "Property Number/Street": "21 Alafia Street, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "172700",
+    "Total Payment": "130625",
+    "Balance": "42075"
+  },
+  {
+    "Code": " 165",
+    "Acount Name": "Mr Ibrahim ",
+    "Property Number/Street": "22 Alafia Street, Shasha, ",
+    "Property Units": "15 Room.",
+    "TotalBill": "563250",
+    "Total Payment": "388800",
+    "Balance": "174450"
+  },
+  {
+    "Code": " 166",
+    "Acount Name": "Mr Ajibola.A ",
+    "Property Number/Street": "24 Alafia Street, Shasha, ",
+    "Property Units": "6 Room.",
+    "TotalBill": "304300",
+    "Total Payment": "271600",
+    "Balance": "32700"
+  },
+  {
+    "Code": " 167",
+    "Acount Name": "Mr Adetula ",
+    "Property Number/Street": "25 Alafia Street, Shasha, ",
+    "Property Units": "3 Room. /1 MiniFlat",
+    "TotalBill": "156600",
+    "Total Payment": "152200",
+    "Balance": "4400"
+  },
+  {
+    "Code": " 172",
+    "Acount Name": "Mr Yekini Akibu ",
+    "Property Number/Street": "26 Alafia Street, Shasha, ",
+    "Property Units": "5 Room.",
+    "TotalBill": "187750",
+    "Total Payment": "165500",
+    "Balance": "22250"
+  },
+  {
+    "Code": " 176",
+    "Acount Name": "Alhaji Muritala Oduola ",
+    "Property Number/Street": "28 Alafia Street, Shasha, ",
+    "Property Units": "8 Room. /1 Shop.",
+    "TotalBill": "343200",
+    "Total Payment": "304300",
+    "Balance": "38900"
+  },
+  {
+    "Code": " 178",
+    "Acount Name": "Mr Agbeke Oni ",
+    "Property Number/Street": "29 Alafia Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "307950",
+    "Total Payment": "262250",
+    "Balance": "45700"
+  },
+  {
+    "Code": " 179",
+    "Acount Name": "Gods Heritage N/P",
+    "Property Number/Street": "27b Alafia Street, Shasha, ",
+    "Property Units": "1 School",
+    "TotalBill": "104000",
+    "Total Payment": "96500",
+    "Balance": "7500"
+  },
+  {
+    "Code": " 180",
+    "Acount Name": "Mr Dairo Amuda ",
+    "Property Number/Street": "27a Alafia Street, Shasha, ",
+    "Property Units": "1 Bakery",
+    "TotalBill": "317900",
+    "Total Payment": "266900",
+    "Balance": "51000"
+  },
+  {
+    "Code": " 182",
+    "Acount Name": "Albert Bankole ",
+    "Property Number/Street": "31 Alafia Street, Shasha, ",
+    "Property Units": "10 Room.",
+    "TotalBill": "547100",
+    "Total Payment": "455700",
+    "Balance": "91400"
+  },
+  {
+    "Code": " 183",
+    "Acount Name": "Mr Obafemi Olubuyimo ",
+    "Property Number/Street": "32 Alafia Street, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "253300",
+    "Total Payment": "212060",
+    "Balance": "41240"
+  },
+  {
+    "Code": " 184",
+    "Acount Name": "Mr Akeju ",
+    "Property Number/Street": "33 Alafia Street, Shasha, ",
+    "Property Units": "11 Room.",
+    "TotalBill": "418250",
+    "Total Payment": "328900",
+    "Balance": "89350"
+  },
+  {
+    "Code": " 186",
+    "Acount Name": "Mr. Joel Oladunmoye ",
+    "Property Number/Street": "34b Alafia Street, Shasha, ",
+    "Property Units": "1 Room_Parlour",
+    "TotalBill": "122800",
+    "Total Payment": "121300",
+    "Balance": "1500"
+  },
+  {
+    "Code": " 187",
+    "Acount Name": "Mr Folorunsho",
+    "Property Number/Street": "35 Alafia Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "380100",
+    "Total Payment": "322700",
+    "Balance": "57400"
+  },
+  {
+    "Code": " 188",
+    "Acount Name": "Tenant ",
+    "Property Number/Street": "36 Alafia Street, Shasha, ",
+    "Property Units": "10 Room.",
+    "TotalBill": "378900",
+    "Total Payment": "306900",
+    "Balance": "72000"
+  },
+  {
+    "Code": " 189",
+    "Acount Name": "TENANTS",
+    "Property Number/Street": "37 Alafia Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "405700",
+    "Total Payment": "365700",
+    "Balance": "40000"
+  },
+  {
+    "Code": " 190",
+    "Acount Name": "Mr Ayinde ",
+    "Property Number/Street": "38 Alafia Street, Shasha, ",
+    "Property Units": "7 Room.",
+    "TotalBill": "264250",
+    "Total Payment": "231800",
+    "Balance": "32450"
+  },
+  {
+    "Code": " 191",
+    "Acount Name": "Mr & Mrs Mohammed ",
+    "Property Number/Street": "39 Alafia Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "123900",
+    "Total Payment": "105900",
+    "Balance": "18000"
+  },
+  {
+    "Code": " 1765",
+    "Acount Name": "David Kwatsida",
+    "Property Number/Street": "41. Alafia Street, Shasha, ",
+    "Property Units": "1 Textile Indusry",
+    "TotalBill": "151900",
+    "Total Payment": "49400",
+    "Balance": "102500"
+  },
+  {
+    "Code": " 3121",
+    "Acount Name": "Shops",
+    "Property Number/Street": "(1) Alafia Street, Shasha, ",
+    "Property Units": "3 Shop.",
+    "TotalBill": "125400",
+    "Total Payment": "59400",
+    "Balance": "66000"
+  },
+  {
+    "Code": " 2498",
+    "Acount Name": "Alaafia Market",
+    "Property Number/Street": "49. Alafia Street, Shasha, ",
+    "Property Units": "5 Shop.",
+    "TotalBill": "237600",
+    "Total Payment": "110600",
+    "Balance": "127000"
+  },
+  {
+    "Code": " 2552",
+    "Acount Name": "Mrs. Alimat (Foodstuff)",
+    "Property Number/Street": "6. Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "37600",
+    "Total Payment": "12000",
+    "Balance": "25600"
+  },
+  {
+    "Code": " 3388",
+    "Acount Name": "Shops ",
+    "Property Number/Street": "29b Alafia Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "75800",
+    "Total Payment": "6600",
+    "Balance": "69200"
+  },
+  {
+    "Code": " 3934",
+    "Acount Name": "Mrs Christiana(Foodstuff)",
+    "Property Number/Street": "(17). Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28600",
+    "Total Payment": "1800",
+    "Balance": "26800"
+  },
+  {
+    "Code": " 3935",
+    "Acount Name": "Mrs Oluwaseun ",
+    "Property Number/Street": "(2). Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28000",
+    "Total Payment": "1000",
+    "Balance": "27000"
+  },
+  {
+    "Code": " 3936",
+    "Acount Name": "Mrs Lateef",
+    "Property Number/Street": "(2.). Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28600",
+    "Total Payment": "6000",
+    "Balance": "22600"
+  },
+  {
+    "Code": " 3902",
+    "Acount Name": "Chemist ",
+    "Property Number/Street": "1, Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30400",
+    "Total Payment": "11300",
+    "Balance": "19100"
+  },
+  {
+    "Code": " 3870",
+    "Acount Name": "Mohammed Abdulahi",
+    "Property Number/Street": "(15) Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "29500",
+    "Total Payment": "12100",
+    "Balance": "17400"
+  },
+  {
+    "Code": " 3782",
+    "Acount Name": "Mrs Favour(Fashion designer)",
+    "Property Number/Street": "(9) Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "32200",
+    "Total Payment": "9200",
+    "Balance": "23000"
+  },
+  {
+    "Code": " 3530",
+    "Acount Name": "Fashion Designer",
+    "Property Number/Street": "27, Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "39400",
+    "Total Payment": "16200",
+    "Balance": "23200"
+  },
+  {
+    "Code": " 3531",
+    "Acount Name": "Foodstuff",
+    "Property Number/Street": "27. Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "39400",
+    "Total Payment": "0",
+    "Balance": "39400"
+  },
+  {
+    "Code": " 3455",
+    "Acount Name": "Food Seller/Fashion Shop",
+    "Property Number/Street": "(29) Alafia Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "68200",
+    "Total Payment": "2000",
+    "Balance": "66200"
+  },
+  {
+    "Code": " 3491",
+    "Acount Name": "Kiosk",
+    "Property Number/Street": "34, Alafia Street, Shasha, ",
+    "Property Units": "4 Shop.",
+    "TotalBill": "102600",
+    "Total Payment": "23300",
+    "Balance": "79300"
+  },
+  {
+    "Code": " 3660",
+    "Acount Name": "Alhaji Adeyemi",
+    "Property Number/Street": "17, Alafia Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "79150",
+    "Total Payment": "66150",
+    "Balance": "13000"
+  },
+  {
+    "Code": " 4440",
+    "Acount Name": "James Emma",
+    "Property Number/Street": "19 Alafia Street, Shasha, ",
+    "Property Units": "2 Room_Parlour /2 Room.",
+    "TotalBill": "54300",
+    "Total Payment": "43400",
+    "Balance": "10900"
+  },
+  {
+    "Code": " 4401",
+    "Acount Name": "PROVISION",
+    "Property Number/Street": "17 Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "15000",
+    "Total Payment": "5500",
+    "Balance": "9500"
+  },
+  {
+    "Code": " 4302",
+    "Acount Name": "Chief Dorcas.A.Folorunsho ",
+    "Property Number/Street": "37, Alafia Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "46000",
+    "Total Payment": "38700",
+    "Balance": "7300"
+  },
+  {
+    "Code": " 4258",
+    "Acount Name": "SYLVANUS MOBEE",
+    "Property Number/Street": "'1' Alafia Street, Shasha, ",
+    "Property Units": "4 Room.",
+    "TotalBill": "76200",
+    "Total Payment": "13500",
+    "Balance": "62700"
+  },
+  {
+    "Code": " 4279",
+    "Acount Name": "Mr. Nafiu Animashaun",
+    "Property Number/Street": "34. Alafia Street, Shasha, ",
+    "Property Units": "4 MiniFlat",
+    "TotalBill": "137000",
+    "Total Payment": "77000",
+    "Balance": "60000"
+  },
+  {
+    "Code": " 3962",
+    "Acount Name": "Mama Iyiaze (Provision)",
+    "Property Number/Street": "(21). Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30400",
+    "Total Payment": "4000",
+    "Balance": "26400"
+  },
+  {
+    "Code": " 3963",
+    "Acount Name": "Mrs. Obasa (Shoe seller/fashion)",
+    "Property Number/Street": "(9). Alafia Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30100",
+    "Total Payment": "4200",
+    "Balance": "25900"
+  },
+  {
+    "Code": " 4002",
+    "Acount Name": "Iya Eleja",
+    "Property Number/Street": "30. Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "29200",
+    "Total Payment": "11800",
+    "Balance": "17400"
+  },
+  {
+    "Code": " 4345",
+    "Acount Name": "Mr. Durojaiye",
+    "Property Number/Street": "13 Anuoluwapo Street, Shasha , ",
+    "Property Units": "5 Room_Parlour",
+    "TotalBill": "142500",
+    "Total Payment": "79000",
+    "Balance": "63500"
+  },
+  {
+    "Code": " 4438",
+    "Acount Name": "High Chief J.O. Ajibola",
+    "Property Number/Street": "10 Anuoluwapo Street, Shasha , ",
+    "Property Units": "10 Room.",
+    "TotalBill": "34000",
+    "Total Payment": "0",
+    "Balance": "34000"
+  },
+  {
+    "Code": " 3657",
+    "Acount Name": "Mallam Lawal",
+    "Property Number/Street": "22b Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Shop. /1 Flat.",
+    "TotalBill": "44400",
+    "Total Payment": "5200",
+    "Balance": "39200"
+  },
+  {
+    "Code": " 3647",
+    "Acount Name": "The God First Ministries",
+    "Property Number/Street": "11 Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Church,",
+    "TotalBill": "152000",
+    "Total Payment": "82000",
+    "Balance": "70000"
+  },
+  {
+    "Code": " 3492",
+    "Acount Name": "Bet9ja Shop",
+    "Property Number/Street": "(25) Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "35600",
+    "Total Payment": "30100",
+    "Balance": "5500"
+  },
+  {
+    "Code": " 3544",
+    "Acount Name": "Mr. Sunday Anozie",
+    "Property Number/Street": "12. Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "60250",
+    "Total Payment": "39000",
+    "Balance": "21250"
+  },
+  {
+    "Code": " 3811",
+    "Acount Name": "Mallam Abdulahi",
+    "Property Number/Street": "30, Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30700",
+    "Total Payment": "25700",
+    "Balance": "5000"
+  },
+  {
+    "Code": " 3745",
+    "Acount Name": "Mr Esho Olutunde Occupants",
+    "Property Number/Street": "(12.) Anuoluwapo Street, Shasha , ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "103850",
+    "Total Payment": "92450",
+    "Balance": "11400"
+  },
+  {
+    "Code": " 3438",
+    "Acount Name": "Mrs. Ngozi (Container)",
+    "Property Number/Street": "15, Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "34700",
+    "Total Payment": "4000",
+    "Balance": "30700"
+  },
+  {
+    "Code": " 2566",
+    "Acount Name": "Ola Pools",
+    "Property Number/Street": "31. Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "48400",
+    "Total Payment": "9600",
+    "Balance": "38800"
+  },
+  {
+    "Code": " 3076",
+    "Acount Name": "Mr. T. Samuel",
+    "Property Number/Street": "5, Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "69250",
+    "Total Payment": "32500",
+    "Balance": "36750"
+  },
+  {
+    "Code": " 1623",
+    "Acount Name": "ROUTE 712 AGENCY",
+    "Property Number/Street": "25B Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 COMPANY ..",
+    "TotalBill": "730000",
+    "Total Payment": "714000",
+    "Balance": "16000"
+  },
+  {
+    "Code": " 455",
+    "Acount Name": "Mr Jacob Omole",
+    "Property Number/Street": "24 Anuoluwapo Street, Shasha , ",
+    "Property Units": "2 Shop. /10 Room.",
+    "TotalBill": "480050",
+    "Total Payment": "388900",
+    "Balance": "91150"
+  },
+  {
+    "Code": " 2370",
+    "Acount Name": "Mr.& Mrs.Adewunmi(Provision)",
+    "Property Number/Street": "46, Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "48400",
+    "Total Payment": "21400",
+    "Balance": "27000"
+  },
+  {
+    "Code": " 2057",
+    "Acount Name": "Shops",
+    "Property Number/Street": "21. Anuoluwapo Street, Shasha , ",
+    "Property Units": "4 Shop.",
+    "TotalBill": "223400",
+    "Total Payment": "161600",
+    "Balance": "61800"
+  },
+  {
+    "Code": " 208",
+    "Acount Name": "Pastor Isaac ",
+    "Property Number/Street": "1 Anuoluwapo Street, Shasha , ",
+    "Property Units": "10 Room. /1 Shop.",
+    "TotalBill": "460500",
+    "Total Payment": "407000",
+    "Balance": "53500"
+  },
+  {
+    "Code": " 209",
+    "Acount Name": "The Apostolic Church ",
+    "Property Number/Street": "2 Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Church..",
+    "TotalBill": "102500",
+    "Total Payment": "68000",
+    "Balance": "34500"
+  },
+  {
+    "Code": " 210",
+    "Acount Name": "SQN Ibrahim Saliu",
+    "Property Number/Street": "3 Anuoluwapo Street, Shasha , ",
+    "Property Units": "3 Mini Flat",
+    "TotalBill": "232750",
+    "Total Payment": "222250",
+    "Balance": "10500"
+  },
+  {
+    "Code": " 214",
+    "Acount Name": "Mr. Akintunde Akinyinka",
+    "Property Number/Street": "4 Anuoluwapo Street, Shasha , ",
+    "Property Units": "3 MiniFlat /6 Room.",
+    "TotalBill": "479350",
+    "Total Payment": "370300",
+    "Balance": "109050"
+  },
+  {
+    "Code": " 216",
+    "Acount Name": "Mr. Ariyo Kayode ",
+    "Property Number/Street": "4A Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Flat. /1 MiniFlat",
+    "TotalBill": "217050",
+    "Total Payment": "190775",
+    "Balance": "26275"
+  },
+  {
+    "Code": " 218",
+    "Acount Name": "Mr. Adam",
+    "Property Number/Street": "5 Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "92950",
+    "Total Payment": "20800",
+    "Balance": "72150"
+  },
+  {
+    "Code": " 220",
+    "Acount Name": "Mr Kehinde Akinwunmi ",
+    "Property Number/Street": "7 Anuoluwapo Street, Shasha , ",
+    "Property Units": "16 Room.",
+    "TotalBill": "614520",
+    "Total Payment": "355720",
+    "Balance": "258800"
+  },
+  {
+    "Code": " 221",
+    "Acount Name": "Mr Erinfolarin James ",
+    "Property Number/Street": "8 Anuoluwapo Street, Shasha , ",
+    "Property Units": "17 Room.",
+    "TotalBill": "639150",
+    "Total Payment": "485800",
+    "Balance": "153350"
+  },
+  {
+    "Code": " 222",
+    "Acount Name": "Chief shodolamu ",
+    "Property Number/Street": "9 Anuoluwapo Street, Shasha , ",
+    "Property Units": "13 Room.",
+    "TotalBill": "489650",
+    "Total Payment": "435000",
+    "Balance": "54650"
+  },
+  {
+    "Code": " 228",
+    "Acount Name": "Madam Taibatu Omoniyi",
+    "Property Number/Street": "14 Anuoluwapo Street, Shasha , ",
+    "Property Units": "11 Room.",
+    "TotalBill": "436650",
+    "Total Payment": "271800",
+    "Balance": "164850"
+  },
+  {
+    "Code": " 229",
+    "Acount Name": "Mr Isreal Oladimeji ",
+    "Property Number/Street": "15 Anuoluwapo Street, Shasha , ",
+    "Property Units": "10 Room.",
+    "TotalBill": "402300",
+    "Total Payment": "190900",
+    "Balance": "211400"
+  },
+  {
+    "Code": " 230",
+    "Acount Name": "Chief(Mrs) Shittu Abibatu",
+    "Property Number/Street": "16 Anuoluwapo Street, Shasha , ",
+    "Property Units": "7 Room. /1 Shop.",
+    "TotalBill": "366600",
+    "Total Payment": "315840",
+    "Balance": "50760"
+  },
+  {
+    "Code": " 231",
+    "Acount Name": "Mr Yemi Showale ",
+    "Property Number/Street": "17 Anuoluwapo Street, Shasha , ",
+    "Property Units": "10 Room.",
+    "TotalBill": "267500",
+    "Total Payment": "156000",
+    "Balance": "111500"
+  },
+  {
+    "Code": " 232",
+    "Acount Name": "Mr Ibrahim Yussuf ",
+    "Property Number/Street": "18 Anuoluwapo Street, Shasha , ",
+    "Property Units": "8 Room.",
+    "TotalBill": "303600",
+    "Total Payment": "269570",
+    "Balance": "34030"
+  },
+  {
+    "Code": " 233",
+    "Acount Name": "Chief S.O. Adewale ",
+    "Property Number/Street": "19 Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Flat. /3 Shop.",
+    "TotalBill": "290200",
+    "Total Payment": "254800",
+    "Balance": "35400"
+  },
+  {
+    "Code": " 235",
+    "Acount Name": "Mr Oyekunle Bashiru ",
+    "Property Number/Street": "20 Anuoluwapo Street, Shasha , ",
+    "Property Units": "7 Room. /1 Shop.",
+    "TotalBill": "356150",
+    "Total Payment": "325900",
+    "Balance": "30250"
+  },
+  {
+    "Code": " 236",
+    "Acount Name": "Mr Kusimo Isikilu",
+    "Property Number/Street": "21 Anuoluwapo Street, Shasha , ",
+    "Property Units": "15 Room.",
+    "TotalBill": "652250",
+    "Total Payment": "505000",
+    "Balance": "147250"
+  },
+  {
+    "Code": " 237",
+    "Acount Name": "Mr Oladunjoye Saidi ",
+    "Property Number/Street": "22 Anuoluwapo Street, Shasha , ",
+    "Property Units": "22 Room. /2 Shop.",
+    "TotalBill": "932700",
+    "Total Payment": "720900",
+    "Balance": "211800"
+  },
+  {
+    "Code": " 238",
+    "Acount Name": "Mr Aye ",
+    "Property Number/Street": "23 Anuoluwapo Street, Shasha , ",
+    "Property Units": "2 Room. /1 Church A",
+    "TotalBill": "122200",
+    "Total Payment": "72300",
+    "Balance": "49900"
+  },
+  {
+    "Code": " 240",
+    "Acount Name": "Mr Samuel Adebiyi ",
+    "Property Number/Street": "25 Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "195500",
+    "Total Payment": "192500",
+    "Balance": "3000"
+  },
+  {
+    "Code": " 241",
+    "Acount Name": "Mr A. Bello ",
+    "Property Number/Street": "26 Anuoluwapo Street, Shasha , ",
+    "Property Units": "5 Room_Parlour",
+    "TotalBill": "273900",
+    "Total Payment": "204700",
+    "Balance": "69200"
+  },
+  {
+    "Code": " 242",
+    "Acount Name": "Mr James Kayode ",
+    "Property Number/Street": "27 Anuoluwapo Street, Shasha , ",
+    "Property Units": "10 Room.",
+    "TotalBill": "323000",
+    "Total Payment": "175000",
+    "Balance": "148000"
+  },
+  {
+    "Code": " 243",
+    "Acount Name": "Mrs Shoboyejo Mulikat ",
+    "Property Number/Street": "28 Anuoluwapo Street, Shasha , ",
+    "Property Units": "11 Room. /1 Shop.",
+    "TotalBill": "472650",
+    "Total Payment": "380100",
+    "Balance": "92550"
+  },
+  {
+    "Code": " 248",
+    "Acount Name": "Mr Amusa Ogundairo ",
+    "Property Number/Street": "30 Anuoluwapo Street, Shasha , ",
+    "Property Units": "7 Room.",
+    "TotalBill": "271850",
+    "Total Payment": "119100",
+    "Balance": "152750"
+  },
+  {
+    "Code": " 249",
+    "Acount Name": "Mr Ogundipe A ",
+    "Property Number/Street": "31 Anuoluwapo Street, Shasha , ",
+    "Property Units": "10 Room. /1 Shop.",
+    "TotalBill": "227000",
+    "Total Payment": "131500",
+    "Balance": "95500"
+  },
+  {
+    "Code": " 250",
+    "Acount Name": "Mr Adewuyi Yekini ",
+    "Property Number/Street": "32 Anuoluwapo Street, Shasha , ",
+    "Property Units": "10 Room.",
+    "TotalBill": "378500",
+    "Total Payment": "245500",
+    "Balance": "133000"
+  },
+  {
+    "Code": " 251",
+    "Acount Name": "Mr Oladunjoye ",
+    "Property Number/Street": "33 Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Room. /4 MiniFlat /1 Room_Parlour",
+    "TotalBill": "491350",
+    "Total Payment": "364200",
+    "Balance": "127150"
+  },
+  {
+    "Code": " 252",
+    "Acount Name": "Nutalayo Ajoke ",
+    "Property Number/Street": "34 Anuoluwapo Street, Shasha , ",
+    "Property Units": "9 Room.",
+    "TotalBill": "349350",
+    "Total Payment": "226500",
+    "Balance": "122850"
+  },
+  {
+    "Code": " 253",
+    "Acount Name": "Mr Alani Amidu ",
+    "Property Number/Street": "35 Anuoluwapo Street, Shasha , ",
+    "Property Units": "22 Room.",
+    "TotalBill": "870460",
+    "Total Payment": "598610",
+    "Balance": "271850"
+  },
+  {
+    "Code": " 254",
+    "Acount Name": "Mr Falohun Abibatu ",
+    "Property Number/Street": "36 Anuoluwapo Street, Shasha , ",
+    "Property Units": "12 Room.",
+    "TotalBill": "457900",
+    "Total Payment": "297250",
+    "Balance": "160650"
+  },
+  {
+    "Code": " 257",
+    "Acount Name": "Mr Ojo Dele ",
+    "Property Number/Street": "37 Anuoluwapo Street, Shasha , ",
+    "Property Units": "18 Room. /1 Shop.",
+    "TotalBill": "733400",
+    "Total Payment": "562500",
+    "Balance": "170900"
+  },
+  {
+    "Code": " 258",
+    "Acount Name": "Mr Olutayo.J A. ",
+    "Property Number/Street": "38 Anuoluwapo Street, Shasha , ",
+    "Property Units": "7 Room.",
+    "TotalBill": "254050",
+    "Total Payment": "206950",
+    "Balance": "47100"
+  },
+  {
+    "Code": " 259",
+    "Acount Name": "Mr S.A. Fayena ",
+    "Property Number/Street": "39 Anuoluwapo Street, Shasha , ",
+    "Property Units": "16 Room. /1 Shop.",
+    "TotalBill": "667800",
+    "Total Payment": "592100",
+    "Balance": "75700"
+  },
+  {
+    "Code": " 260",
+    "Acount Name": "Mr Yusuf ",
+    "Property Number/Street": "40 Anuoluwapo Street, Shasha , ",
+    "Property Units": "7 Room.",
+    "TotalBill": "282050",
+    "Total Payment": "90000",
+    "Balance": "192050"
+  },
+  {
+    "Code": " 261",
+    "Acount Name": "Mr Akanbi James ",
+    "Property Number/Street": "41 Anuoluwapo Street, Shasha , ",
+    "Property Units": "6 Room. /1 Shop.",
+    "TotalBill": "285700",
+    "Total Payment": "225800",
+    "Balance": "59900"
+  },
+  {
+    "Code": " 262",
+    "Acount Name": "Mr Ajani Oladipo ",
+    "Property Number/Street": "42 Anuoluwapo Street, Shasha , ",
+    "Property Units": "8 Room.",
+    "TotalBill": "173900",
+    "Total Payment": "105100",
+    "Balance": "68800"
+  },
+  {
+    "Code": " 263",
+    "Acount Name": "T-Sal ",
+    "Property Number/Street": "42A Anuoluwapo Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "149200",
+    "Total Payment": "147200",
+    "Balance": "2000"
+  },
+  {
+    "Code": " 264",
+    "Acount Name": "Mr Aduranigba  ",
+    "Property Number/Street": "44 Anuoluwapo Street, Shasha , ",
+    "Property Units": "8 Room. /2 Room_Parlour",
+    "TotalBill": "449800",
+    "Total Payment": "387300",
+    "Balance": "62500"
+  },
+  {
+    "Code": " 266",
+    "Acount Name": "Mr Olu ",
+    "Property Number/Street": "46 Anuoluwapo Street, Shasha , ",
+    "Property Units": "8 Room.",
+    "TotalBill": "324700",
+    "Total Payment": "236200",
+    "Balance": "88500"
+  },
+  {
+    "Code": " 267",
+    "Acount Name": "Chief Aina ",
+    "Property Number/Street": "48 Anuoluwapo Street, Shasha , ",
+    "Property Units": "22 Room. /1 MiniFlat",
+    "TotalBill": "907850",
+    "Total Payment": "552850",
+    "Balance": "355000"
+  },
+  {
+    "Code": " 268",
+    "Acount Name": "Lasisi Olukosi ",
+    "Property Number/Street": "1 Atan Street, Shasha , ",
+    "Property Units": "22 Room.",
+    "TotalBill": "804700",
+    "Total Payment": "354200",
+    "Balance": "450500"
+  },
+  {
+    "Code": " 271",
+    "Acount Name": "Mr Mufutau Olukosi ",
+    "Property Number/Street": "4 Atan Street, Shasha , ",
+    "Property Units": "14 Room.",
+    "TotalBill": "675700",
+    "Total Payment": "343200",
+    "Balance": "332500"
+  },
+  {
+    "Code": " 272",
+    "Acount Name": "Chief Jimoh Adisa ",
+    "Property Number/Street": "5 Atan Street, Shasha , ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "98950",
+    "Total Payment": "69700",
+    "Balance": "29250"
+  },
+  {
+    "Code": " 274",
+    "Acount Name": "Mr Adenubi Bejamin ",
+    "Property Number/Street": "7 Atan Street, Shasha , ",
+    "Property Units": "6 Room.",
+    "TotalBill": "279900",
+    "Total Payment": "166800",
+    "Balance": "113100"
+  },
+  {
+    "Code": " 275",
+    "Acount Name": "Mr R. Ahmed ",
+    "Property Number/Street": "8/10 Atan Street, Shasha , ",
+    "Property Units": "25 Room.",
+    "TotalBill": "1164950",
+    "Total Payment": "763100",
+    "Balance": "401850"
+  },
+  {
+    "Code": " 276",
+    "Acount Name": "Madam Falilat ",
+    "Property Number/Street": "9 Atan Street, Shasha , ",
+    "Property Units": "10 Room. /1 Shop.",
+    "TotalBill": "440900",
+    "Total Payment": "173000",
+    "Balance": "267900"
+  },
+  {
+    "Code": " 277",
+    "Acount Name": "Mr Ajisefinni ",
+    "Property Number/Street": "11 Atan Street, Shasha , ",
+    "Property Units": "15 Room. /2 Shop.",
+    "TotalBill": "662750",
+    "Total Payment": "320000",
+    "Balance": "342750"
+  },
+  {
+    "Code": " 278",
+    "Acount Name": "Mrs Esohe Uhuawangho ",
+    "Property Number/Street": "12 Atan Street, Shasha , ",
+    "Property Units": "3 MiniFlat",
+    "TotalBill": "324750",
+    "Total Payment": "240700",
+    "Balance": "84050"
+  },
+  {
+    "Code": " 279",
+    "Acount Name": "Bose Paul ",
+    "Property Number/Street": "12A Atan Street, Shasha , ",
+    "Property Units": "3 Room.",
+    "TotalBill": "121850",
+    "Total Payment": "68600",
+    "Balance": "53250"
+  },
+  {
+    "Code": " 280",
+    "Acount Name": "Mr Oladipupo Folayemi",
+    "Property Number/Street": "13 Atan Street, Shasha , ",
+    "Property Units": "1 Room. /2 Shop. /4 Room_Parlour",
+    "TotalBill": "597600",
+    "Total Payment": "334850",
+    "Balance": "262750"
+  },
+  {
+    "Code": " 281",
+    "Acount Name": "Idowu Iyabo ",
+    "Property Number/Street": "14 Atan Street, Shasha , ",
+    "Property Units": "1 Flat. /10 Room. /1 Shop.",
+    "TotalBill": "570300",
+    "Total Payment": "453200",
+    "Balance": "117100"
+  },
+  {
+    "Code": " 282",
+    "Acount Name": "Mrs Adewunmi ",
+    "Property Number/Street": "15 Atan Street, Shasha , ",
+    "Property Units": "10 Room.",
+    "TotalBill": "383700",
+    "Total Payment": "239700",
+    "Balance": "144000"
+  },
+  {
+    "Code": " 283",
+    "Acount Name": "Mr Olatunbosun ",
+    "Property Number/Street": "16 Atan Street, Shasha , ",
+    "Property Units": "12 Room.",
+    "TotalBill": "465900",
+    "Total Payment": "379900",
+    "Balance": "86000"
+  },
+  {
+    "Code": " 284",
+    "Acount Name": "Mr A. A.Bello ",
+    "Property Number/Street": "17 Atan Street, Shasha , ",
+    "Property Units": "7 Room.",
+    "TotalBill": "243850",
+    "Total Payment": "234900",
+    "Balance": "8950"
+  },
+  {
+    "Code": " 285",
+    "Acount Name": "Soretire ",
+    "Property Number/Street": "18 Atan Street, Shasha , ",
+    "Property Units": "18 Room.",
+    "TotalBill": "726300",
+    "Total Payment": "317800",
+    "Balance": "408500"
+  },
+  {
+    "Code": " 287",
+    "Acount Name": "Mr Obasanya ",
+    "Property Number/Street": "19/23. Atan Street, Shasha , ",
+    "Property Units": "14 Room.",
+    "TotalBill": "549700",
+    "Total Payment": "288700",
+    "Balance": "261000"
+  },
+  {
+    "Code": " 290",
+    "Acount Name": "Mr Eze ",
+    "Property Number/Street": "20. Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "71390",
+    "Total Payment": "59390",
+    "Balance": "12000"
+  },
+  {
+    "Code": " 2031",
+    "Acount Name": "Iya Ibeji Food",
+    "Property Number/Street": "20., Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "68000",
+    "Total Payment": "37100",
+    "Balance": "30900"
+  },
+  {
+    "Code": " 2088",
+    "Acount Name": "Alhaji Saka",
+    "Property Number/Street": "3, Atan Street, Shasha , ",
+    "Property Units": "12 Room.",
+    "TotalBill": "117983",
+    "Total Payment": "113183",
+    "Balance": "4800"
+  },
+  {
+    "Code": " 1896",
+    "Acount Name": "Mrs. Adenodeo",
+    "Property Number/Street": "3 Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "44100",
+    "Total Payment": "19200",
+    "Balance": "24900"
+  },
+  {
+    "Code": " 2383",
+    "Acount Name": "Generator Mechanic",
+    "Property Number/Street": "19/23,, Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "48400",
+    "Total Payment": "18000",
+    "Balance": "30400"
+  },
+  {
+    "Code": " 2384",
+    "Acount Name": "Table-Chair/Generator Seller",
+    "Property Number/Street": "19/23) Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "48400",
+    "Total Payment": "19500",
+    "Balance": "28900"
+  },
+  {
+    "Code": " 2387",
+    "Acount Name": "Mrs. Atibere (Provision)",
+    "Property Number/Street": "(19/23) Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "55600",
+    "Total Payment": "34900",
+    "Balance": "20700"
+  },
+  {
+    "Code": " 2405",
+    "Acount Name": "Mrs. Deborah Kingsley",
+    "Property Number/Street": "19/23, Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "41200",
+    "Total Payment": "17900",
+    "Balance": "23300"
+  },
+  {
+    "Code": " 2411",
+    "Acount Name": "Kiosks",
+    "Property Number/Street": "20.. Atan Street, Shasha , ",
+    "Property Units": "3 Shop.",
+    "TotalBill": "106400",
+    "Total Payment": "33400",
+    "Balance": "73000"
+  },
+  {
+    "Code": " 2315",
+    "Acount Name": "Mrs. Fajinmi (Provisions)",
+    "Property Number/Street": "19/23., Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "57700",
+    "Total Payment": "45200",
+    "Balance": "12500"
+  },
+  {
+    "Code": " 1631",
+    "Acount Name": "Iya Abidemi (Minerals shop)",
+    "Property Number/Street": "18. Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "95300",
+    "Total Payment": "65500",
+    "Balance": "29800"
+  },
+  {
+    "Code": " 3135",
+    "Acount Name": "Mr. Simon (Barber shop)",
+    "Property Number/Street": "(19\\23), Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "40900",
+    "Total Payment": "11700",
+    "Balance": "29200"
+  },
+  {
+    "Code": " 2920",
+    "Acount Name": "Mrs. Faith Ibeneme(Shoe/Bag seller)",
+    "Property Number/Street": "20, Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "45400",
+    "Total Payment": "15000",
+    "Balance": "30400"
+  },
+  {
+    "Code": " 2921",
+    "Acount Name": "Shoe Maker/Shoe Seller",
+    "Property Number/Street": "20,. Atan Street, Shasha , ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "86000",
+    "Total Payment": "48800",
+    "Balance": "37200"
+  },
+  {
+    "Code": " 3004",
+    "Acount Name": "Bridget Okoroafor",
+    "Property Number/Street": "(20), Atan Street, Shasha , ",
+    "Property Units": "1 Room_Parlour",
+    "TotalBill": "66900",
+    "Total Payment": "43300",
+    "Balance": "23600"
+  },
+  {
+    "Code": " 3019",
+    "Acount Name": "Mrs. Oluchi Okoye",
+    "Property Number/Street": "(19/23), Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "42400",
+    "Total Payment": "23400",
+    "Balance": "19000"
+  },
+  {
+    "Code": " 3050",
+    "Acount Name": "Photocopy/Rewinder",
+    "Property Number/Street": "20 Atan Street, Shasha , ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "85400",
+    "Total Payment": "25800",
+    "Balance": "59600"
+  },
+  {
+    "Code": " 3051",
+    "Acount Name": "Electronics",
+    "Property Number/Street": "(20). Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30400",
+    "Total Payment": "0",
+    "Balance": "30400"
+  },
+  {
+    "Code": " 2757",
+    "Acount Name": "One Love Frozen Food",
+    "Property Number/Street": "(19/23.) Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "47500",
+    "Total Payment": "20900",
+    "Balance": "26600"
+  },
+  {
+    "Code": " 2727",
+    "Acount Name": "ANYI BEST GAS",
+    "Property Number/Street": "19/23.., Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "44200",
+    "Total Payment": "14400",
+    "Balance": "29800"
+  },
+  {
+    "Code": " 3320",
+    "Acount Name": "Mrs. Ajidahun (Softdrinks)",
+    "Property Number/Street": "(19/23., Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "40900",
+    "Total Payment": "17500",
+    "Balance": "23400"
+  },
+  {
+    "Code": " 3306",
+    "Acount Name": "Mr. Moses (Marwa parts)",
+    "Property Number/Street": "(19/23.. Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30400",
+    "Total Payment": "9900",
+    "Balance": "20500"
+  },
+  {
+    "Code": " 3348",
+    "Acount Name": "Mrs. Joy (Food & Bar)",
+    "Property Number/Street": "8, Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "65500",
+    "Total Payment": "34000",
+    "Balance": "31500"
+  },
+  {
+    "Code": " 3361",
+    "Acount Name": "Mrs. Benedict Utolor(Container)",
+    "Property Number/Street": "(2B.), Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30400",
+    "Total Payment": "0",
+    "Balance": "30400"
+  },
+  {
+    "Code": " 3204",
+    "Acount Name": "Mrs. Akinwunmi (Plastic)",
+    "Property Number/Street": "(19/23. Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "40300",
+    "Total Payment": "21900",
+    "Balance": "18400"
+  },
+  {
+    "Code": " 3205",
+    "Acount Name": "Mr. Obi (Garri Shop8)",
+    "Property Number/Street": "(19/23, Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "40300",
+    "Total Payment": "9600",
+    "Balance": "30700"
+  },
+  {
+    "Code": " 3206",
+    "Acount Name": "Isaac Fashion designer(Shop9)",
+    "Property Number/Street": "(19/23.),  Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "40300",
+    "Total Payment": "25200",
+    "Balance": "15100"
+  },
+  {
+    "Code": " 3227",
+    "Acount Name": "Fashion Designer",
+    "Property Number/Street": "(20,. Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "40100",
+    "Total Payment": "10200",
+    "Balance": "29900"
+  },
+  {
+    "Code": " 3253",
+    "Acount Name": "Mrs. Nwashi (Foodstuff)",
+    "Property Number/Street": "(18.) Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "42400",
+    "Total Payment": "23200",
+    "Balance": "19200"
+  },
+  {
+    "Code": " 3836",
+    "Acount Name": "Mrs. Esther (Provision)",
+    "Property Number/Street": "(8/10.) Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30400",
+    "Total Payment": "0",
+    "Balance": "30400"
+  },
+  {
+    "Code": " 3840",
+    "Acount Name": "Mrs. Bolanle Kuku",
+    "Property Number/Street": "(8/10), Atan Street, Shasha , ",
+    "Property Units": "6 Room.",
+    "TotalBill": "142500",
+    "Total Payment": "19400",
+    "Balance": "123100"
+  },
+  {
+    "Code": " 3860",
+    "Acount Name": "Hairdresser",
+    "Property Number/Street": "(13). Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30400",
+    "Total Payment": "9900",
+    "Balance": "20500"
+  },
+  {
+    "Code": " 3907",
+    "Acount Name": "Mrs. Ogbonna Michael",
+    "Property Number/Street": "(13) Atan Street, Shasha , ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "49750",
+    "Total Payment": "12000",
+    "Balance": "37750"
+  },
+  {
+    "Code": " 3462",
+    "Acount Name": "Mrs. Favour (Foodstuff)",
+    "Property Number/Street": "(20,) Atan Street, Shasha , ",
+    "Property Units": "1 Shop. /2 Flat.",
+    "TotalBill": "81300",
+    "Total Payment": "6900",
+    "Balance": "74400"
+  },
+  {
+    "Code": " 3442",
+    "Acount Name": "Saloon (Shop10)",
+    "Property Number/Street": "(19/23.).  Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30400",
+    "Total Payment": "0",
+    "Balance": "30400"
+  },
+  {
+    "Code": " 3436",
+    "Acount Name": "Christian Simon (Foodstuff)",
+    "Property Number/Street": "(.19/23) Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "37600",
+    "Total Payment": "15900",
+    "Balance": "21700"
+  },
+  {
+    "Code": " 3991",
+    "Acount Name": "Mrs. Rose (Foodstuff)",
+    "Property Number/Street": "(20.). Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "27400",
+    "Total Payment": "0",
+    "Balance": "27400"
+  },
+  {
+    "Code": " 3960",
+    "Acount Name": "Hot Drinks (Soretire shop)",
+    "Property Number/Street": "(18) Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "29800",
+    "Total Payment": "0",
+    "Balance": "29800"
+  },
+  {
+    "Code": " 3978",
+    "Acount Name": "Rose John",
+    "Property Number/Street": ".(20) Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "27100",
+    "Total Payment": "6700",
+    "Balance": "20400"
+  },
+  {
+    "Code": " 4114",
+    "Acount Name": "Onasanya (Biz Centre)",
+    "Property Number/Street": "'20' Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26800",
+    "Total Payment": "4000",
+    "Balance": "22800"
+  },
+  {
+    "Code": " 4140",
+    "Acount Name": "Wing West School",
+    "Property Number/Street": "17, Atan Street, Shasha , ",
+    "Property Units": "1 School B",
+    "TotalBill": "18000",
+    "Total Payment": "9000",
+    "Balance": "9000"
+  },
+  {
+    "Code": " 4288",
+    "Acount Name": "Mrs. Mary (Foodstuff /Petty stuff))",
+    "Property Number/Street": "13' Atan Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "22000",
+    "Total Payment": "1500",
+    "Balance": "20500"
+  },
+  {
+    "Code": " 291",
+    "Acount Name": "M. F.  Famodun ",
+    "Property Number/Street": "1 Awojobi Street, Shasha , ",
+    "Property Units": "1 Flat. /2 Shop. /1 Mini Flat",
+    "TotalBill": "284650",
+    "Total Payment": "246150",
+    "Balance": "38500"
+  },
+  {
+    "Code": " 292",
+    "Acount Name": "Mr Awojobi ",
+    "Property Number/Street": "2 Awojobi Street, Shasha , ",
+    "Property Units": "2 Shop. /4 MiniFlat",
+    "TotalBill": "412200",
+    "Total Payment": "393200",
+    "Balance": "19000"
+  },
+  {
+    "Code": " 293",
+    "Acount Name": "Mr S.A.Famodun ",
+    "Property Number/Street": "3 Awojobi Street, Shasha , ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "492200",
+    "Total Payment": "455000",
+    "Balance": "37200"
+  },
+  {
+    "Code": " 294",
+    "Acount Name": "Mr Anibaba ",
+    "Property Number/Street": "5 Awojobi Street, Shasha , ",
+    "Property Units": "3 Flat.",
+    "TotalBill": "608150",
+    "Total Payment": "602150",
+    "Balance": "6000"
+  },
+  {
+    "Code": " 296",
+    "Acount Name": "Mr Laisi ",
+    "Property Number/Street": "2 Balogun Street, Shasha , ",
+    "Property Units": "6 Room.",
+    "TotalBill": "253900",
+    "Total Payment": "111400",
+    "Balance": "142500"
+  },
+  {
+    "Code": " 297",
+    "Acount Name": "Mrs Olatunde Ronke ",
+    "Property Number/Street": "2. Balogun Street, Shasha , ",
+    "Property Units": "8 Room.",
+    "TotalBill": "332000",
+    "Total Payment": "142000",
+    "Balance": "190000"
+  },
+  {
+    "Code": " 298",
+    "Acount Name": "Mr Balogun ",
+    "Property Number/Street": "3 Balogun Street, Shasha , ",
+    "Property Units": "5 Room.",
+    "TotalBill": "198950",
+    "Total Payment": "117900",
+    "Balance": "81050"
+  },
+  {
+    "Code": " 299",
+    "Acount Name": "Mr Sobanke Olatunji",
+    "Property Number/Street": "4 Balogun Street, Shasha , ",
+    "Property Units": "5 Room.",
+    "TotalBill": "188750",
+    "Total Payment": "108000",
+    "Balance": "80750"
+  },
+  {
+    "Code": " 300",
+    "Acount Name": "David Ayinla Ogunseye",
+    "Property Number/Street": "6 Balogun Street, Shasha , ",
+    "Property Units": "8 Room.",
+    "TotalBill": "301600",
+    "Total Payment": "163200",
+    "Balance": "138400"
+  },
+  {
+    "Code": " 301",
+    "Acount Name": "Mr G OKolise ",
+    "Property Number/Street": "7 Balogun Street, Shasha , ",
+    "Property Units": "9 Room.",
+    "TotalBill": "389550",
+    "Total Payment": "226900",
+    "Balance": "162650"
+  },
+  {
+    "Code": " 302",
+    "Acount Name": "Augustine Dada ",
+    "Property Number/Street": "9 Balogun Street, Shasha , ",
+    "Property Units": "12 Room. /1 Shop.",
+    "TotalBill": "520900",
+    "Total Payment": "224400",
+    "Balance": "296500"
+  },
+  {
+    "Code": " 303",
+    "Acount Name": "Bashiru Omotosho ",
+    "Property Number/Street": "9A Balogun Street, Shasha , ",
+    "Property Units": "5 Room.",
+    "TotalBill": "211450",
+    "Total Payment": "92700",
+    "Balance": "118750"
+  },
+  {
+    "Code": " 304",
+    "Acount Name": "Emeka Ebonyi ",
+    "Property Number/Street": "12 Balogun Street, Shasha , ",
+    "Property Units": "12 Room.",
+    "TotalBill": "516200",
+    "Total Payment": "231200",
+    "Balance": "285000"
+  },
+  {
+    "Code": " 3088",
+    "Acount Name": "Mr. Velly Tiemo",
+    "Property Number/Street": "11B Balogun Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "104650",
+    "Total Payment": "51000",
+    "Balance": "53650"
+  },
+  {
+    "Code": " 3381",
+    "Acount Name": "Simple Kona Guest House",
+    "Property Number/Street": "12. Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 HOTEL..",
+    "TotalBill": "361000",
+    "Total Payment": "244000",
+    "Balance": "117000"
+  },
+  {
+    "Code": " 3344",
+    "Acount Name": "Ozua Bobby Chuks",
+    "Property Number/Street": "14 Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "89650",
+    "Total Payment": "57250",
+    "Balance": "32400"
+  },
+  {
+    "Code": " 4254",
+    "Acount Name": "Mr. Daniyan",
+    "Property Number/Street": "13, Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "48400",
+    "Total Payment": "38000",
+    "Balance": "10400"
+  },
+  {
+    "Code": " 4407",
+    "Acount Name": "Akintunde Akinlanwa",
+    "Property Number/Street": "13. Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "52900",
+    "Total Payment": "41900",
+    "Balance": "11000"
+  },
+  {
+    "Code": " 4375",
+    "Acount Name": "Mr. Shonola",
+    "Property Number/Street": "15, Baruwa Etti Street, Shasha , ",
+    "Property Units": "2 MiniFlat",
+    "TotalBill": "56500",
+    "Total Payment": "10500",
+    "Balance": "46000"
+  },
+  {
+    "Code": " 305",
+    "Acount Name": "Mr Sefia ",
+    "Property Number/Street": "1 Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "129400",
+    "Total Payment": "114400",
+    "Balance": "15000"
+  },
+  {
+    "Code": " 306",
+    "Acount Name": "Mr Folashade Abosede ",
+    "Property Number/Street": "2 Baruwa Etti Street, Shasha , ",
+    "Property Units": "2 Room_Parlour",
+    "TotalBill": "158200",
+    "Total Payment": "111900",
+    "Balance": "46300"
+  },
+  {
+    "Code": " 307",
+    "Acount Name": "Baruwa Etti ",
+    "Property Number/Street": "3 Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "138550",
+    "Total Payment": "124500",
+    "Balance": "14050"
+  },
+  {
+    "Code": " 308",
+    "Acount Name": "Alfred Engr. Coy ",
+    "Property Number/Street": "4 Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 COMPANY.,",
+    "TotalBill": "430000",
+    "Total Payment": "43500",
+    "Balance": "386500"
+  },
+  {
+    "Code": " 309",
+    "Acount Name": "Mr. Emwerem Emeka",
+    "Property Number/Street": "5 Baruwa Etti Street, Shasha , ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "214800",
+    "Total Payment": "211000",
+    "Balance": "3800"
+  },
+  {
+    "Code": " 310",
+    "Acount Name": "Mr Thomas Ben ",
+    "Property Number/Street": "7 Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "139400",
+    "Total Payment": "59750",
+    "Balance": "79650"
+  },
+  {
+    "Code": " 312",
+    "Acount Name": "Mr Isaac Christian ",
+    "Property Number/Street": "9 Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "137900",
+    "Total Payment": "59500",
+    "Balance": "78400"
+  },
+  {
+    "Code": " 313",
+    "Acount Name": "Mr Analekulu Juliet ",
+    "Property Number/Street": "9/10 Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "144400",
+    "Total Payment": "47000",
+    "Balance": "97400"
+  },
+  {
+    "Code": " 315",
+    "Acount Name": "Mr Sunday ",
+    "Property Number/Street": "11 Baruwa Etti Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "123400",
+    "Total Payment": "62250",
+    "Balance": "61150"
+  },
+  {
+    "Code": " 317",
+    "Acount Name": "Mr Ogbidi E.O ",
+    "Property Number/Street": "13 Baruwa Etti Street, Shasha , ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "415600",
+    "Total Payment": "114000",
+    "Balance": "301600"
+  },
+  {
+    "Code": " 319",
+    "Acount Name": "Rabiu Bello ",
+    "Property Number/Street": "1 Bello Avenue, Shasha, ",
+    "Property Units": "7 Room. /1 Shop.",
+    "TotalBill": "293450",
+    "Total Payment": "65400",
+    "Balance": "228050"
+  },
+  {
+    "Code": " 320",
+    "Acount Name": "Rabiu Bello ",
+    "Property Number/Street": "2 Bello Avenue, Shasha, ",
+    "Property Units": "5 Room. /1 Shop.",
+    "TotalBill": "242950",
+    "Total Payment": "59100",
+    "Balance": "183850"
+  },
+  {
+    "Code": " 321",
+    "Acount Name": "Alhaji Akintola ",
+    "Property Number/Street": "3 Bello Avenue, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "113900",
+    "Total Payment": "28500",
+    "Balance": "85400"
+  },
+  {
+    "Code": " 322",
+    "Acount Name": "S.T.R Ultimate Engr Coy ",
+    "Property Number/Street": "5 Bello Avenue, Shasha, ",
+    "Property Units": "1 Workshop B /3 Shop.",
+    "TotalBill": "303650",
+    "Total Payment": "159850",
+    "Balance": "143800"
+  },
+  {
+    "Code": " 323",
+    "Acount Name": "Kosh Manni &  Coy",
+    "Property Number/Street": "5a Bello Avenue, Shasha, ",
+    "Property Units": "1 Workshop B",
+    "TotalBill": "222800",
+    "Total Payment": "196800",
+    "Balance": "26000"
+  },
+  {
+    "Code": " 2117",
+    "Acount Name": "Workshop/Shops",
+    "Property Number/Street": "5, Bello Avenue, Shasha, ",
+    "Property Units": "1 Workshop B /5 Shop.",
+    "TotalBill": "382930",
+    "Total Payment": "245930",
+    "Balance": "137000"
+  },
+  {
+    "Code": " 2685",
+    "Acount Name": "Mr. Micheal",
+    "Property Number/Street": "4 Bello Avenue, Shasha, ",
+    "Property Units": "3 Flat.",
+    "TotalBill": "327450",
+    "Total Payment": "229050",
+    "Balance": "98400"
+  },
+  {
+    "Code": " 3569",
+    "Acount Name": "Kosh Manny Shops",
+    "Property Number/Street": "5a, Bello Avenue, Shasha, ",
+    "Property Units": "4 Shop.",
+    "TotalBill": "143200",
+    "Total Payment": "68560",
+    "Balance": "74640"
+  },
+  {
+    "Code": " 3478",
+    "Acount Name": "GOD GIFT STORE",
+    "Property Number/Street": "11, Ben Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "47000",
+    "Total Payment": "45000",
+    "Balance": "2000"
+  },
+  {
+    "Code": " 3943",
+    "Acount Name": "Occupant",
+    "Property Number/Street": "(4) Ben Street, Shasha , ",
+    "Property Units": "1 Room.",
+    "TotalBill": "22550",
+    "Total Payment": "2400",
+    "Balance": "20150"
+  },
+  {
+    "Code": " 3951",
+    "Acount Name": "Mohammed Mariam",
+    "Property Number/Street": "(4).. Ben Street, Shasha , ",
+    "Property Units": "1 Room.",
+    "TotalBill": "22950",
+    "Total Payment": "4800",
+    "Balance": "18150"
+  },
+  {
+    "Code": " 3859",
+    "Acount Name": "Mr. Christian (Boutique)",
+    "Property Number/Street": "(11) Ben Street, Shasha , ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "51800",
+    "Total Payment": "21800",
+    "Balance": "30000"
+  },
+  {
+    "Code": " 3885",
+    "Acount Name": "Iya Eleko",
+    "Property Number/Street": "(4). Ben Street, Shasha , ",
+    "Property Units": "1 Open Field",
+    "TotalBill": "62000",
+    "Total Payment": "58000",
+    "Balance": "4000"
+  },
+  {
+    "Code": " 3867",
+    "Acount Name": "Mrs. Blessing ",
+    "Property Number/Street": "(4.), Ben Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "29800",
+    "Total Payment": "2400",
+    "Balance": "27400"
+  },
+  {
+    "Code": " 3868",
+    "Acount Name": "Chemist/Phone Accessories",
+    "Property Number/Street": "(11). Ben Street, Shasha , ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "60200",
+    "Total Payment": "46700",
+    "Balance": "13500"
+  },
+  {
+    "Code": " 3763",
+    "Acount Name": "Yam Seller",
+    "Property Number/Street": "(11.) Ben Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "32500",
+    "Total Payment": "4800",
+    "Balance": "27700"
+  },
+  {
+    "Code": " 3001",
+    "Acount Name": "Amos Bakare",
+    "Property Number/Street": "3B Ben Street, Shasha , ",
+    "Property Units": "9 MiniFlat",
+    "TotalBill": "902750",
+    "Total Payment": "742000",
+    "Balance": "160750"
+  },
+  {
+    "Code": " 4310",
+    "Acount Name": "Mrs. Vine (Frozen food)",
+    "Property Number/Street": "11' Ben Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "23000",
+    "Total Payment": "9000",
+    "Balance": "14000"
+  },
+  {
+    "Code": " 4333",
+    "Acount Name": "Ola Fashion",
+    "Property Number/Street": "11'. Ben Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "27000",
+    "Total Payment": "0",
+    "Balance": "27000"
+  },
+  {
+    "Code": " 3989",
+    "Acount Name": "Mrs. Grace (Fufu Seller)",
+    "Property Number/Street": "(3) Ben Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26500",
+    "Total Payment": "4100",
+    "Balance": "22400"
+  },
+  {
+    "Code": " 2419",
+    "Acount Name": "Mrs. Ajegunle(Pepper Seller)",
+    "Property Number/Street": "11. Ben Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "46600",
+    "Total Payment": "44100",
+    "Balance": "2500"
+  },
+  {
+    "Code": " 2421",
+    "Acount Name": "Mr. Omojoye O.",
+    "Property Number/Street": "1A Ben Street, Shasha , ",
+    "Property Units": "6 Room.",
+    "TotalBill": "198300",
+    "Total Payment": "60100",
+    "Balance": "138200"
+  },
+  {
+    "Code": " 1625",
+    "Acount Name": "Mr. Lennis Adagbon",
+    "Property Number/Street": "8 Ben Street, Shasha , ",
+    "Property Units": "3 Flat.",
+    "TotalBill": "387600",
+    "Total Payment": "381600",
+    "Balance": "6000"
+  },
+  {
+    "Code": " 325",
+    "Acount Name": "Mr Badmus Gbadamosi",
+    "Property Number/Street": "1B Ben Street, Shasha , ",
+    "Property Units": "10 Room. /5 Shop.",
+    "TotalBill": "653100",
+    "Total Payment": "499100",
+    "Balance": "154000"
+  },
+  {
+    "Code": " 326",
+    "Acount Name": "Mr. Ben ",
+    "Property Number/Street": "2 Ben Street, Shasha , ",
+    "Property Units": "16 Room. /1 Shop.",
+    "TotalBill": "665200",
+    "Total Payment": "254800",
+    "Balance": "410400"
+  },
+  {
+    "Code": " 328",
+    "Acount Name": "Oladokun O.A ",
+    "Property Number/Street": "3 Ben Street, Shasha , ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "128900",
+    "Total Payment": "59500",
+    "Balance": "69400"
+  },
+  {
+    "Code": " 331",
+    "Acount Name": "Vicland NurPry School ",
+    "Property Number/Street": "4a Ben Street, Shasha , ",
+    "Property Units": "1 School B",
+    "TotalBill": "52300",
+    "Total Payment": "31900",
+    "Balance": "20400"
+  },
+  {
+    "Code": " 332",
+    "Acount Name": "Kiosks",
+    "Property Number/Street": "(4), Ben Street, Shasha , ",
+    "Property Units": "6 Shop.",
+    "TotalBill": "328770",
+    "Total Payment": "162170",
+    "Balance": "166600"
+  },
+  {
+    "Code": " 333",
+    "Acount Name": "Anthony Ezeunara ",
+    "Property Number/Street": "4i Ben Street, Shasha , ",
+    "Property Units": "1 WAREHOUSE",
+    "TotalBill": "364000",
+    "Total Payment": "120000",
+    "Balance": "244000"
+  },
+  {
+    "Code": " 335",
+    "Acount Name": "Baale Ajegunle ",
+    "Property Number/Street": "6 Ben Street, Shasha , ",
+    "Property Units": "2 Room. /5 Shop.",
+    "TotalBill": "344500",
+    "Total Payment": "233800",
+    "Balance": "110700"
+  },
+  {
+    "Code": " 336",
+    "Acount Name": "Mr Adenubi ",
+    "Property Number/Street": "11 Ben Street, Shasha , ",
+    "Property Units": "4 Room.",
+    "TotalBill": "312400",
+    "Total Payment": "228600",
+    "Balance": "83800"
+  },
+  {
+    "Code": " 337",
+    "Acount Name": "Mao Beauty Saloon ",
+    "Property Number/Street": "11a Ben Street, Shasha , ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "54400",
+    "Total Payment": "44400",
+    "Balance": "10000"
+  },
+  {
+    "Code": " 339",
+    "Acount Name": "Bonny Nkameme ",
+    "Property Number/Street": "2 Bonny Nkameme Close, ",
+    "Property Units": "3 Mini Flat /6 Room.",
+    "TotalBill": "510740",
+    "Total Payment": "459290",
+    "Balance": "51450"
+  },
+  {
+    "Code": " 340",
+    "Acount Name": "Mr Okosun ",
+    "Property Number/Street": "3 Bonny Nkameme Close, ",
+    "Property Units": "1 Bungalow",
+    "TotalBill": "185000",
+    "Total Payment": "177500",
+    "Balance": "7500"
+  },
+  {
+    "Code": " 341",
+    "Acount Name": "Mr Frederick Akpoguma O. ",
+    "Property Number/Street": "3A Bonny Nkameme Close, ",
+    "Property Units": "1 Flats",
+    "TotalBill": "127600",
+    "Total Payment": "120750",
+    "Balance": "6850"
+  },
+  {
+    "Code": " 3093",
+    "Acount Name": "Patrick Obaro Utuodor",
+    "Property Number/Street": "1, Bonny Nkameme Close, ",
+    "Property Units": "1 Flats",
+    "TotalBill": "1950",
+    "Total Payment": "750",
+    "Balance": "1200"
+  },
+  {
+    "Code": " 3067",
+    "Acount Name": "Chief Sulaimon Akinde (Guesthouse)",
+    "Property Number/Street": "16B Boundary Road, Shasha, ",
+    "Property Units": "1 Shop. /1 Room.",
+    "TotalBill": "74650",
+    "Total Payment": "54700",
+    "Balance": "19950"
+  },
+  {
+    "Code": " 2993",
+    "Acount Name": "Mr. Arogundade",
+    "Property Number/Street": "4, Boundary Road, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "136000",
+    "Total Payment": "132000",
+    "Balance": "4000"
+  },
+  {
+    "Code": " 2907",
+    "Acount Name": "Mr. Lawal (Barbing Saloon)",
+    "Property Number/Street": "49, Boundary Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "43050",
+    "Total Payment": "3500",
+    "Balance": "39550"
+  },
+  {
+    "Code": " 2524",
+    "Acount Name": "Mr. Shotunde Olanrewaju",
+    "Property Number/Street": "6A Boundary Road, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "108400",
+    "Total Payment": "98400",
+    "Balance": "10000"
+  },
+  {
+    "Code": " 3240",
+    "Acount Name": "Mrs Kehinde Olusola Ogundiji",
+    "Property Number/Street": "3B, Boundary Road, Shasha, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "139000",
+    "Total Payment": "120000",
+    "Balance": "19000"
+  },
+  {
+    "Code": " 3777",
+    "Acount Name": "Alhaja Funmilayo Sule",
+    "Property Number/Street": "(2) Boundary Road, Shasha, ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "289600",
+    "Total Payment": "59000",
+    "Balance": "230600"
+  },
+  {
+    "Code": " 3879",
+    "Acount Name": "Kiosk",
+    "Property Number/Street": "45, Boundary Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "24900",
+    "Total Payment": "1800",
+    "Balance": "23100"
+  },
+  {
+    "Code": " 3924",
+    "Acount Name": "Mr & Mrs. Egbebi",
+    "Property Number/Street": "(93) Boundary Road, Shasha, ",
+    "Property Units": "1 Room_Parlour",
+    "TotalBill": "47300",
+    "Total Payment": "7600",
+    "Balance": "39700"
+  },
+  {
+    "Code": " 3457",
+    "Acount Name": "Mr. James Ojo (Opp. 45)",
+    "Property Number/Street": "(45.) Boundary Road, Shasha, ",
+    "Property Units": "5 Shop.",
+    "TotalBill": "172000",
+    "Total Payment": "2000",
+    "Balance": "170000"
+  },
+  {
+    "Code": " 3441",
+    "Acount Name": "Mrs. Raji Ganiyat (Biscuit)",
+    "Property Number/Street": "(62) Boundary Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "37600",
+    "Total Payment": "26600",
+    "Balance": "11000"
+  },
+  {
+    "Code": " 3518",
+    "Acount Name": "Mama K. Restaurant",
+    "Property Number/Street": "(62,) Boundary Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "36700",
+    "Total Payment": "2700",
+    "Balance": "34000"
+  },
+  {
+    "Code": " 3627",
+    "Acount Name": "Mr. Joseph Ezekaka",
+    "Property Number/Street": "5, Boundary Road, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "71850",
+    "Total Payment": "7250",
+    "Balance": "64600"
+  },
+  {
+    "Code": " 3572",
+    "Acount Name": "Mr. Ogundipe",
+    "Property Number/Street": "(56.) Boundary Road, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "82150",
+    "Total Payment": "1500",
+    "Balance": "80650"
+  },
+  {
+    "Code": " 3589",
+    "Acount Name": "Mr. Semiu ",
+    "Property Number/Street": "(7) Boundary Road, Shasha, ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "287400",
+    "Total Payment": "137600",
+    "Balance": "149800"
+  },
+  {
+    "Code": " 4045",
+    "Acount Name": "Frozen Food (Opposit FAAN fence)",
+    "Property Number/Street": "26, Boundary Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "25000",
+    "Total Payment": "7000",
+    "Balance": "18000"
+  },
+  {
+    "Code": " 3985",
+    "Acount Name": "IYA ALATA",
+    "Property Number/Street": "(45.). Boundary Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26800",
+    "Total Payment": "8300",
+    "Balance": "18500"
+  },
+  {
+    "Code": " 3986",
+    "Acount Name": "ROOT ANNS SCHOOL",
+    "Property Number/Street": "(87) Boundary Road, Shasha, ",
+    "Property Units": "1 School",
+    "TotalBill": "51000",
+    "Total Payment": "25000",
+    "Balance": "26000"
+  },
+  {
+    "Code": " 4452",
+    "Acount Name": "Mr. Femi Adeyeye",
+    "Property Number/Street": "87, Boundary Road, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "30000",
+    "Total Payment": "0",
+    "Balance": "30000"
+  },
+  {
+    "Code": " 4453",
+    "Acount Name": "Major AUN Osuorah",
+    "Property Number/Street": "5. Boundary Road, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "18000",
+    "Total Payment": "0",
+    "Balance": "18000"
+  },
+  {
+    "Code": " 342",
+    "Acount Name": "Alhaji Kola Okunola",
+    "Property Number/Street": "2. Boundary Road, Shasha, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "189000",
+    "Total Payment": "186000",
+    "Balance": "3000"
+  },
+  {
+    "Code": " 343",
+    "Acount Name": "C.C.C. Agbala Iyanu ",
+    "Property Number/Street": "1.. Boundary Road, Shasha, ",
+    "Property Units": "1 Church A",
+    "TotalBill": "74500",
+    "Total Payment": "27000",
+    "Balance": "47500"
+  },
+  {
+    "Code": " 344",
+    "Acount Name": "Mrs Popo ",
+    "Property Number/Street": "1a Boundary Road, Shasha, ",
+    "Property Units": "3 Flat.",
+    "TotalBill": "479100",
+    "Total Payment": "270900",
+    "Balance": "208200"
+  },
+  {
+    "Code": " 345",
+    "Acount Name": "Mr Oloyede ",
+    "Property Number/Street": "2 Boundary Road, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "338000",
+    "Total Payment": "148000",
+    "Balance": "190000"
+  },
+  {
+    "Code": " 346",
+    "Acount Name": "Barr. Oladunjoye ",
+    "Property Number/Street": "2/3 Boundary Road, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "268300",
+    "Total Payment": "71500",
+    "Balance": "196800"
+  },
+  {
+    "Code": " 347",
+    "Acount Name": "Mr. Ajiboye Salami",
+    "Property Number/Street": "3 Boundary Road, Shasha, ",
+    "Property Units": "4 Room.",
+    "TotalBill": "178200",
+    "Total Payment": "83200",
+    "Balance": "95000"
+  },
+  {
+    "Code": " 348",
+    "Acount Name": "Mr Omole Rasaki ",
+    "Property Number/Street": "4 Boundary Road, Shasha, ",
+    "Property Units": "8 Room. /1 Flat.",
+    "TotalBill": "472500",
+    "Total Payment": "258350",
+    "Balance": "214150"
+  },
+  {
+    "Code": " 351",
+    "Acount Name": "Christ Apostolic Prayerlife ",
+    "Property Number/Street": "5 Boundary Road, Shasha, ",
+    "Property Units": "1 Church A",
+    "TotalBill": "70250",
+    "Total Payment": "50000",
+    "Balance": "20250"
+  },
+  {
+    "Code": " 352",
+    "Acount Name": "Mr.Izuchukwu .F. Nnodebe",
+    "Property Number/Street": "5A Boundary Road, Shasha, ",
+    "Property Units": "2 Flat. /8 Flat. /8 Flat.",
+    "TotalBill": "771200",
+    "Total Payment": "713600",
+    "Balance": "57600"
+  },
+  {
+    "Code": " 353",
+    "Acount Name": "Mrs Dupe Lateef ",
+    "Property Number/Street": "6 Boundary Road, Shasha, ",
+    "Property Units": "14 Room. /1 Shop.",
+    "TotalBill": "615400",
+    "Total Payment": "393600",
+    "Balance": "221800"
+  },
+  {
+    "Code": " 354",
+    "Acount Name": "Mr Shina Tawakalitu",
+    "Property Number/Street": "7 Boundary Road, Shasha, ",
+    "Property Units": "18 Room.",
+    "TotalBill": "772400",
+    "Total Payment": "281300",
+    "Balance": "491100"
+  },
+  {
+    "Code": " 355",
+    "Acount Name": "Mr Jolasun Tijani",
+    "Property Number/Street": "7. Boundary Road, Shasha, ",
+    "Property Units": "2 Room_Parlour /5 Room. /1 Flat.",
+    "TotalBill": "503950",
+    "Total Payment": "310650",
+    "Balance": "193300"
+  },
+  {
+    "Code": " 356",
+    "Acount Name": "Mr Joseph.O.Oniyide ",
+    "Property Number/Street": "8 Boundary Road, Shasha, ",
+    "Property Units": "10 Room. /1 Flat.",
+    "TotalBill": "519800",
+    "Total Payment": "303990",
+    "Balance": "215810"
+  },
+  {
+    "Code": " 357",
+    "Acount Name": "Mr Adewuyi S.A ",
+    "Property Number/Street": "8A Boundary Road, Shasha, ",
+    "Property Units": "3 Flat.",
+    "TotalBill": "322950",
+    "Total Payment": "292950",
+    "Balance": "30000"
+  },
+  {
+    "Code": " 360",
+    "Acount Name": "Mr. Musiliu Adeshola",
+    "Property Number/Street": "9 Boundary Road, Shasha, ",
+    "Property Units": "16 Room.",
+    "TotalBill": "622200",
+    "Total Payment": "339200",
+    "Balance": "283000"
+  },
+  {
+    "Code": " 361",
+    "Acount Name": "Mr R.A.Adeogun ",
+    "Property Number/Street": "10 Boundary Road, Shasha, ",
+    "Property Units": "10 Room.",
+    "TotalBill": "336900",
+    "Total Payment": "171400",
+    "Balance": "165500"
+  },
+  {
+    "Code": " 362",
+    "Acount Name": "Mrs Olaogun Dauda",
+    "Property Number/Street": "11 Boundary Road, Shasha, ",
+    "Property Units": "29 Room. /1 Shop.",
+    "TotalBill": "1063250",
+    "Total Payment": "827650",
+    "Balance": "235600"
+  },
+  {
+    "Code": " 363",
+    "Acount Name": "Mr Sumonu Balogun ",
+    "Property Number/Street": "14 Boundary Road, Shasha, ",
+    "Property Units": "3 Flat. /2 MiniFlat /1 Room.",
+    "TotalBill": "579750",
+    "Total Payment": "568400",
+    "Balance": "11350"
+  },
+  {
+    "Code": " 367",
+    "Acount Name": "Alhaja Olaiya ",
+    "Property Number/Street": "16 Boundary Road, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "325300",
+    "Total Payment": "210900",
+    "Balance": "114400"
+  },
+  {
+    "Code": " 368",
+    "Acount Name": "Prophet Salam",
+    "Property Number/Street": "18 Boundary Road, Shasha, ",
+    "Property Units": "4 Room.",
+    "TotalBill": "150000",
+    "Total Payment": "93200",
+    "Balance": "56800"
+  },
+  {
+    "Code": " 369",
+    "Acount Name": "Madam Eyo E.L ",
+    "Property Number/Street": "19 Boundary Road, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "221150",
+    "Total Payment": "204850",
+    "Balance": "16300"
+  },
+  {
+    "Code": " 370",
+    "Acount Name": "Mr Olusesi Kasali ",
+    "Property Number/Street": "20 Boundary Road, Shasha, ",
+    "Property Units": "13 Room.",
+    "TotalBill": "492250",
+    "Total Payment": "481200",
+    "Balance": "11050"
+  },
+  {
+    "Code": " 371",
+    "Acount Name": "Alhaji M.A. Idowu ",
+    "Property Number/Street": "22 Boundary Road, Shasha, ",
+    "Property Units": "6 Room.",
+    "TotalBill": "234900",
+    "Total Payment": "172500",
+    "Balance": "62400"
+  },
+  {
+    "Code": " 372",
+    "Acount Name": "Mr Ajani Salawu",
+    "Property Number/Street": "24 Boundary Road, Shasha, ",
+    "Property Units": "5 Room.",
+    "TotalBill": "315050",
+    "Total Payment": "225300",
+    "Balance": "89750"
+  },
+  {
+    "Code": " 373",
+    "Acount Name": "Nasiru Elegbede",
+    "Property Number/Street": "26 Boundary Road, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "345090",
+    "Total Payment": "239290",
+    "Balance": "105800"
+  },
+  {
+    "Code": " 374",
+    "Acount Name": "Mr Badmus ",
+    "Property Number/Street": "28 Boundary Road, Shasha, ",
+    "Property Units": "5 Room. /6 MiniFlat",
+    "TotalBill": "666850",
+    "Total Payment": "405600",
+    "Balance": "261250"
+  },
+  {
+    "Code": " 375",
+    "Acount Name": "Mr Abisile ",
+    "Property Number/Street": "28B Boundary Road, Shasha, ",
+    "Property Units": "3 Room.",
+    "TotalBill": "118250",
+    "Total Payment": "63800",
+    "Balance": "54450"
+  },
+  {
+    "Code": " 376",
+    "Acount Name": "Mr Sakiru Rafatu",
+    "Property Number/Street": "30 Boundary Road, Shasha, ",
+    "Property Units": "16 Room.",
+    "TotalBill": "638500",
+    "Total Payment": "259000",
+    "Balance": "379500"
+  },
+  {
+    "Code": " 377",
+    "Acount Name": "Mr Elegbede ",
+    "Property Number/Street": "34A Boundary Road, Shasha, ",
+    "Property Units": "5 Room.",
+    "TotalBill": "187750",
+    "Total Payment": "156500",
+    "Balance": "31250"
+  },
+  {
+    "Code": " 378",
+    "Acount Name": "Mr Elegbede ",
+    "Property Number/Street": "34B Boundary Road, Shasha, ",
+    "Property Units": "7 Room.",
+    "TotalBill": "277950",
+    "Total Payment": "193200",
+    "Balance": "84750"
+  },
+  {
+    "Code": " 379",
+    "Acount Name": "Bakery ",
+    "Property Number/Street": "37A Boundary Road, Shasha, ",
+    "Property Units": "1 Bakery A",
+    "TotalBill": "147000",
+    "Total Payment": "101000",
+    "Balance": "46000"
+  },
+  {
+    "Code": " 380",
+    "Acount Name": "Alhaja Sikirat Momoh",
+    "Property Number/Street": "37 Boundary Road, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "312580",
+    "Total Payment": "177380",
+    "Balance": "135200"
+  },
+  {
+    "Code": " 381",
+    "Acount Name": "Mr S.I. Aberejo ",
+    "Property Number/Street": "40 Boundary Road, Shasha, ",
+    "Property Units": "6 Room.",
+    "TotalBill": "288900",
+    "Total Payment": "283800",
+    "Balance": "5100"
+  },
+  {
+    "Code": " 382",
+    "Acount Name": "Boundary Road Artisan Association ",
+    "Property Number/Street": "41 Boundary Road, Shasha, ",
+    "Property Units": "1 Workshop",
+    "TotalBill": "958000",
+    "Total Payment": "886000",
+    "Balance": "72000"
+  },
+  {
+    "Code": " 384",
+    "Acount Name": "Revd. Stephen Akinyemi ",
+    "Property Number/Street": "43 Boundary Road, Shasha, ",
+    "Property Units": "3 Room_Parlour",
+    "TotalBill": "277500",
+    "Total Payment": "207800",
+    "Balance": "69700"
+  },
+  {
+    "Code": " 385",
+    "Acount Name": "Chief Shonde K.O.M ",
+    "Property Number/Street": "45 Boundary Road, Shasha, ",
+    "Property Units": "10 Room.",
+    "TotalBill": "492300",
+    "Total Payment": "390050",
+    "Balance": "102250"
+  },
+  {
+    "Code": " 387",
+    "Acount Name": "Mr Tijani Afusa.I ",
+    "Property Number/Street": "48 Boundary Road, Shasha, ",
+    "Property Units": "21 Room. /1 Shop.",
+    "TotalBill": "871750",
+    "Total Payment": "533700",
+    "Balance": "338050"
+  },
+  {
+    "Code": " 388",
+    "Acount Name": "Furniture B",
+    "Property Number/Street": "48b Boundary Road, Shasha, ",
+    "Property Units": "1 Furniture B",
+    "TotalBill": "90000",
+    "Total Payment": "79000",
+    "Balance": "11000"
+  },
+  {
+    "Code": " 389",
+    "Acount Name": "Mr Tunde Akanbi ",
+    "Property Number/Street": "49 Boundary Road, Shasha, ",
+    "Property Units": "7 Room.",
+    "TotalBill": "293750",
+    "Total Payment": "148500",
+    "Balance": "145250"
+  },
+  {
+    "Code": " 391",
+    "Acount Name": "Monsuru Inusa ",
+    "Property Number/Street": "51A Boundary Road, Shasha, ",
+    "Property Units": "5 Room.",
+    "TotalBill": "194050",
+    "Total Payment": "75300",
+    "Balance": "118750"
+  },
+  {
+    "Code": " 392",
+    "Acount Name": "Mr Adewuyi  ",
+    "Property Number/Street": "51 Boundary Road, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "317950",
+    "Total Payment": "127950",
+    "Balance": "190000"
+  },
+  {
+    "Code": " 393",
+    "Acount Name": "Mr Oladimeji Saidi ",
+    "Property Number/Street": "52 Boundary Road, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "327200",
+    "Total Payment": "153200",
+    "Balance": "174000"
+  },
+  {
+    "Code": " 394",
+    "Acount Name": "Mrs Tunbosun Raimi ",
+    "Property Number/Street": "53 Boundary Road, Shasha, ",
+    "Property Units": "7 Room. /1 Shop.",
+    "TotalBill": "328990",
+    "Total Payment": "299440",
+    "Balance": "29550"
+  },
+  {
+    "Code": " 395",
+    "Acount Name": "Mr Ayeni .J.A ",
+    "Property Number/Street": "54 Boundary Road, Shasha, ",
+    "Property Units": "9 Room.",
+    "TotalBill": "348750",
+    "Total Payment": "308100",
+    "Balance": "40650"
+  },
+  {
+    "Code": " 396",
+    "Acount Name": "Mr Lawal Isiaka ",
+    "Property Number/Street": "54A Boundary Road, Shasha, ",
+    "Property Units": "4 Room. /2 Room_Parlour",
+    "TotalBill": "301200",
+    "Total Payment": "252800",
+    "Balance": "48400"
+  },
+  {
+    "Code": " 397",
+    "Acount Name": "Mr Wahab Afolayan ",
+    "Property Number/Street": "54B Boundary Road, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "139400",
+    "Total Payment": "96250",
+    "Balance": "43150"
+  },
+  {
+    "Code": " 400",
+    "Acount Name": "Mrs Lydia Gbadamosi ",
+    "Property Number/Street": "59 Boundary Road, Shasha, ",
+    "Property Units": "15 Room. /3 Shop.",
+    "TotalBill": "750150",
+    "Total Payment": "486500",
+    "Balance": "263650"
+  },
+
+  {
+    "Code": "4213",
+    "Acount Name": "Mrs. Olaoye (Provisions)",
+    "Property Number/Street": "\"22' Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26200",
+    "Total Payment": "4500",
+    "Balance": "21700"
+  },
+  {
+    "Code": " 4214",
+    "Acount Name": "Mr. Henry (Chemist)",
+    "Property Number/Street": "60, Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26500",
+    "Total Payment": "2000",
+    "Balance": "24500"
+  },
+  {
+    "Code": " 4215",
+    "Acount Name": "Mrs. Olugbuyi (Provision/Toiletries)",
+    "Property Number/Street": "60' Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26500",
+    "Total Payment": "5000",
+    "Balance": "21500"
+  },
+  {
+    "Code": " 4216",
+    "Acount Name": "Mrs. Ngozi (Beer parlour)",
+    "Property Number/Street": "'60' Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26500",
+    "Total Payment": "4000",
+    "Balance": "22500"
+  },
+  {
+    "Code": " 4217",
+    "Acount Name": "Mrs. Abubakar (Provisons)",
+    "Property Number/Street": "''48' Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "27400",
+    "Total Payment": "3000",
+    "Balance": "24400"
+  },
+  {
+    "Code": " 4218",
+    "Acount Name": "Aiwansoba Cynthia (Chemist)",
+    "Property Number/Street": "'15 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26200",
+    "Total Payment": "3600",
+    "Balance": "22600"
+  },
+  {
+    "Code": " 4219",
+    "Acount Name": "Mrs. Akakponi Joyce(Foodstuff)",
+    "Property Number/Street": "'15' Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26200",
+    "Total Payment": "3600",
+    "Balance": "22600"
+  },
+  {
+    "Code": " 4220",
+    "Acount Name": "Mum Zainab (Hairdresser)",
+    "Property Number/Street": "17' Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "27600",
+    "Total Payment": "5000",
+    "Balance": "22600"
+  },
+  {
+    "Code": " 529",
+    "Acount Name": "Mr Adeogun Ganiyu",
+    "Property Number/Street": "1 Ifelodun Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "546700",
+    "Total Payment": "487100",
+    "Balance": "59600"
+  },
+  {
+    "Code": " 531",
+    "Acount Name": "Mr Oduntan M ",
+    "Property Number/Street": "2 Ifelodun Street, Shasha, ",
+    "Property Units": "13 Room. /1 Shop.",
+    "TotalBill": "550650",
+    "Total Payment": "142200",
+    "Balance": "408450"
+  },
+  {
+    "Code": " 532",
+    "Acount Name": "Chief Akinwande Gabby ",
+    "Property Number/Street": "3 Ifelodun Street, Shasha, ",
+    "Property Units": "5 Room. /1 Shop.",
+    "TotalBill": "715750",
+    "Total Payment": "665050",
+    "Balance": "50700"
+  },
+  {
+    "Code": " 534",
+    "Acount Name": "Shops ",
+    "Property Number/Street": "4 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "3500",
+    "Total Payment": "1400",
+    "Balance": "2100"
+  },
+  {
+    "Code": " 535",
+    "Acount Name": "Mr Mojid ",
+    "Property Number/Street": "5 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat. /1 Room. /3 Shop. /6 Room_Parlour",
+    "TotalBill": "524000",
+    "Total Payment": "444050",
+    "Balance": "79950"
+  },
+  {
+    "Code": " 536",
+    "Acount Name": "Kiosks ",
+    "Property Number/Street": "5.. Ifelodun Street, Shasha, ",
+    "Property Units": "6 Shop.",
+    "TotalBill": "248400",
+    "Total Payment": "56410",
+    "Balance": "191990"
+  },
+  {
+    "Code": " 537",
+    "Acount Name": "Chief Y.A.B Osho ",
+    "Property Number/Street": "6 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Bungalow",
+    "TotalBill": "201500",
+    "Total Payment": "195500",
+    "Balance": "6000"
+  },
+  {
+    "Code": " 538",
+    "Acount Name": "Alhaji Ibrahim Yusuf ",
+    "Property Number/Street": "7 Ifelodun Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "334100",
+    "Total Payment": "234900",
+    "Balance": "99200"
+  },
+  {
+    "Code": " 539",
+    "Acount Name": "Atiba  Florence ",
+    "Property Number/Street": "8 Ifelodun Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "111450",
+    "Total Payment": "107950",
+    "Balance": "3500"
+  },
+  {
+    "Code": " 540",
+    "Acount Name": "Chief Akanni ",
+    "Property Number/Street": "9 Ifelodun Street, Shasha, ",
+    "Property Units": "4 Flat. /1 MiniFlat",
+    "TotalBill": "475650",
+    "Total Payment": "449200",
+    "Balance": "26450"
+  },
+  {
+    "Code": " 541",
+    "Acount Name": "Mr Akinola ",
+    "Property Number/Street": "10 Ifelodun Street, Shasha, ",
+    "Property Units": "3 Room. /8 Shop. /1 MiniFlat",
+    "TotalBill": "501850",
+    "Total Payment": "381500",
+    "Balance": "120350"
+  },
+  {
+    "Code": " 542",
+    "Acount Name": "Mrs Adelowo ",
+    "Property Number/Street": "11 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "123400",
+    "Total Payment": "117500",
+    "Balance": "5900"
+  },
+  {
+    "Code": " 544",
+    "Acount Name": "Mr Sikiru Labulo ",
+    "Property Number/Street": "14 Ifelodun Street, Shasha, ",
+    "Property Units": "2 Flat. /3 Room_Parlour",
+    "TotalBill": "628625",
+    "Total Payment": "611625",
+    "Balance": "17000"
+  },
+  {
+    "Code": " 545",
+    "Acount Name": "Hellen Omega (Canteen)",
+    "Property Number/Street": "13.. Ifelodun Street, Shasha, ",
+    "Property Units": "1 Canteen.",
+    "TotalBill": "97300",
+    "Total Payment": "87300",
+    "Balance": "10000"
+  },
+  {
+    "Code": " 546",
+    "Acount Name": "Shops ",
+    "Property Number/Street": "15 Ifelodun Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "137200",
+    "Total Payment": "49200",
+    "Balance": "88000"
+  },
+  {
+    "Code": " 547",
+    "Acount Name": "Mechanic ",
+    "Property Number/Street": "15. Ifelodun Street, Shasha, ",
+    "Property Units": "1 Workshop C",
+    "TotalBill": "99900",
+    "Total Payment": "37300",
+    "Balance": "62600"
+  },
+  {
+    "Code": " 548",
+    "Acount Name": "Shop",
+    "Property Number/Street": "15... Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "42900",
+    "Total Payment": "17300",
+    "Balance": "25600"
+  },
+  {
+    "Code": " 552",
+    "Acount Name": "Mr Olasode M.A ",
+    "Property Number/Street": "17 Ifelodun Street, Shasha, ",
+    "Property Units": "13 Room. /5 Shop.",
+    "TotalBill": "753250",
+    "Total Payment": "482100",
+    "Balance": "271150"
+  },
+  {
+    "Code": " 554",
+    "Acount Name": "Mr Oladimeji ",
+    "Property Number/Street": "18 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat. /14 Shop. /1 Mallam",
+    "TotalBill": "994100",
+    "Total Payment": "893100",
+    "Balance": "101000"
+  },
+  {
+    "Code": " 555",
+    "Acount Name": "Wulemotu Amunigun",
+    "Property Number/Street": "19 Ifelodun Street, Shasha, ",
+    "Property Units": "10 Room. /1 Shop.",
+    "TotalBill": "428700",
+    "Total Payment": "359500",
+    "Balance": "69200"
+  },
+  {
+    "Code": " 556",
+    "Acount Name": "Mrs Bakare ",
+    "Property Number/Street": "20 Ifelodun Street, Shasha, ",
+    "Property Units": "12 Room.",
+    "TotalBill": "457800",
+    "Total Payment": "332800",
+    "Balance": "125000"
+  },
+  {
+    "Code": " 558",
+    "Acount Name": "Mrs Oni Adeyomoye ",
+    "Property Number/Street": "22 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat. /1 Room.",
+    "TotalBill": "229350",
+    "Total Payment": "175200",
+    "Balance": "54150"
+  },
+  {
+    "Code": " 559",
+    "Acount Name": "Furniture C",
+    "Property Number/Street": "22.. Ifelodun Street, Shasha, ",
+    "Property Units": "1 FURNITURE.",
+    "TotalBill": "261500",
+    "Total Payment": "111000",
+    "Balance": "150500"
+  },
+  {
+    "Code": " 560",
+    "Acount Name": "R.C.C.G(Greater Light) ",
+    "Property Number/Street": "23 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Church B",
+    "TotalBill": "138000",
+    "Total Payment": "133000",
+    "Balance": "5000"
+  },
+  {
+    "Code": " 561",
+    "Acount Name": "Mr Jaiyeyemi ",
+    "Property Number/Street": "24 Ifelodun Street, Shasha, ",
+    "Property Units": "13 Room.",
+    "TotalBill": "603100",
+    "Total Payment": "548700",
+    "Balance": "54400"
+  },
+  {
+    "Code": " 562",
+    "Acount Name": "PRIME CARE REHAB",
+    "Property Number/Street": "25 Ifelodun Street, Shasha, ",
+    "Property Units": "1 HOSPITAL",
+    "TotalBill": "142500",
+    "Total Payment": "124500",
+    "Balance": "18000"
+  },
+  {
+    "Code": " 563",
+    "Acount Name": "Mr Kayode Olanrewaju ",
+    "Property Number/Street": "26 Ifelodun Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "305700",
+    "Total Payment": "140500",
+    "Balance": "165200"
+  },
+  {
+    "Code": " 564",
+    "Acount Name": "Mr Akinde Moses ",
+    "Property Number/Street": "27 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat. /1 Shop.",
+    "TotalBill": "174700",
+    "Total Payment": "108350",
+    "Balance": "66350"
+  },
+  {
+    "Code": " 565",
+    "Acount Name": "Mr Odukoya ",
+    "Property Number/Street": "28 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "270950",
+    "Total Payment": "242100",
+    "Balance": "28850"
+  },
+  {
+    "Code": " 566",
+    "Acount Name": "C.A.C.(Chapel of Faith) ",
+    "Property Number/Street": "29 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Church,",
+    "TotalBill": "98500",
+    "Total Payment": "68000",
     "Balance": "30500"
   },
   {
-    "Code": "1091",
-    "Acount Name": "Alhaji Animashaun ",
-    "Property Number/Street": "4          Oluwagbebe Street, Shasha, ",
-    "Property Units": "1 Flat. /2 MiniFlat",
-    "TotalBill": "457830",
-    "Total Payment": "419930",
-    "Balance": "37900"
+    "Code": " 567",
+    "Acount Name": "FORTE OIL",
+    "Property Number/Street": "31 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Filling station.,",
+    "TotalBill": "785000",
+    "Total Payment": "755000",
+    "Balance": "30000"
   },
   {
-    "Code": "1089",
-    "Acount Name": "Mrs Medina ",
-    "Property Number/Street": "2.         Oluwagbebe Street, Shasha, ",
+    "Code": " 568",
+    "Acount Name": "Mr Akintola ",
+    "Property Number/Street": "32 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "117650",
+    "Total Payment": "95650",
+    "Balance": "22000"
+  },
+  {
+    "Code": " 569",
+    "Acount Name": "Ganiyu Ogundare ",
+    "Property Number/Street": "34 Ifelodun Street, Shasha, ",
+    "Property Units": "2 Room. /2 Shop.",
+    "TotalBill": "161500",
+    "Total Payment": "119800",
+    "Balance": "41700"
+  },
+  {
+    "Code": " 572",
+    "Acount Name": "Shops ",
+    "Property Number/Street": "38.. Ifelodun Street, Shasha, ",
+    "Property Units": "3 Shop.",
+    "TotalBill": "156000",
+    "Total Payment": "88200",
+    "Balance": "67800"
+  },
+  {
+    "Code": " 573",
+    "Acount Name": "C.A.C.(Oke Ibukun II) ",
+    "Property Number/Street": "40 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Church,",
+    "TotalBill": "214200",
+    "Total Payment": "210200",
+    "Balance": "4000"
+  },
+  {
+    "Code": " 574",
+    "Acount Name": "Mr A.Bello ",
+    "Property Number/Street": "42 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop. /1 Room. /9 Room_Parlour",
+    "TotalBill": "724350",
+    "Total Payment": "703300",
+    "Balance": "21050"
+  },
+  {
+    "Code": " 575",
+    "Acount Name": "Shops ",
+    "Property Number/Street": "43 Ifelodun Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "137700",
+    "Total Payment": "59500",
+    "Balance": "78200"
+  },
+  {
+    "Code": " 580",
+    "Acount Name": "Mechanic ",
+    "Property Number/Street": "47 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Workshop.",
+    "TotalBill": "190500",
+    "Total Payment": "35000",
+    "Balance": "155500"
+  },
+  {
+    "Code": " 581",
+    "Acount Name": "Barber/Plastic shop",
+    "Property Number/Street": "47. Ifelodun Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "147700",
+    "Total Payment": "111700",
+    "Balance": "36000"
+  },
+  {
+    "Code": " 582",
+    "Acount Name": "Mr Rafiu Adisa ",
+    "Property Number/Street": "54 Ifelodun Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "187550",
+    "Total Payment": "168300",
+    "Balance": "19250"
+  },
+  {
+    "Code": " 583",
+    "Acount Name": "Mr Taiwo Ogunbunmi ",
+    "Property Number/Street": "56 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat",
+    "TotalBill": "142400",
+    "Total Payment": "139400",
+    "Balance": "3000"
+  },
+  {
+    "Code": " 584",
+    "Acount Name": "Mr Yisa Olaogun",
+    "Property Number/Street": "58 Ifelodun Street, Shasha, ",
+    "Property Units": "2 Room. /2 Room_Parlour",
+    "TotalBill": "287500",
+    "Total Payment": "160950",
+    "Balance": "126550"
+  },
+  {
+    "Code": " 585",
+    "Acount Name": "Mr Yisa Olaogun ",
+    "Property Number/Street": "58. Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "122900",
+    "Total Payment": "104050",
+    "Balance": "18850"
+  },
+  {
+    "Code": " 586",
+    "Acount Name": "Mrs. Boluwaji Folake ",
+    "Property Number/Street": "60 Ifelodun Street, Shasha, ",
+    "Property Units": "2 Flat. /14 Room.",
+    "TotalBill": "858200",
+    "Total Payment": "562700",
+    "Balance": "295500"
+  },
+  {
+    "Code": " 588",
+    "Acount Name": "Mr. Otusemade ",
+    "Property Number/Street": "64 Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "123900",
+    "Total Payment": "118100",
+    "Balance": "5800"
+  },
+  {
+    "Code": " 590",
+    "Acount Name": "Mr Adio Ajala ",
+    "Property Number/Street": "68 Ifelodun Street, Shasha, ",
+    "Property Units": "18 MiniFlat",
+    "TotalBill": "1496700",
+    "Total Payment": "367700",
+    "Balance": "1129000"
+  },
+  {
+    "Code": " 591",
+    "Acount Name": "Mrs. Roselyn Ajala",
+    "Property Number/Street": "68B Ifelodun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "121800",
+    "Total Payment": "44600",
+    "Balance": "77200"
+  },
+  {
+    "Code": " 1810",
+    "Acount Name": "GSM Food Shop",
+    "Property Number/Street": "16., Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "67700",
+    "Total Payment": "56700",
+    "Balance": "11000"
+  },
+  {
+    "Code": " 2018",
+    "Acount Name": "Shops",
+    "Property Number/Street": "6, Ifelodun Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "115200",
+    "Total Payment": "72000",
+    "Balance": "43200"
+  },
+  {
+    "Code": " 2026",
+    "Acount Name": "Mrs. Serah (Biscuit Shop)",
+    "Property Number/Street": "13, Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "75300",
+    "Total Payment": "38800",
+    "Balance": "36500"
+  },
+  {
+    "Code": " 2486",
+    "Acount Name": "Fashion designer",
+    "Property Number/Street": "21. Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "46300",
+    "Total Payment": "5000",
+    "Balance": "41300"
+  },
+  {
+    "Code": " 2366",
+    "Acount Name": "Occupant A",
+    "Property Number/Street": "58). Ifelodun Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "77750",
+    "Total Payment": "23000",
+    "Balance": "54750"
+  },
+  {
+    "Code": " 609",
+    "Acount Name": "Bag Shop ",
+    "Property Number/Street": "74, Ifelodun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "51800",
+    "Total Payment": "15100",
+    "Balance": "36700"
+  },
+  {
+    "Code": " 622",
+    "Acount Name": "Mr Kelechi ",
+    "Property Number/Street": "2a Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat. /1 Shop.",
+    "TotalBill": "176100",
+    "Total Payment": "133500",
+    "Balance": "42600"
+  },
+  {
+    "Code": " 628",
+    "Acount Name": "The Most Fashion Designer ",
+    "Property Number/Street": "4. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "54400",
+    "Total Payment": "39200",
+    "Balance": "15200"
+  },
+  {
+    "Code": " 629",
+    "Acount Name": "Shops ",
+    "Property Number/Street": "4.. Igbehinadun Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "141540",
+    "Total Payment": "90890",
+    "Balance": "50650"
+  },
+  {
+    "Code": " 631",
+    "Acount Name": "Mr Nasirudeen ",
+    "Property Number/Street": "5. Igbehinadun Street, Shasha, ",
+    "Property Units": "6 Room.",
+    "TotalBill": "224900",
+    "Total Payment": "122200",
+    "Balance": "102700"
+  },
+  {
+    "Code": " 632",
+    "Acount Name": "Mr R.A. Adeyemo ",
+    "Property Number/Street": "6 Igbehinadun Street, Shasha, ",
+    "Property Units": "10 Room. /4 Room_Parlour",
+    "TotalBill": "739800",
+    "Total Payment": "465100",
+    "Balance": "274700"
+  },
+  {
+    "Code": " 633",
+    "Acount Name": "Alhaji Temidire ",
+    "Property Number/Street": "7 Igbehinadun Street, Shasha, ",
     "Property Units": "12 Room. /1 Shop.",
-    "TotalBill": "495500",
-    "Total Payment": "310900",
-    "Balance": "184600"
+    "TotalBill": "548600",
+    "Total Payment": "84600",
+    "Balance": "464000"
+  },
+  {
+    "Code": " 634",
+    "Acount Name": "Madam Okeleye Amudatu",
+    "Property Number/Street": "8 Igbehinadun Street, Shasha, ",
+    "Property Units": "8 Room. /2 Shop.",
+    "TotalBill": "402000",
+    "Total Payment": "356000",
+    "Balance": "46000"
+  },
+  {
+    "Code": " 635",
+    "Acount Name": "Aforolagba Lasisi A.",
+    "Property Number/Street": "9 Igbehinadun Street, Shasha, ",
+    "Property Units": "8 Room. /2 Shop.",
+    "TotalBill": "402000",
+    "Total Payment": "111900",
+    "Balance": "290100"
+  },
+  {
+    "Code": " 636",
+    "Acount Name": "Alhaji Ganiyu Abi",
+    "Property Number/Street": "10 Igbehinadun Street, Shasha, ",
+    "Property Units": "14 Room.",
+    "TotalBill": "598500",
+    "Total Payment": "375900",
+    "Balance": "222600"
+  },
+  {
+    "Code": " 637",
+    "Acount Name": "Alfa Adesoye Ibrahim ",
+    "Property Number/Street": "11 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat. /3 Shop.",
+    "TotalBill": "278300",
+    "Total Payment": "213800",
+    "Balance": "64500"
+  },
+  {
+    "Code": " 638",
+    "Acount Name": "Adeola kareem ",
+    "Property Number/Street": "12 Igbehinadun Street, Shasha, ",
+    "Property Units": "9 Room.",
+    "TotalBill": "364550",
+    "Total Payment": "202400",
+    "Balance": "162150"
+  },
+  {
+    "Code": " 639",
+    "Acount Name": "Mr Kareem Ademosun",
+    "Property Number/Street": "13 Igbehinadun Street, Shasha, ",
+    "Property Units": "6 Room.",
+    "TotalBill": "236300",
+    "Total Payment": "167210",
+    "Balance": "69090"
+  },
+  {
+    "Code": " 644",
+    "Acount Name": "Mrs Agboola ",
+    "Property Number/Street": "10. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "41300",
+    "Total Payment": "22100",
+    "Balance": "19200"
+  },
+  {
+    "Code": " 645",
+    "Acount Name": "Alhaji Aremu ",
+    "Property Number/Street": "14 Igbehinadun Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "349200",
+    "Total Payment": "89800",
+    "Balance": "259400"
+  },
+  {
+    "Code": " 646",
+    "Acount Name": "Madam Sholanke Iyabo",
+    "Property Number/Street": "15 Igbehinadun Street, Shasha, ",
+    "Property Units": "14 Room. /2 Shop.",
+    "TotalBill": "702900",
+    "Total Payment": "605090",
+    "Balance": "97810"
+  },
+  {
+    "Code": " 647",
+    "Acount Name": "Alhaji Alabi Garuba ",
+    "Property Number/Street": "16 Igbehinadun Street, Shasha, ",
+    "Property Units": "3 Room_Parlour",
+    "TotalBill": "284900",
+    "Total Payment": "202400",
+    "Balance": "82500"
+  },
+  {
+    "Code": " 648",
+    "Acount Name": "Alebiosu ",
+    "Property Number/Street": "17 Igbehinadun Street, Shasha, ",
+    "Property Units": "3 MiniFlat /2 Shop.",
+    "TotalBill": "503850",
+    "Total Payment": "481700",
+    "Balance": "22150"
+  },
+  {
+    "Code": " 649",
+    "Acount Name": "Lamidi Adeoye ",
+    "Property Number/Street": "18 Igbehinadun Street, Shasha, ",
+    "Property Units": "10 Room. /1 Shop.",
+    "TotalBill": "439400",
+    "Total Payment": "268500",
+    "Balance": "170900"
+  },
+  {
+    "Code": " 651",
+    "Acount Name": "Furniture D",
+    "Property Number/Street": "19. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Furniture A",
+    "TotalBill": "70000",
+    "Total Payment": "61000",
+    "Balance": "9000"
+  },
+  {
+    "Code": " 652",
+    "Acount Name": "Alhaji Raimi Jimoh ",
+    "Property Number/Street": "20 Igbehinadun Street, Shasha, ",
+    "Property Units": "11 Room. /1 Shop.",
+    "TotalBill": "465050",
+    "Total Payment": "380400",
+    "Balance": "84650"
+  },
+  {
+    "Code": " 653",
+    "Acount Name": "Mrs Adeojo Anike",
+    "Property Number/Street": "21 Igbehinadun Street, Shasha, ",
+    "Property Units": "11 Room.",
+    "TotalBill": "489650",
+    "Total Payment": "444800",
+    "Balance": "44850"
+  },
+  {
+    "Code": " 654",
+    "Acount Name": "Alhaji Ajao ",
+    "Property Number/Street": "22 Igbehinadun Street, Shasha, ",
+    "Property Units": "14 Room. /2 Shop.",
+    "TotalBill": "633700",
+    "Total Payment": "586500",
+    "Balance": "47200"
+  },
+  {
+    "Code": " 655",
+    "Acount Name": "Baba  Ibeji ",
+    "Property Number/Street": "23 Igbehinadun Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "342400",
+    "Total Payment": "273600",
+    "Balance": "68800"
+  },
+  {
+    "Code": " 657",
+    "Acount Name": "Alhaji Raimi Raji ",
+    "Property Number/Street": "24 Igbehinadun Street, Shasha, ",
+    "Property Units": "2 Room. /2 MiniFlat /2 Room_Parlour",
+    "TotalBill": "342700",
+    "Total Payment": "249500",
+    "Balance": "93200"
+  },
+  {
+    "Code": " 658",
+    "Acount Name": "Mr.A.A. Ogungbayi ",
+    "Property Number/Street": "25 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "127900",
+    "Total Payment": "125900",
+    "Balance": "2000"
+  },
+  {
+    "Code": " 659",
+    "Acount Name": "Valhalla Hotel & Suites",
+    "Property Number/Street": "27 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Hotel",
+    "TotalBill": "663000",
+    "Total Payment": "625000",
+    "Balance": "38000"
+  },
+  {
+    "Code": " 660",
+    "Acount Name": "Alhaji Raimi Raji ",
+    "Property Number/Street": "28 Igbehinadun Street, Shasha, ",
+    "Property Units": "10 Room.",
+    "TotalBill": "409100",
+    "Total Payment": "400600",
+    "Balance": "8500"
+  },
+  {
+    "Code": " 661",
+    "Acount Name": "Mr. Olorunfemi",
+    "Property Number/Street": "29 Igbehinadun Street, Shasha, ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "533600",
+    "Total Payment": "530500",
+    "Balance": "3100"
+  },
+  {
+    "Code": " 662",
+    "Acount Name": "Chemist",
+    "Property Number/Street": "29. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "102690",
+    "Total Payment": "68590",
+    "Balance": "34100"
+  },
+  {
+    "Code": " 663",
+    "Acount Name": "Alhaji Raimi Raji",
+    "Property Number/Street": "26 Igbehinadun Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "316400",
+    "Total Payment": "259900",
+    "Balance": "56500"
+  },
+  {
+    "Code": " 664",
+    "Acount Name": "Alhaji Lawal Issah",
+    "Property Number/Street": "30 Igbehinadun Street, Shasha, ",
+    "Property Units": "5 Room.",
+    "TotalBill": "252150",
+    "Total Payment": "244350",
+    "Balance": "7800"
+  },
+  {
+    "Code": " 665",
+    "Acount Name": "Alhaji Jubril Olalekan ",
+    "Property Number/Street": "31 Igbehinadun Street, Shasha, ",
+    "Property Units": "2 Flat. /12 Room.",
+    "TotalBill": "744300",
+    "Total Payment": "516100",
+    "Balance": "228200"
+  },
+  {
+    "Code": " 667",
+    "Acount Name": "Mr Babalola ",
+    "Property Number/Street": "33 Igbehinadun Street, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "245200",
+    "Total Payment": "198300",
+    "Balance": "46900"
+  },
+  {
+    "Code": " 668",
+    "Acount Name": "Dauda Aremu Surakatu",
+    "Property Number/Street": "34 Igbehinadun Street, Shasha, ",
+    "Property Units": "15 Room. /1 Shop.",
+    "TotalBill": "681550",
+    "Total Payment": "528700",
+    "Balance": "152850"
+  },
+  {
+    "Code": " 669",
+    "Acount Name": "Alhaji Saliu Nasirudeen ",
+    "Property Number/Street": "35 Igbehinadun Street, Shasha, ",
+    "Property Units": "8 Room. /2 Shop.",
+    "TotalBill": "399400",
+    "Total Payment": "320400",
+    "Balance": "79000"
+  },
+  {
+    "Code": " 670",
+    "Acount Name": "Mr Musili ",
+    "Property Number/Street": "36 Igbehinadun Street, Shasha, ",
+    "Property Units": "13 Room.",
+    "TotalBill": "525250",
+    "Total Payment": "264200",
+    "Balance": "261050"
+  },
+  {
+    "Code": " 671",
+    "Acount Name": "Alhaji S.A. Animashaun ",
+    "Property Number/Street": "37 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat. /9 Room. /3 Shop.",
+    "TotalBill": "613350",
+    "Total Payment": "510650",
+    "Balance": "102700"
+  },
+  {
+    "Code": " 672",
+    "Acount Name": "Alh Alimi Yau ",
+    "Property Number/Street": "38 Igbehinadun Street, Shasha, ",
+    "Property Units": "12 Room. /1 Shop.",
+    "TotalBill": "533200",
+    "Total Payment": "310200",
+    "Balance": "223000"
+  },
+  {
+    "Code": " 673",
+    "Acount Name": "Wosilatu Animashaun ",
+    "Property Number/Street": "39 Igbehinadun Street, Shasha, ",
+    "Property Units": "9 Room. /1 Shop.",
+    "TotalBill": "407570",
+    "Total Payment": "227830",
+    "Balance": "179740"
+  },
+  {
+    "Code": " 674",
+    "Acount Name": "Mrs Dorcas Debayo ",
+    "Property Number/Street": "39B Igbehinadun Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "308820",
+    "Total Payment": "196120",
+    "Balance": "112700"
+  },
+  {
+    "Code": " 675",
+    "Acount Name": "Mr Abati ",
+    "Property Number/Street": "40 Igbehinadun Street, Shasha, ",
+    "Property Units": "8 Room. /1 Shop",
+    "TotalBill": "365000",
+    "Total Payment": "148080",
+    "Balance": "216920"
+  },
+  {
+    "Code": " 676",
+    "Acount Name": "Olowokere ",
+    "Property Number/Street": "41 Igbehinadun Street, Shasha, ",
+    "Property Units": "19 Room.",
+    "TotalBill": "717930",
+    "Total Payment": "505280",
+    "Balance": "212650"
+  },
+  {
+    "Code": " 679",
+    "Acount Name": "Kuforiji Samuel",
+    "Property Number/Street": "43 Igbehinadun Street, Shasha, ",
+    "Property Units": "6 Room. /2 Shop.",
+    "TotalBill": "331300",
+    "Total Payment": "281600",
+    "Balance": "49700"
+  },
+  {
+    "Code": " 680",
+    "Acount Name": "Mrs Olayemi ",
+    "Property Number/Street": "44 Igbehinadun Street, Shasha, ",
+    "Property Units": "10 Room.",
+    "TotalBill": "386500",
+    "Total Payment": "212000",
+    "Balance": "174500"
+  },
+  {
+    "Code": " 691",
+    "Acount Name": "Alhaji Kasumu Mufutau ",
+    "Property Number/Street": "48 Igbehinadun Street, Shasha, ",
+    "Property Units": "10 Room. /1 Shop.",
+    "TotalBill": "421800",
+    "Total Payment": "366950",
+    "Balance": "54850"
+  },
+  {
+    "Code": " 692",
+    "Acount Name": "Celestial Church of Christ ",
+    "Property Number/Street": "49 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Church B",
+    "TotalBill": "140500",
+    "Total Payment": "131500",
+    "Balance": "9000"
+  },
+  {
+    "Code": " 693",
+    "Acount Name": "Mr Abiodun ",
+    "Property Number/Street": "50 Igbehinadun Street, Shasha, ",
+    "Property Units": "5 Room.",
+    "TotalBill": "259750",
+    "Total Payment": "221600",
+    "Balance": "38150"
+  },
+  {
+    "Code": " 694",
+    "Acount Name": "Mrs. Ogunlowo (Plastic shop)",
+    "Property Number/Street": "52 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "324900",
+    "Total Payment": "309700",
+    "Balance": "15200"
+  },
+  {
+    "Code": " 695",
+    "Acount Name": "Mr. Eloke I. I. Shop",
+    "Property Number/Street": "54 Igbehinadun Street, Shasha, ",
+    "Property Units": "7 Shop.",
+    "TotalBill": "350100",
+    "Total Payment": "118710",
+    "Balance": "231390"
+  },
+  {
+    "Code": " 700",
+    "Acount Name": "C.K.C Church ",
+    "Property Number/Street": "60 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 CHURCH.",
+    "TotalBill": "1805000",
+    "Total Payment": "1715000",
+    "Balance": "90000"
+  },
+  {
+    "Code": " 2488",
+    "Acount Name": "Food Canteen",
+    "Property Number/Street": "6. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 CANTEEN,",
+    "TotalBill": "112500",
+    "Total Payment": "109500",
+    "Balance": "3000"
+  },
+  {
+    "Code": " 2458",
+    "Acount Name": "Mr. Steve Ibeziakor (Right wing down)",
+    "Property Number/Street": "4, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "74750",
+    "Total Payment": "59750",
+    "Balance": "15000"
+  },
+  {
+    "Code": " 2207",
+    "Acount Name": "Elewedu",
+    "Property Number/Street": "6, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Room. /1 Elewedu",
+    "TotalBill": "132250",
+    "Total Payment": "120700",
+    "Balance": "11550"
+  },
+  {
+    "Code": " 2029",
+    "Acount Name": "Occupants",
+    "Property Number/Street": "46, Igbehinadun Street, Shasha, ",
+    "Property Units": "4 MiniFlat",
+    "TotalBill": "325000",
+    "Total Payment": "186000",
+    "Balance": "139000"
+  },
+  {
+    "Code": " 1892",
+    "Acount Name": "Mr. Eke ",
+    "Property Number/Street": "19, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "91750",
+    "Total Payment": "68500",
+    "Balance": "23250"
+  },
+  {
+    "Code": " 1936",
+    "Acount Name": "Tunde Barber (Shop8)",
+    "Property Number/Street": "45, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "49400",
+    "Total Payment": "9500",
+    "Balance": "39900"
+  },
+  {
+    "Code": " 1946",
+    "Acount Name": "Mama Okiki Hairdresser(Shop6)",
+    "Property Number/Street": "45.., Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "50070",
+    "Total Payment": "12200",
+    "Balance": "37870"
+  },
+  {
+    "Code": " 1947",
+    "Acount Name": "Alfa (Shop4)",
+    "Property Number/Street": "45) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "49770",
+    "Total Payment": "14000",
+    "Balance": "35770"
+  },
+  {
+    "Code": " 1902",
+    "Acount Name": "Mrs. Innocent",
+    "Property Number/Street": "13, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "4000",
+    "Total Payment": "1000",
+    "Balance": "3000"
+  },
+  {
+    "Code": " 1928",
+    "Acount Name": "Mrs. Augusta (Provision shop5)",
+    "Property Number/Street": "19) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "52600",
+    "Total Payment": "19000",
+    "Balance": "33600"
+  },
+  {
+    "Code": " 1767",
+    "Acount Name": "Model Nur/Pry School",
+    "Property Number/Street": "18b Igbehinadun Street, Shasha, ",
+    "Property Units": "1 School",
+    "TotalBill": "117767",
+    "Total Payment": "114767",
+    "Balance": "3000"
+  },
+  {
+    "Code": " 1802",
+    "Acount Name": "Mr. Ibrahim (Tailor)",
+    "Property Number/Street": "12. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "22900",
+    "Total Payment": "0",
+    "Balance": "22900"
+  },
+  {
+    "Code": " 1872",
+    "Acount Name": "Dustbin market (2Shops)",
+    "Property Number/Street": "1A Igbehinadun Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "105400",
+    "Total Payment": "37400",
+    "Balance": "68000"
+  },
+  {
+    "Code": " 1760",
+    "Acount Name": "FEMDEX PLAZA Barber. ",
+    "Property Number/Street": "(2,). Igbehinadun Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "127100",
+    "Total Payment": "54600",
+    "Balance": "72500"
+  },
+  {
+    "Code": " 1761",
+    "Acount Name": "FEMDEX PLAZA",
+    "Property Number/Street": "2) Igbehinadun Street, Shasha, ",
+    "Property Units": "5 Shop.",
+    "TotalBill": "247700",
+    "Total Payment": "129000",
+    "Balance": "118700"
+  },
+  {
+    "Code": " 1729",
+    "Acount Name": "Turkey,Gari,Fruit Seller",
+    "Property Number/Street": "2b. Igbehinadun Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "129200",
+    "Total Payment": "71900",
+    "Balance": "57300"
+  },
+  {
+    "Code": " 1603",
+    "Acount Name": "Mr Ohize Abdusalam Dada ",
+    "Property Number/Street": "57 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat. /2 MiniFlat /5 Shop",
+    "TotalBill": "423800",
+    "Total Payment": "413300",
+    "Balance": "10500"
+  },
+  {
+    "Code": " 4195",
+    "Acount Name": "Mrs. Ngozi (Ogbonna Tailoring)",
+    "Property Number/Street": "21' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "23300",
+    "Total Payment": "4800",
+    "Balance": "18500"
+  },
+  {
+    "Code": " 4289",
+    "Acount Name": "Mama Chimex(Provision/Building Material) 7&9",
+    "Property Number/Street": "(2)', Igbehinadun Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "46400",
+    "Total Payment": "5000",
+    "Balance": "41400"
+  },
+  {
+    "Code": " 4291",
+    "Acount Name": "Esther (Foodstuff)",
+    "Property Number/Street": "5' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "22300",
+    "Total Payment": "4500",
+    "Balance": "17800"
+  },
+  {
+    "Code": " 4293",
+    "Acount Name": "Ndidi (Liquur shop4)",
+    "Property Number/Street": "2'.. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "24500",
+    "Total Payment": "4000",
+    "Balance": "20500"
+  },
+  {
+    "Code": " 4284",
+    "Acount Name": "Sarah (Nail Fixiing)",
+    "Property Number/Street": "2a' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "22500",
+    "Total Payment": "5500",
+    "Balance": "17000"
+  },
+  {
+    "Code": " 4303",
+    "Acount Name": "Mrs. Etim (Vegetable Shop 14)",
+    "Property Number/Street": "1' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "22000",
+    "Total Payment": "3500",
+    "Balance": "18500"
+  },
+  {
+    "Code": " 4299",
+    "Acount Name": "Mama Izuchukwu (Shop3)",
+    "Property Number/Street": ",2' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "23200",
+    "Total Payment": "5200",
+    "Balance": "18000"
+  },
+  {
+    "Code": " 4287",
+    "Acount Name": "Cynthia (Hairdresser) Shop5",
+    "Property Number/Street": "(2)' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "23500",
+    "Total Payment": "4000",
+    "Balance": "19500"
+  },
+  {
+    "Code": " 4296",
+    "Acount Name": "Mrs. Joy (Clothing) SHOP10",
+    "Property Number/Street": "1B' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "23200",
+    "Total Payment": "3200",
+    "Balance": "20000"
+  },
+  {
+    "Code": " 4322",
+    "Acount Name": "ENYMA  CONCEPT ENT.",
+    "Property Number/Street": "'45' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "23500",
+    "Total Payment": "4500",
+    "Balance": "19000"
+  },
+  {
+    "Code": " 4335",
+    "Acount Name": "Phone Accessories (Container)",
+    "Property Number/Street": "45'. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "22500",
+    "Total Payment": "10500",
+    "Balance": "12000"
+  },
+  {
+    "Code": " 4082",
+    "Acount Name": "SHOPS OCCUPANT",
+    "Property Number/Street": "'52' Igbehinadun Street, Shasha, ",
+    "Property Units": "8 Shop.",
+    "TotalBill": "209600",
+    "Total Payment": "0",
+    "Balance": "209600"
+  },
+  {
+    "Code": " 4083",
+    "Acount Name": "Dry Cleaner",
+    "Property Number/Street": "'52 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26200",
+    "Total Payment": "2000",
+    "Balance": "24200"
+  },
+  {
+    "Code": " 4084",
+    "Acount Name": "MOI-MOI",
+    "Property Number/Street": "52' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26200",
+    "Total Payment": "6000",
+    "Balance": "20200"
+  },
+  {
+    "Code": " 4063",
+    "Acount Name": "Mama Chinwe(Foodstuff)",
+    "Property Number/Street": "(54) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "25000",
+    "Total Payment": "24000",
+    "Balance": "1000"
+  },
+  {
+    "Code": " 4108",
+    "Acount Name": "Mr. Walter Nwabueze(Right Wing Up)",
+    "Property Number/Street": "4 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "52150",
+    "Total Payment": "16250",
+    "Balance": "35900"
+  },
+  {
+    "Code": " 3970",
+    "Acount Name": "Mama Victory",
+    "Property Number/Street": "(18) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Room.",
+    "TotalBill": "23750",
+    "Total Payment": "15400",
+    "Balance": "8350"
+  },
+  {
+    "Code": " 3955",
+    "Acount Name": "Morufa Idowu(Hairdresser)",
+    "Property Number/Street": "(45). Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28000",
+    "Total Payment": "6200",
+    "Balance": "21800"
+  },
+  {
+    "Code": " 3996",
+    "Acount Name": "Addmore",
+    "Property Number/Street": "(13) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26500",
+    "Total Payment": "1000",
+    "Balance": "25500"
+  },
+  {
+    "Code": " 4048",
+    "Acount Name": "Flourish Beauty Saloon",
+    "Property Number/Street": "(5) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "25000",
+    "Total Payment": "7800",
+    "Balance": "17200"
+  },
+  {
+    "Code": " 4017",
+    "Acount Name": "Barber Shop",
+    "Property Number/Street": "(52). Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26200",
+    "Total Payment": "1800",
+    "Balance": "24400"
+  },
+  {
+    "Code": " 4018",
+    "Acount Name": "Mrs. Amoo(Fashion designer)",
+    "Property Number/Street": "(52), Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26200",
+    "Total Payment": "7500",
+    "Balance": "18700"
+  },
+  {
+    "Code": " 4010",
+    "Acount Name": "Mrs. Odekunle",
+    "Property Number/Street": "2,, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "25900",
+    "Total Payment": "7200",
+    "Balance": "18700"
+  },
+  {
+    "Code": " 4012",
+    "Acount Name": "Hairdresser",
+    "Property Number/Street": "(4),, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "25900",
+    "Total Payment": "1300",
+    "Balance": "24600"
+  },
+  {
+    "Code": " 4027",
+    "Acount Name": "Electrical Shop",
+    "Property Number/Street": "(.2) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "25300",
+    "Total Payment": "12800",
+    "Balance": "12500"
+  },
+  {
+    "Code": " 4363",
+    "Acount Name": "Mrs. Salisu (Food Seller)",
+    "Property Number/Street": "23' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "18500",
+    "Total Payment": "9500",
+    "Balance": "9000"
+  },
+  {
+    "Code": " 4354",
+    "Acount Name": "MARJOL STORE",
+    "Property Number/Street": "13. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "18000",
+    "Total Payment": "6000",
+    "Balance": "12000"
+  },
+  {
+    "Code": " 4355",
+    "Acount Name": "Joseph Uchendu (Right Wing Down)",
+    "Property Number/Street": "4' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "43600",
+    "Total Payment": "28400",
+    "Balance": "15200"
+  },
+  {
+    "Code": " 4361",
+    "Acount Name": "Mr. Daniel Okeke",
+    "Property Number/Street": "19' Igbehinadun Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "32000",
+    "Total Payment": "27100",
+    "Balance": "4900"
+  },
+  {
+    "Code": " 4338",
+    "Acount Name": "Mrs. Damola (Fashion design Shop3)",
+    "Property Number/Street": "45 . Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26800",
+    "Total Payment": "2000",
+    "Balance": "24800"
+  },
+  {
+    "Code": " 4398",
+    "Acount Name": "Mrs Anudam (Provision)",
+    "Property Number/Street": "47, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop",
+    "TotalBill": "15000",
+    "Total Payment": "6000",
+    "Balance": "9000"
+  },
+  {
+    "Code": " 4399",
+    "Acount Name": "Mr. Laura Amah",
+    "Property Number/Street": "45,. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "29500",
+    "Total Payment": "8000",
+    "Balance": "21500"
+  },
+  {
+    "Code": " 4395",
+    "Acount Name": "Mallam",
+    "Property Number/Street": "7, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop",
+    "TotalBill": "15000",
+    "Total Payment": "11500",
+    "Balance": "3500"
+  },
+  {
+    "Code": " 4396",
+    "Acount Name": "Snacks",
+    "Property Number/Street": "24, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop",
+    "TotalBill": "14500",
+    "Total Payment": "4000",
+    "Balance": "10500"
+  },
+  {
+    "Code": " 4451",
+    "Acount Name": "AYINKE HOUSE",
+    "Property Number/Street": "47 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat. /2 MiniFlat /2 Room_Parlour /1 Room.",
+    "TotalBill": "102850",
+    "Total Payment": "0",
+    "Balance": "102850"
+  },
+  {
+    "Code": " 4426",
+    "Acount Name": "DARLINTON (FOODSTUFF)",
+    "Property Number/Street": "(2). Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop",
+    "TotalBill": "13500",
+    "Total Payment": "1500",
+    "Balance": "12000"
+  },
+  {
+    "Code": " 4461",
+    "Acount Name": "Bello Joseph",
+    "Property Number/Street": "3 Igbehinadun Street, Shasha, ",
+    "Property Units": "2 MiniFlat /2 Room_Parlour",
+    "TotalBill": "6500",
+    "Total Payment": "0",
+    "Balance": "6500"
+  },
+  {
+    "Code": " 3393",
+    "Acount Name": "Mrs. Anna Kiplan",
+    "Property Number/Street": "(2,),, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "37900",
+    "Total Payment": "9900",
+    "Balance": "28000"
+  },
+  {
+    "Code": " 3394",
+    "Acount Name": "Ankara, Foodstuff/Biscuit",
+    "Property Number/Street": "(2,)., Igbehinadun Street, Shasha, ",
+    "Property Units": "3 Shop.",
+    "TotalBill": "112800",
+    "Total Payment": "31300",
+    "Balance": "81500"
+  },
+  {
+    "Code": " 3301",
+    "Acount Name": "Patricia Smart (Dustin Market)",
+    "Property Number/Street": "(1A, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "39400",
+    "Total Payment": "600",
+    "Balance": "38800"
+  },
+  {
+    "Code": " 3319",
+    "Acount Name": "Mr. Eloke I. I.",
+    "Property Number/Street": "54, Igbehinadun Street, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "153800",
+    "Total Payment": "121000",
+    "Balance": "32800"
+  },
+  {
+    "Code": " 3373",
+    "Acount Name": "Comfort Obe (Foodstuff)",
+    "Property Number/Street": "(2.)., Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop",
+    "TotalBill": "35400",
+    "Total Payment": "15000",
+    "Balance": "20400"
+  },
+  {
+    "Code": " 3183",
+    "Acount Name": "FASHION DESIGNER (Left Wing Up)",
+    "Property Number/Street": "(4,). Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "94900",
+    "Total Payment": "66200",
+    "Balance": "28700"
+  },
+  {
+    "Code": " 3248",
+    "Acount Name": "Mrs. Okere Joy",
+    "Property Number/Street": "2 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "40300",
+    "Total Payment": "11400",
+    "Balance": "28900"
+  },
+  {
+    "Code": " 3277",
+    "Acount Name": "Mrs. Shokunbi Provision(Shop1)",
+    "Property Number/Street": "45,). Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "39700",
+    "Total Payment": "3000",
+    "Balance": "36700"
+  },
+  {
+    "Code": " 3279",
+    "Acount Name": "Mrs. Eseyin (Flour Shop))",
+    "Property Number/Street": "(58,). Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "39400",
+    "Total Payment": "21400",
+    "Balance": "18000"
+  },
+  {
+    "Code": " 3280",
+    "Acount Name": "Abiodun (Fashion designer Shop5)",
+    "Property Number/Street": "(58,), Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "39400",
+    "Total Payment": "20700",
+    "Balance": "18700"
+  },
+  {
+    "Code": " 3138",
+    "Acount Name": "Left Wing Downstair",
+    "Property Number/Street": "(4,) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "96400",
+    "Total Payment": "35000",
+    "Balance": "61400"
+  },
+  {
+    "Code": " 3189",
+    "Acount Name": "Mrs. Amarachi (Shop1)",
+    "Property Number/Street": "2a,. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "40300",
+    "Total Payment": "15600",
+    "Balance": "24700"
+  },
+  {
+    "Code": " 3190",
+    "Acount Name": "Florence Ige (Plastic Shop2)",
+    "Property Number/Street": "2a, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "40300",
+    "Total Payment": "7500",
+    "Balance": "32800"
+  },
+  {
+    "Code": " 2812",
+    "Acount Name": "Mr. Femi",
+    "Property Number/Street": "2A.. Igbehinadun Street, Shasha, ",
+    "Property Units": "3 Flat.",
+    "TotalBill": "313950",
+    "Total Payment": "179300",
+    "Balance": "134650"
+  },
+  {
+    "Code": " 2823",
+    "Acount Name": "Mrs. Clara (Shop2)",
+    "Property Number/Street": "(19). Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "43900",
+    "Total Payment": "8700",
+    "Balance": "35200"
+  },
+  {
+    "Code": " 2631",
+    "Acount Name": "Mrs. Stella Provision (Shop A)",
+    "Property Number/Street": "58 Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop",
+    "TotalBill": "45100",
+    "Total Payment": "23500",
+    "Balance": "21600"
+  },
+  {
+    "Code": " 2633",
+    "Acount Name": "Mrs. Onyiny (Foodstuff)",
+    "Property Number/Street": "58. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "45100",
+    "Total Payment": "3900",
+    "Balance": "41200"
+  },
+  {
+    "Code": " 2948",
+    "Acount Name": "Mrs. Yusuf(Catherer Shop3)",
+    "Property Number/Street": "(19) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "42700",
+    "Total Payment": "5000",
+    "Balance": "37700"
+  },
+  {
+    "Code": " 3085",
+    "Acount Name": "Shop",
+    "Property Number/Street": "36, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "42100",
+    "Total Payment": "13500",
+    "Balance": "28600"
+  },
+  {
+    "Code": " 3069",
+    "Acount Name": "Kerosene Dealer",
+    "Property Number/Street": ".2b, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "43000",
+    "Total Payment": "27300",
+    "Balance": "15700"
+  },
+  {
+    "Code": " 3693",
+    "Acount Name": "Mallam Yakubu ",
+    "Property Number/Street": "(4)., Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30400",
+    "Total Payment": "1500",
+    "Balance": "28900"
+  },
+  {
+    "Code": " 3644",
+    "Acount Name": "Mama Amaka (Shop 6)",
+    "Property Number/Street": ".1. Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "35800",
+    "Total Payment": "13600",
+    "Balance": "22200"
+  },
+  {
+    "Code": " 3656",
+    "Acount Name": "Mr. Shola Kehinde",
+    "Property Number/Street": "23B Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Room_Parlour",
+    "TotalBill": "48900",
+    "Total Payment": "36600",
+    "Balance": "12300"
+  },
+  {
+    "Code": " 3613",
+    "Acount Name": "Mummy Peace (Fruit)",
+    "Property Number/Street": "(47.), Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "36100",
+    "Total Payment": "2100",
+    "Balance": "34000"
+  },
+  {
+    "Code": " 3591",
+    "Acount Name": "Mrs Perpetual Ojukwu(Foodstuff)",
+    "Property Number/Street": "(40) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "30800",
+    "Total Payment": "1200",
+    "Balance": "29600"
+  },
+  {
+    "Code": " 3574",
+    "Acount Name": "RONALD (Frozen Shop 11)",
+    "Property Number/Street": "(1B,) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "50100",
+    "Total Payment": "39100",
+    "Balance": "11000"
+  },
+  {
+    "Code": " 3588",
+    "Acount Name": "Provision (Shop 10)",
+    "Property Number/Street": "(1B.), Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "35800",
+    "Total Payment": "5200",
+    "Balance": "30600"
+  },
+  {
+    "Code": " 3635",
+    "Acount Name": "Mrs. Omowunmi (Hairdresser)",
+    "Property Number/Street": "(29.) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "35500",
+    "Total Payment": "0",
+    "Balance": "35500"
+  },
+  {
+    "Code": " 3636",
+    "Acount Name": "Methodist church of Nig. ",
+    "Property Number/Street": "(42), Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Church B",
+    "TotalBill": "74000",
+    "Total Payment": "73000",
+    "Balance": "1000"
+  },
+  {
+    "Code": " 3637",
+    "Acount Name": "Tailor/Provision/Clotheir",
+    "Property Number/Street": "(29), Igbehinadun Street, Shasha, ",
+    "Property Units": "3 Shop.",
+    "TotalBill": "106500",
+    "Total Payment": "36500",
+    "Balance": "70000"
+  },
+  {
+    "Code": " 3443",
+    "Acount Name": "Electrical/ Supermarket",
+    "Property Number/Street": "31, Igbehinadun Street, Shasha, ",
+    "Property Units": "3 Shop.",
+    "TotalBill": "112700",
+    "Total Payment": "28900",
+    "Balance": "83800"
+  },
+  {
+    "Code": " 3515",
+    "Acount Name": "Occupant (Front Flat)",
+    "Property Number/Street": "(58). Igbehinadun Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "66250",
+    "Total Payment": "9000",
+    "Balance": "57250"
+  },
+  {
+    "Code": " 3513",
+    "Acount Name": "Mrs. Cecilia Daramola(Backflat)",
+    "Property Number/Street": "(58), Igbehinadun Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "66250",
+    "Total Payment": "64500",
+    "Balance": "1750"
+  },
+  {
+    "Code": " 3570",
+    "Acount Name": "Mrs. Busari (Shop13)",
+    "Property Number/Street": "(1B)., Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "35500",
+    "Total Payment": "15500",
+    "Balance": "20000"
+  },
+  {
+    "Code": " 3914",
+    "Acount Name": "Mrs. Lawal (Bread shop)",
+    "Property Number/Street": "(2..) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28600",
+    "Total Payment": "11600",
+    "Balance": "17000"
+  },
+  {
+    "Code": " 3910",
+    "Acount Name": "Tawa Liadi (Hairdresser)",
+    "Property Number/Street": "(13). Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28300",
+    "Total Payment": "20300",
+    "Balance": "8000"
+  },
+  {
+    "Code": " 3911",
+    "Acount Name": "Mama Amaka Junior",
+    "Property Number/Street": "(23), Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Room.",
+    "TotalBill": "22350",
+    "Total Payment": "11300",
+    "Balance": "11050"
+  },
+  {
+    "Code": " 3786",
+    "Acount Name": "Igwe Fashion Deisgner(Shop10)",
+    "Property Number/Street": "(45.) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "32800",
+    "Total Payment": "8800",
+    "Balance": "24000"
+  },
+  {
+    "Code": " 3841",
+    "Acount Name": "Felix/ Taiwo Shops",
+    "Property Number/Street": "(45.).. Igbehinadun Street, Shasha, ",
+    "Property Units": "2 Shop.",
+    "TotalBill": "60800",
+    "Total Payment": "26000",
+    "Balance": "34800"
+  },
+  {
+    "Code": " 3752",
+    "Acount Name": "Mrs. Ishola (Provision)",
+    "Property Number/Street": "(21.) Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "34000",
+    "Total Payment": "1000",
+    "Balance": "33000"
+  },
+  {
+    "Code": " 3722",
+    "Acount Name": "LADY T",
+    "Property Number/Street": "12, Igbehinadun Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "33500",
+    "Total Payment": "15000",
+    "Balance": "18500"
+  },
+  {
+    "Code": " 3912",
+    "Acount Name": "Frozen Food ",
+    "Property Number/Street": "(2) Ikoti Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28300",
+    "Total Payment": "1000",
+    "Balance": "27300"
+  },
+  {
+    "Code": " 3549",
+    "Acount Name": "Mr. Fatai Ganiu(Upstair)",
+    "Property Number/Street": "12 Ikoti Street, Shasha, ",
+    "Property Units": "6 Room_Parlour",
+    "TotalBill": "319800",
+    "Total Payment": "45900",
+    "Balance": "273900"
+  },
+  {
+    "Code": " 3550",
+    "Acount Name": "Mr. Fatai Ganiu (Downstair)",
+    "Property Number/Street": "12. Ikoti Street, Shasha, ",
+    "Property Units": "4 Room_Parlour",
+    "TotalBill": "213200",
+    "Total Payment": "34600",
+    "Balance": "178600"
+  },
+  {
+    "Code": " 3173",
+    "Acount Name": "Eberechi Iyke (Flat2)",
+    "Property Number/Street": "8 Ikoti Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "94900",
+    "Total Payment": "1500",
+    "Balance": "93400"
+  },
+  {
+    "Code": " 4016",
+    "Acount Name": "Mr. Godwin David",
+    "Property Number/Street": "14. Ikoti Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "40000",
+    "Total Payment": "38250",
+    "Balance": "1750"
+  },
+  {
+    "Code": " 4080",
+    "Acount Name": "Mr. Paul Uzum (Front Flat)",
+    "Property Number/Street": "5, Ikoti Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "59900",
+    "Total Payment": "7000",
+    "Balance": "52900"
+  },
+  {
+    "Code": " 1998",
+    "Acount Name": "Mrs. Nneoma Love Ibe",
+    "Property Number/Street": "1 Ikoti Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "116400",
+    "Total Payment": "23750",
+    "Balance": "92650"
+  },
+  {
+    "Code": " 702",
+    "Acount Name": "Pa. Oladimeji ",
+    "Property Number/Street": "2 Ikoti Street, Shasha, ",
+    "Property Units": "2 Flat. /3 MiniFlat",
+    "TotalBill": "395000",
+    "Total Payment": "288950",
+    "Balance": "106050"
+  },
+  {
+    "Code": " 703",
+    "Acount Name": "Shops ",
+    "Property Number/Street": "2. Ikoti Street, Shasha, ",
+    "Property Units": "5 Shop.",
+    "TotalBill": "277200",
+    "Total Payment": "97800",
+    "Balance": "179400"
+  },
+  {
+    "Code": " 704",
+    "Acount Name": "Chemist ",
+    "Property Number/Street": "2.. Ikoti Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "53000",
+    "Total Payment": "16600",
+    "Balance": "36400"
+  },
+  {
+    "Code": " 705",
+    "Acount Name": "Mr Oluseye ",
+    "Property Number/Street": "3 Ikoti Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "326700",
+    "Total Payment": "286900",
+    "Balance": "39800"
+  },
+  {
+    "Code": " 706",
+    "Acount Name": "Mr Adegoke ",
+    "Property Number/Street": "5 Ikoti Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "201150",
+    "Total Payment": "166350",
+    "Balance": "34800"
+  },
+  {
+    "Code": " 707",
+    "Acount Name": "Mr Jimoh Akanbi ",
+    "Property Number/Street": "6 Ikoti Street, Shasha, ",
+    "Property Units": "8 Room. /2 Shop.",
+    "TotalBill": "406800",
+    "Total Payment": "389200",
+    "Balance": "17600"
+  },
+  {
+    "Code": " 708",
+    "Acount Name": "Mrs. Nwose Lucky Mercy",
+    "Property Number/Street": "7 Ikoti Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "100750",
+    "Total Payment": "99000",
+    "Balance": "1750"
+  },
+  {
+    "Code": " 710",
+    "Acount Name": "Alhaji Ahmed ",
+    "Property Number/Street": "8B Ikoti Street, Shasha, ",
+    "Property Units": "4 MiniFlat",
+    "TotalBill": "321600",
+    "Total Payment": "70600",
+    "Balance": "251000"
+  },
+  {
+    "Code": " 711",
+    "Acount Name": "Moriliat Ganiyu ",
+    "Property Number/Street": "10 Ikoti Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "317700",
+    "Total Payment": "125900",
+    "Balance": "191800"
+  },
+  {
+    "Code": " 713",
+    "Acount Name": "Alhaji R.A.Lawal ",
+    "Property Number/Street": "13 Ikoti Street, Shasha, ",
+    "Property Units": "6 Room. /2 Flat.",
+    "TotalBill": "529300",
+    "Total Payment": "233100",
+    "Balance": "296200"
+  },
+  {
+    "Code": " 714",
+    "Acount Name": "Mr Taiwo Abatan ",
+    "Property Number/Street": "14 Ikoti Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "326000",
+    "Total Payment": "252300",
+    "Balance": "73700"
+  },
+  {
+    "Code": " 715",
+    "Acount Name": "Mr Salawudeen Babatunde ",
+    "Property Number/Street": "20 Ikoti Street, Shasha, ",
+    "Property Units": "6 Room.",
+    "TotalBill": "231100",
+    "Total Payment": "170000",
+    "Balance": "61100"
+  },
+  {
+    "Code": " 716",
+    "Acount Name": "Chief Olutayo ",
+    "Property Number/Street": "22 Ikoti Street, Shasha, ",
+    "Property Units": "1 R_Parlour",
+    "TotalBill": "88100",
+    "Total Payment": "35600",
+    "Balance": "52500"
+  },
+  {
+    "Code": " 717",
+    "Acount Name": "Mrs Muyibat ",
+    "Property Number/Street": "26 Ikoti Street, Shasha, ",
+    "Property Units": "14 Room.",
+    "TotalBill": "531000",
+    "Total Payment": "253700",
+    "Balance": "277300"
+  },
+  {
+    "Code": " 718",
+    "Acount Name": "Mr Akintola ",
+    "Property Number/Street": "28 Ikoti Street, Shasha, ",
+    "Property Units": "10 Room.",
+    "TotalBill": "368300",
+    "Total Payment": "178300",
+    "Balance": "190000"
+  },
+  {
+    "Code": " 721",
+    "Acount Name": "Chief Toye Ladipo ",
+    "Property Number/Street": "1B Ilugun Close,  Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "141600",
+    "Total Payment": "73500",
+    "Balance": "68100"
+  },
+  {
+    "Code": " 722",
+    "Acount Name": "Mr Ibrahim Folake ",
+    "Property Number/Street": "2 Ilugun Close,  Shasha, ",
+    "Property Units": "4 R_Parlour",
+    "TotalBill": "328300",
+    "Total Payment": "304300",
+    "Balance": "24000"
+  },
+  {
+    "Code": " 724",
+    "Acount Name": "Mr Gabriel Ajayi ",
+    "Property Number/Street": "4 Ilugun Close,  Shasha, ",
+    "Property Units": "13 Room.",
+    "TotalBill": "509750",
+    "Total Payment": "392700",
+    "Balance": "117050"
+  },
+  {
+    "Code": " 725",
+    "Acount Name": "Alhaji Akeem Olawore ",
+    "Property Number/Street": "5 Ilugun Close,  Shasha, ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "498300",
+    "Total Payment": "439300",
+    "Balance": "59000"
+  },
+  {
+    "Code": " 726",
+    "Acount Name": "Christ Liberty Gospel Assm ",
+    "Property Number/Street": "7 Ilugun Close,  Shasha, ",
+    "Property Units": "1 Church B",
+    "TotalBill": "137000",
+    "Total Payment": "136000",
+    "Balance": "1000"
+  },
+  {
+    "Code": " 727",
+    "Acount Name": "Mrs Ayeniko ",
+    "Property Number/Street": "8 Ilugun Close,  Shasha, ",
+    "Property Units": "5 Room.",
+    "TotalBill": "188750",
+    "Total Payment": "123500",
+    "Balance": "65250"
+  },
+  {
+    "Code": " 4113",
+    "Acount Name": "OwoIya (Spray Painter)",
+    "Property Number/Street": "'1' Ilugun Close,  Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "23800",
+    "Total Payment": "7300",
+    "Balance": "16500"
+  },
+  {
+    "Code": " 3290",
+    "Acount Name": "Mr. Samuel Ezeobi (Downflat)",
+    "Property Number/Street": "1A, Ilugun Close,  Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "116000",
+    "Total Payment": "103550",
+    "Balance": "12450"
+  },
+  {
+    "Code": " 3291",
+    "Acount Name": "Mr. Victor Obi (Upflat)",
+    "Property Number/Street": "1A. Ilugun Close,  Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "99100",
+    "Total Payment": "28200",
+    "Balance": "70900"
+  },
+  {
+    "Code": " 3599",
+    "Acount Name": "Mr. Sunday Avoce (Shop)",
+    "Property Number/Street": "(1B) Ilugun Close,  Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "34900",
+    "Total Payment": "20000",
+    "Balance": "14900"
+  },
+  {
+    "Code": " 3664",
+    "Acount Name": "Furniture",
+    "Property Number/Street": "3, Ipetu Ijesha Street, Shasha, ",
+    "Property Units": "1 Furniture Work",
+    "TotalBill": "109000",
+    "Total Payment": "87000",
+    "Balance": "22000"
+  },
+  {
+    "Code": " 3463",
+    "Acount Name": "Alh. Yusuf Mohammed ",
+    "Property Number/Street": "9 Ipetu Ijesha Street, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "166550",
+    "Total Payment": "162550",
+    "Balance": "4000"
+  },
+  {
+    "Code": " 728",
+    "Acount Name": "Mr Opara ",
+    "Property Number/Street": "1 Ipetu Ijesha Street, Shasha, ",
+    "Property Units": "9 Room_Parlour /2 Room.",
+    "TotalBill": "567800",
+    "Total Payment": "494800",
+    "Balance": "73000"
+  },
+  {
+    "Code": " 729",
+    "Acount Name": "Alhaji Akintunde ",
+    "Property Number/Street": "4 Ipetu Ijesha Street, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "249800",
+    "Total Payment": "219400",
+    "Balance": "30400"
+  },
+  {
+    "Code": " 730",
+    "Acount Name": "Chief FadipeS.A ",
+    "Property Number/Street": "5 Ipetu Ijesha Street, Shasha, ",
+    "Property Units": "1 Flat. /2 Room. /1 Shop.",
+    "TotalBill": "272400",
+    "Total Payment": "172550",
+    "Balance": "99850"
+  },
+  {
+    "Code": " 1619",
+    "Acount Name": "Alhaji Rabiu",
+    "Property Number/Street": "11 Ipetu Ijesha Street, Shasha, ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "491600",
+    "Total Payment": "459200",
+    "Balance": "32400"
+  },
+  {
+    "Code": " 2348",
+    "Acount Name": "Kiosks",
+    "Property Number/Street": "1, Irewolede Street, Shasha, ",
+    "Property Units": "5 Shop.",
+    "TotalBill": "187300",
+    "Total Payment": "46450",
+    "Balance": "140850"
+  },
+  {
+    "Code": " 735",
+    "Acount Name": " Mr Johnson Oluade Emm ",
+    "Property Number/Street": "1 Irewolede Street, Shasha, ",
+    "Property Units": "1 Flat. /1 Shop.",
+    "TotalBill": "175500",
+    "Total Payment": "172500",
+    "Balance": "3000"
+  },
+  {
+    "Code": " 736",
+    "Acount Name": "Pastor Dairo ",
+    "Property Number/Street": "3 Irewolede Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "86100",
+    "Total Payment": "66250",
+    "Balance": "19850"
+  },
+  {
+    "Code": " 737",
+    "Acount Name": "Mrs Docas Oyenuga ",
+    "Property Number/Street": "4 Irewolede Street, Shasha, ",
+    "Property Units": "11 Room.",
+    "TotalBill": "429050",
+    "Total Payment": "136700",
+    "Balance": "292350"
+  },
+  {
+    "Code": " 738",
+    "Acount Name": "Mr Ibekwe Williams ",
+    "Property Number/Street": "5 Irewolede Street, Shasha, ",
+    "Property Units": "2 Flat. /1 MiniFlat",
+    "TotalBill": "337800",
+    "Total Payment": "316050",
+    "Balance": "21750"
+  },
+  {
+    "Code": " 739",
+    "Acount Name": "Mr Moruf ",
+    "Property Number/Street": "6 Irewolede Street, Shasha, ",
+    "Property Units": "10 Room.",
+    "TotalBill": "441800",
+    "Total Payment": "286200",
+    "Balance": "155600"
+  },
+  {
+    "Code": " 740",
+    "Acount Name": "Alh. L.Olaiya. ",
+    "Property Number/Street": "7 Irewolede Street, Shasha, ",
+    "Property Units": "2 Room",
+    "TotalBill": "179800",
+    "Total Payment": "171700",
+    "Balance": "8100"
+  },
+  {
+    "Code": " 742",
+    "Acount Name": "Mr Onifade ",
+    "Property Number/Street": "10 Irewolede Street, Shasha, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "195000",
+    "Total Payment": "189000",
+    "Balance": "6000"
+  },
+  {
+    "Code": " 744",
+    "Acount Name": "Shops ",
+    "Property Number/Street": "11. Irewolede Street, Shasha, ",
+    "Property Units": "3 Shop.",
+    "TotalBill": "156600",
+    "Total Payment": "44000",
+    "Balance": "112600"
+  },
+  {
+    "Code": " 746",
+    "Acount Name": "Mr Emadake Adura ",
+    "Property Number/Street": "12 Irewolede Street, Shasha, ",
+    "Property Units": "20 Room. /8 Room.",
+    "TotalBill": "429400",
+    "Total Payment": "346700",
+    "Balance": "82700"
+  },
+  {
+    "Code": " 747",
+    "Acount Name": "Mr. Tawak Olawale",
+    "Property Number/Street": "15 Irewolede Street, Shasha, ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "494600",
+    "Total Payment": "457800",
+    "Balance": "36800"
+  },
+  {
+    "Code": " 748",
+    "Acount Name": "Mr Ogunsanya Joseph",
+    "Property Number/Street": "16 Irewolede Street, Shasha, ",
+    "Property Units": "2 MiniFlat",
+    "TotalBill": "193650",
+    "Total Payment": "161650",
+    "Balance": "32000"
+  },
+  {
+    "Code": " 749",
+    "Acount Name": "Mrs Sherifatu Lawal ",
+    "Property Number/Street": "17 Irewolede Street, Shasha, ",
+    "Property Units": "3 Room_Parlour",
+    "TotalBill": "267900",
+    "Total Payment": "175700",
+    "Balance": "92200"
+  },
+  {
+    "Code": " 750",
+    "Acount Name": "Alhaja Ayisat Olaleye",
+    "Property Number/Street": "19A Irewolede Street, Shasha, ",
+    "Property Units": "4 MiniFlat /1 Room.",
+    "TotalBill": "354050",
+    "Total Payment": "178300",
+    "Balance": "175750"
+  },
+  {
+    "Code": " 751",
+    "Acount Name": "Alhaja Ayisat Olaleye",
+    "Property Number/Street": "19B Irewolede Street, Shasha, ",
+    "Property Units": "3 MiniFlat",
+    "TotalBill": "287450",
+    "Total Payment": "252450",
+    "Balance": "35000"
+  },
+  {
+    "Code": " 752",
+    "Acount Name": "Alhaja Adebisi ",
+    "Property Number/Street": "21 Irewolede Street, Shasha, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "301900",
+    "Total Payment": "275900",
+    "Balance": "26000"
+  },
+  {
+    "Code": " 3583",
+    "Acount Name": "Provision Shop",
+    "Property Number/Street": "(1.. Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "32200",
+    "Total Payment": "0",
+    "Balance": "32200"
+  },
+  {
+    "Code": " 3652",
+    "Acount Name": "Mrs. Balogun (Fashion Designer)",
+    "Property Number/Street": "9. Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "34600",
+    "Total Payment": "10500",
+    "Balance": "24100"
+  },
+  {
+    "Code": " 3921",
+    "Acount Name": "Mrs. Gabriel Foodstuff0",
+    "Property Number/Street": "(16,). Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28300",
+    "Total Payment": "0",
+    "Balance": "28300"
+  },
+  {
+    "Code": " 3854",
+    "Acount Name": "Mrs. Abati (Food seller) shop4",
+    "Property Number/Street": "(16.) Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "29800",
+    "Total Payment": "8500",
+    "Balance": "21300"
+  },
+  {
+    "Code": " 3116",
+    "Acount Name": "Mrs. Mary (Hairdresser Shop9)",
+    "Property Number/Street": "(16, Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "43000",
+    "Total Payment": "25000",
+    "Balance": "18000"
+  },
+  {
+    "Code": " 3117",
+    "Acount Name": "Happyday leather(Shop8)",
+    "Property Number/Street": "16) Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "42400",
+    "Total Payment": "24400",
+    "Balance": "18000"
+  },
+  {
+    "Code": " 3118",
+    "Acount Name": "Occupant Shop5",
+    "Property Number/Street": "16,. Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "44000",
+    "Total Payment": "5300",
+    "Balance": "38700"
+  },
+  {
+    "Code": " 3119",
+    "Acount Name": "Iya Yetunde(Slippers) Shop3",
+    "Property Number/Street": "16. Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "43300",
+    "Total Payment": "28300",
+    "Balance": "15000"
+  },
+  {
+    "Code": " 3110",
+    "Acount Name": "Occupant Shop7",
+    "Property Number/Street": "(16) Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "42100",
+    "Total Payment": "5700",
+    "Balance": "36400"
+  },
+  {
+    "Code": " 2671",
+    "Acount Name": "Alhaji Arobiewe",
+    "Property Number/Street": "9 Irewolede Street, Shasha, ",
+    "Property Units": "26 Room.",
+    "TotalBill": "868600",
+    "Total Payment": "295000",
+    "Balance": "573600"
+  },
+  {
+    "Code": " 4334",
+    "Acount Name": "Joy Nwankwo (Foodstuff)",
+    "Property Number/Street": "11' Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "22000",
+    "Total Payment": "2000",
+    "Balance": "20000"
+  },
+  {
+    "Code": " 4295",
+    "Acount Name": "Mrs. Ikyaagba (Foodstuff)",
+    "Property Number/Street": "16' Irewolede Street, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "22000",
+    "Total Payment": "1500",
+    "Balance": "20500"
+  },
+  {
+    "Code": " 4138",
+    "Acount Name": "Mr. Joshua Sunday (Front Up)",
+    "Property Number/Street": "5' Kao Close, Santos Layout, ",
+    "Property Units": "1 Flats",
+    "TotalBill": "62350",
+    "Total Payment": "53950",
+    "Balance": "8400"
+  },
+  {
+    "Code": " 4358",
+    "Acount Name": "Kenneth Enabosi (Back upstair)",
+    "Property Number/Street": "5 Kao Close, Santos Layout, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "38800",
+    "Total Payment": "30400",
+    "Balance": "8400"
+  },
+  {
+    "Code": " 2512",
+    "Acount Name": "Arthur Nwosu (Front downstair)",
+    "Property Number/Street": "5, Kao Close, Santos Layout, ",
+    "Property Units": "1 Flats",
+    "TotalBill": "111100",
+    "Total Payment": "102400",
+    "Balance": "8700"
+  },
+  {
+    "Code": " 3889",
+    "Acount Name": "Barbing Saloon",
+    "Property Number/Street": "(6) Kao Close, Santos Layout, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "32150",
+    "Total Payment": "13550",
+    "Balance": "18600"
+  },
+  {
+    "Code": " 3766",
+    "Acount Name": "Barr. Oshoke (Backdown)",
+    "Property Number/Street": "(5.) Kao Close, Santos Layout, ",
+    "Property Units": "1 Flats",
+    "TotalBill": "75850",
+    "Total Payment": "60050",
+    "Balance": "15800"
+  },
+  {
+    "Code": " 3818",
+    "Acount Name": "Mr. Anyanwu",
+    "Property Number/Street": "13, Kao Close, Santos Layout, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "35000",
+    "Total Payment": "29000",
+    "Balance": "6000"
+  },
+  {
+    "Code": " 753",
+    "Acount Name": "Mr. Isaac Otobrisa Sakpere",
+    "Property Number/Street": "1 Kao Close, Santos Layout, ",
+    "Property Units": "1 Duplex /2 Flats",
+    "TotalBill": "737300",
+    "Total Payment": "647800",
+    "Balance": "89500"
+  },
+  {
+    "Code": " 756",
+    "Acount Name": "Mrs. Florence George (Block A Front)",
+    "Property Number/Street": "3. Kao Close, Santos Layout, ",
+    "Property Units": "1 Flats /2 MiniFlat",
+    "TotalBill": "202600",
+    "Total Payment": "186000",
+    "Balance": "16600"
+  },
+  {
+    "Code": " 757",
+    "Acount Name": "R.C.C.G ",
+    "Property Number/Street": "4 Kao Close, Santos Layout, ",
+    "Property Units": "1 Church A",
+    "TotalBill": "124500",
+    "Total Payment": "69500",
+    "Balance": "55000"
+  },
+  {
+    "Code": " 758",
+    "Acount Name": "Mr. Opanike",
+    "Property Number/Street": "4. Kao Close, Santos Layout, ",
+    "Property Units": "3 Room",
+    "TotalBill": "173200",
+    "Total Payment": "100400",
+    "Balance": "72800"
+  },
+  {
+    "Code": " 760",
+    "Acount Name": "Mrs Olujimi Oluyemi ",
+    "Property Number/Street": "6 Kao Close, Santos Layout, ",
+    "Property Units": "1 Church B",
+    "TotalBill": "152500",
+    "Total Payment": "150500",
+    "Balance": "2000"
+  },
+  {
+    "Code": " 761",
+    "Acount Name": "Alh. Ramoni Olasumbo ",
+    "Property Number/Street": "7 Kao Close, Santos Layout, ",
+    "Property Units": "3 Flats /4 Room /2 Shop",
+    "TotalBill": "759650",
+    "Total Payment": "748250",
+    "Balance": "11400"
+  },
+  {
+    "Code": " 762",
+    "Acount Name": "Mr Bello ",
+    "Property Number/Street": "11 Kao Close, Santos Layout, ",
+    "Property Units": "1 Flats",
+    "TotalBill": "179350",
+    "Total Payment": "168450",
+    "Balance": "10900"
+  },
+  {
+    "Code": " 763",
+    "Acount Name": "Mr Fatai Kehinde ",
+    "Property Number/Street": "9. Kao Close, Santos Layout, ",
+    "Property Units": "5 Rooms /1 Flat.",
+    "TotalBill": "369000",
+    "Total Payment": "301950",
+    "Balance": "67050"
+  },
+  {
+    "Code": " 764",
+    "Acount Name": "Adeniji Adebayo ",
+    "Property Number/Street": "10 Kao Close, Santos Layout, ",
+    "Property Units": "3 Rooms",
+    "TotalBill": "118650",
+    "Total Payment": "116150",
+    "Balance": "2500"
+  },
+  {
+    "Code": " 766",
+    "Acount Name": "Mrs Shobakin ",
+    "Property Number/Street": "15 Kao Close, Santos Layout, ",
+    "Property Units": "1 Flats",
+    "TotalBill": "132300",
+    "Total Payment": "82600",
+    "Balance": "49700"
+  },
+  {
+    "Code": " 767",
+    "Acount Name": "Alhaji Ikawokolaso ",
+    "Property Number/Street": "17 Kao Close, Santos Layout, ",
+    "Property Units": "10 Room",
+    "TotalBill": "416500",
+    "Total Payment": "332740",
+    "Balance": "83760"
+  },
+  {
+    "Code": " 2295",
+    "Acount Name": "Dr. Bakare",
+    "Property Number/Street": "8 Kao Close, Santos Layout, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "167500",
+    "Total Payment": "139500",
+    "Balance": "28000"
+  },
+  {
+    "Code": " 2276",
+    "Acount Name": "Fashion Designer (shop3)",
+    "Property Number/Street": "6, Kao Close, Santos Layout, ",
+    "Property Units": "1 Shop",
+    "TotalBill": "49900",
+    "Total Payment": "31400",
+    "Balance": "18500"
+  },
+  {
+    "Code": " 4376",
+    "Acount Name": "Methodist church Nigeria",
+    "Property Number/Street": "33/35 Ladipo Fafore Street, Santos Layout, ",
+    "Property Units": "1 Church,",
+    "TotalBill": "48000",
+    "Total Payment": "0",
+    "Balance": "48000"
+  },
+  {
+    "Code": " 4381",
+    "Acount Name": "GERRARD COMPANY",
+    "Property Number/Street": "61 Lagos-Abeokuta Express Road, ",
+    "Property Units": "1 COY /2 Flat",
+    "TotalBill": "315600",
+    "Total Payment": "0",
+    "Balance": "315600"
+  },
+  {
+    "Code": " 4044",
+    "Acount Name": "TOWER ALLOY INDUSTRIES LTD",
+    "Property Number/Street": "76/77, Lagos-Abeokuta Express Road, ",
+    "Property Units": "1 Factory",
+    "TotalBill": "4050000",
+    "Total Payment": "3920000",
+    "Balance": "130000"
+  },
+  {
+    "Code": " 3969",
+    "Acount Name": "Kunmi Heritage Concept",
+    "Property Number/Street": "67. Lagos-Abeokuta Express Road, ",
+    "Property Units": "1 Auto Dealer",
+    "TotalBill": "52000",
+    "Total Payment": "2000",
+    "Balance": "50000"
+  },
+  {
+    "Code": " 3499",
+    "Acount Name": "Divine Shield Ltd",
+    "Property Number/Street": "73. Lagos-Abeokuta Express Road, ",
+    "Property Units": "1 COMPANY.,",
+    "TotalBill": "415000",
+    "Total Payment": "5000",
+    "Balance": "410000"
+  },
+  {
+    "Code": " 2814",
+    "Acount Name": "Mr. Aburime Nathaniel",
+    "Property Number/Street": "73 Lagos-Abeokuta Express Road, ",
+    "Property Units": "1 Flats",
+    "TotalBill": "103600",
+    "Total Payment": "7750",
+    "Balance": "95850"
+  },
+  {
+    "Code": " 3242",
+    "Acount Name": "SALVATION MINISTRY",
+    "Property Number/Street": "57 Lagos-Abeokuta Express Road, ",
+    "Property Units": "1 HALL B",
+    "TotalBill": "545000",
+    "Total Payment": "120000",
+    "Balance": "425000"
+  },
+  {
+    "Code": " 3363",
+    "Acount Name": "SHOPS",
+    "Property Number/Street": "71, Lagos-Abeokuta Express Road, ",
+    "Property Units": "4 Shop",
+    "TotalBill": "160400",
+    "Total Payment": "14400",
+    "Balance": "146000"
+  },
+  {
+    "Code": " 771",
+    "Acount Name": "Iyabode Sanni Jeje",
+    "Property Number/Street": "59 Lagos-Abeokuta Express Road, ",
+    "Property Units": "5 Flats",
+    "TotalBill": "673500",
+    "Total Payment": "545300",
+    "Balance": "128200"
+  },
+  {
+    "Code": " 773",
+    "Acount Name": "Mr Banjoko Afolabi ",
+    "Property Number/Street": "63 Lagos-Abeokuta Express Road, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "492900",
+    "Total Payment": "460700",
+    "Balance": "32200"
+  },
+  {
+    "Code": " 774",
+    "Acount Name": "Mr Banjoko Afolabi ",
+    "Property Number/Street": "63. Lagos-Abeokuta Express Road, ",
+    "Property Units": "1 COMPANY.",
+    "TotalBill": "303000",
+    "Total Payment": "293000",
+    "Balance": "10000"
+  },
+  {
+    "Code": " 775",
+    "Acount Name": "Provident Baptist Church ",
+    "Property Number/Street": "65 Lagos-Abeokuta Express Road, ",
+    "Property Units": "1 Church C.",
+    "TotalBill": "308000",
+    "Total Payment": "304000",
+    "Balance": "4000"
+  },
+  {
+    "Code": " 776",
+    "Acount Name": "Alalade House",
+    "Property Number/Street": "67 Lagos-Abeokuta Express Road, ",
+    "Property Units": "1 Duplex /5 Flats",
+    "TotalBill": "684000",
+    "Total Payment": "658000",
+    "Balance": "26000"
+  },
+  {
+    "Code": " 778",
+    "Acount Name": "Automobile Sale 7 Service",
+    "Property Number/Street": "71 Lagos-Abeokuta Express Road, ",
+    "Property Units": "2 Flats",
+    "TotalBill": "288200",
+    "Total Payment": "56925",
+    "Balance": "231275"
+  },
+  {
+    "Code": " 780",
+    "Acount Name": "Sule Abati ",
+    "Property Number/Street": "1 Lawal Street, Shasha, ",
+    "Property Units": "6 Room",
+    "TotalBill": "430900",
+    "Total Payment": "368550",
+    "Balance": "62350"
+  },
+  {
+    "Code": " 782",
+    "Acount Name": "Mr Osas Agbontean ",
+    "Property Number/Street": "2. Lawal Street, Shasha, ",
+    "Property Units": "1 Flat. /4 MiniFlat",
+    "TotalBill": "374400",
+    "Total Payment": "217300",
+    "Balance": "157100"
+  },
+  {
+    "Code": " 784",
+    "Acount Name": "Alhaja Alarape ",
+    "Property Number/Street": "2.. Lawal Street, Shasha, ",
+    "Property Units": "4 Flat. /1 MiniFlat",
+    "TotalBill": "613450",
+    "Total Payment": "593950",
+    "Balance": "19500"
+  },
+  {
+    "Code": " 786",
+    "Acount Name": "Chief Madu ",
+    "Property Number/Street": "3 Lawal Street, Shasha, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "219000",
+    "Total Payment": "63000",
+    "Balance": "156000"
+  },
+  {
+    "Code": " 787",
+    "Acount Name": "Mr Animashaun ",
+    "Property Number/Street": "3. Lawal Street, Shasha, ",
+    "Property Units": "6 Room. /1 Shop.",
+    "TotalBill": "415600",
+    "Total Payment": "337800",
+    "Balance": "77800"
+  },
+  {
+    "Code": " 789",
+    "Acount Name": "Assemblies Of God Church ",
+    "Property Number/Street": "5 Lawal Street, Shasha, ",
+    "Property Units": "1 Church B",
+    "TotalBill": "140000",
+    "Total Payment": "134000",
+    "Balance": "6000"
+  },
+  {
+    "Code": " 790",
+    "Acount Name": "Mr Lawal",
+    "Property Number/Street": "6 Lawal Street, Shasha, ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "540600",
+    "Total Payment": "488900",
+    "Balance": "51700"
+  },
+  {
+    "Code": " 791",
+    "Acount Name": "Mr Oladipupo ",
+    "Property Number/Street": "7A Lawal Street, Shasha, ",
+    "Property Units": "3 Shop. /2 Flat",
+    "TotalBill": "451100",
+    "Total Payment": "396100",
+    "Balance": "55000"
+  },
+  {
+    "Code": " 792",
+    "Acount Name": "Mrs Oluwo ",
+    "Property Number/Street": "7B Lawal Street, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "334550",
+    "Total Payment": "307650",
+    "Balance": "26900"
+  },
+  {
+    "Code": " 793",
+    "Acount Name": "Elder James Olukitibi ",
+    "Property Number/Street": "8 Lawal Street, Shasha, ",
+    "Property Units": "1 Flat. /1 Room.",
+    "TotalBill": "174050",
+    "Total Payment": "168350",
+    "Balance": "5700"
+  },
+  {
+    "Code": " 794",
+    "Acount Name": "AlhajI Jinadu ",
+    "Property Number/Street": "9A Lawal Street, Shasha, ",
+    "Property Units": "8 Room.",
+    "TotalBill": "436000",
+    "Total Payment": "350600",
+    "Balance": "85400"
+  },
+  {
+    "Code": " 796",
+    "Acount Name": "Mr Afariogun ",
+    "Property Number/Street": "10 Lawal Street, Shasha, ",
+    "Property Units": "1 Flat. /1 MiniFlat",
+    "TotalBill": "216450",
+    "Total Payment": "210950",
+    "Balance": "5500"
+  },
+  {
+    "Code": " 801",
+    "Acount Name": "Alhaja Ajao ",
+    "Property Number/Street": "12 Lawal Street, Shasha, ",
+    "Property Units": "6 Flat.",
+    "TotalBill": "839800",
+    "Total Payment": "803800",
+    "Balance": "36000"
+  },
+  {
+    "Code": " 802",
+    "Acount Name": "Alhaja Ajao ",
+    "Property Number/Street": "14 Lawal Street, Shasha, ",
+    "Property Units": "3 Flat. /3 MiniFlat",
+    "TotalBill": "600450",
+    "Total Payment": "566700",
+    "Balance": "33750"
+  },
+  {
+    "Code": " 803",
+    "Acount Name": "Peculiar People Ministry ",
+    "Property Number/Street": "16 Lawal Street, Shasha, ",
+    "Property Units": "1 Church B",
+    "TotalBill": "113000",
+    "Total Payment": "89000",
+    "Balance": "24000"
+  },
+  {
+    "Code": " 805",
+    "Acount Name": "Asoland College ",
+    "Property Number/Street": "17/19 Lawal Street, Shasha, ",
+    "Property Units": "1 School.",
+    "TotalBill": "551500",
+    "Total Payment": "465500",
+    "Balance": "86000"
+  },
+  {
+    "Code": " 806",
+    "Acount Name": "Mrs Funke Ugbage ",
+    "Property Number/Street": "18 Lawal Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "126400",
+    "Total Payment": "77000",
+    "Balance": "49400"
+  },
+  {
+    "Code": " 809",
+    "Acount Name": "Gospel Now Ministry ",
+    "Property Number/Street": "24 Lawal Street, Shasha, ",
+    "Property Units": "1 Church..",
+    "TotalBill": "198000",
+    "Total Payment": "180000",
+    "Balance": "18000"
+  },
+  {
+    "Code": " 1589",
+    "Acount Name": "Pastor Famodun",
+    "Property Number/Street": "19 Lawal Street, Shasha, ",
+    "Property Units": "2 Flat.",
+    "TotalBill": "244800",
+    "Total Payment": "240800",
+    "Balance": "4000"
+  },
+  {
+    "Code": " 1737",
+    "Acount Name": "Dorssy Nur/Pry School",
+    "Property Number/Street": "11 Lawal Street, Shasha, ",
+    "Property Units": "1 SCHOOL,",
+    "TotalBill": "253000",
+    "Total Payment": "250000",
+    "Balance": "3000"
+  },
+  {
+    "Code": " 3239",
+    "Acount Name": "Omotade Olubode (Back downflat)",
+    "Property Number/Street": "2a., Lawal Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "82750",
+    "Total Payment": "750",
+    "Balance": "82000"
+  },
+  {
+    "Code": " 3159",
+    "Acount Name": "Occupantt",
+    "Property Number/Street": "9B Lawal Street, Shasha, ",
+    "Property Units": "2 MiniFlat",
+    "TotalBill": "127500",
+    "Total Payment": "16000",
+    "Balance": "111500"
+  },
+  {
+    "Code": " 2506",
+    "Acount Name": "Akeem Abodunrin(Back Upstair)",
+    "Property Number/Street": "2A.. Lawal Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "104500",
+    "Total Payment": "54000",
+    "Balance": "50500"
+  },
+  {
+    "Code": " 2527",
+    "Acount Name": "Omotade Olubode (Front upstair)",
+    "Property Number/Street": "2., Lawal Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "74250",
+    "Total Payment": "13500",
+    "Balance": "60750"
+  },
+  {
+    "Code": " 2528",
+    "Acount Name": "Omotade Olubode (Front downstair)",
+    "Property Number/Street": "2A,. Lawal Street, Shasha, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "74250",
+    "Total Payment": "13500",
+    "Balance": "60750"
+  },
+  {
+    "Code": " 3136",
+    "Acount Name": "Mr. Imoh Lambert (Front upstair)",
+    "Property Number/Street": "(2), Lawal Street, Shasha, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "76750",
+    "Total Payment": "43500",
+    "Balance": "33250"
+  },
+  {
+    "Code": " 3703",
+    "Acount Name": "AR - RISALAT N/P SCH",
+    "Property Number/Street": "(3) Lawal Street, Shasha, ",
+    "Property Units": "1 School",
+    "TotalBill": "67000",
+    "Total Payment": "62000",
+    "Balance": "5000"
+  },
+  {
+    "Code": " 3961",
+    "Acount Name": "CORPERS LODGE",
+    "Property Number/Street": "20. Lawal Street, Shasha, ",
+    "Property Units": "1 LOGDE.",
+    "TotalBill": "136000",
+    "Total Payment": "128500",
+    "Balance": "7500"
+  },
+  {
+    "Code": " 4432",
+    "Acount Name": "Alhaja Matanmi ",
+    "Property Number/Street": "11B Lawal Street, Shasha, ",
+    "Property Units": "4 Flat /2 Room.",
+    "TotalBill": "153750",
+    "Total Payment": "28000",
+    "Balance": "125750"
+  },
+  {
+    "Code": " 3033",
+    "Acount Name": "Mr. Ajileye",
+    "Property Number/Street": "2 Lewis Street, Santos Layout, ",
+    "Property Units": "1 Flat.",
+    "TotalBill": "160900",
+    "Total Payment": "142900",
+    "Balance": "18000"
+  },
+  {
+    "Code": " 2891",
+    "Acount Name": "Tailoring Company",
+    "Property Number/Street": "4/6, Lewis Street, Santos Layout, ",
+    "Property Units": "1 Company",
+    "TotalBill": "104000",
+    "Total Payment": "103000",
+    "Balance": "1000"
+  },
+  {
+    "Code": "0",
+    "Acount Name": "",
+    "Property Number/Street": "",
+    "Property Units": "",
+    "TotalBill": "",
+    "Total Payment": "",
+    "Balance": ""
+  },
+  {
+    "Code": "811",
+    "Acount Name": "MEAT EMBASSY",
+    "Property Number/Street": "1 Lewis Street, Santos Layout, ",
+    "Property Units": "1 BW FOOD LTD",
+    "TotalBill": "1015000",
+    "Total Payment": "925000",
+    "Balance": "90000"
+  },
+  {
+    "Code": "813",
+    "Acount Name": "Mr Popoola O.A ",
+    "Property Number/Street": "3 Lewis Street, Santos Layout, ",
+    "Property Units": "1 Room_Parlour /4 Flats",
+    "TotalBill": "572300",
+    "Total Payment": "563300",
+    "Balance": "9000"
+  },
+  {
+    "Code": "815",
+    "Acount Name": "Mrs Mabel Awodein ",
+    "Property Number/Street": "5 Lewis Street, Santos Layout, ",
+    "Property Units": "3 Flats",
+    "TotalBill": "356450",
+    "Total Payment": "350450",
+    "Balance": "6000"
+  },
+  {
+    "Code": "817",
+    "Acount Name": "Mrs Princess ",
+    "Property Number/Street": "7 Lewis Street, Santos Layout, ",
+    "Property Units": "3 Flats /2 Mini Flat",
+    "TotalBill": "437300",
+    "Total Payment": "427800",
+    "Balance": "9500"
+  },
+  {
+    "Code": "818",
+    "Acount Name": "Mr Akinola Kolade ",
+    "Property Number/Street": "9 Lewis Street, Santos Layout, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "183000",
+    "Total Payment": "171000",
+    "Balance": "12000"
+  },
+  {
+    "Code": "821",
+    "Acount Name": "Chief J. E. Oshio",
+    "Property Number/Street": "12 Lewis Street, Santos Layout, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "198000",
+    "Total Payment": "195000",
+    "Balance": "3000"
+  },
+  {
+    "Code": "822",
+    "Acount Name": "Mr Onafowokan ",
+    "Property Number/Street": "13 Lewis Street, Santos Layout, ",
+    "Property Units": "1 Duplex /1 Flats",
+    "TotalBill": "309600",
+    "Total Payment": "253200",
+    "Balance": "56400"
+  },
+  {
+    "Code": "823",
+    "Acount Name": "Mr Taiwo S.K ",
+    "Property Number/Street": "1 Losa Street, Santos Layout, ",
+    "Property Units": "1 Room_Parlour",
+    "TotalBill": "87250",
+    "Total Payment": "83750",
+    "Balance": "3500"
+  },
+  {
+    "Code": "825",
+    "Acount Name": "Leeway Drycleaners ",
+    "Property Number/Street": "3. Losa Street, Santos Layout, ",
+    "Property Units": "1 Shop",
+    "TotalBill": "63300",
+    "Total Payment": "59800",
+    "Balance": "3500"
+  },
+  {
+    "Code": "826",
+    "Acount Name": "Mr. Losa ",
+    "Property Number/Street": "4 Losa Street, Santos Layout, ",
+    "Property Units": "3 Flats",
+    "TotalBill": "423300",
+    "Total Payment": "228000",
+    "Balance": "195300"
+  },
+  {
+    "Code": "828",
+    "Acount Name": "Mr Agwo (Flat A)",
+    "Property Number/Street": "6 Losa Street, Santos Layout, ",
+    "Property Units": "1 Flats",
+    "TotalBill": "272600",
+    "Total Payment": "247000",
+    "Balance": "25600"
+  },
+  {
+    "Code": "829",
+    "Acount Name": "A.Adebari ",
+    "Property Number/Street": "7 Losa Street, Santos Layout, ",
+    "Property Units": "1 Flats",
+    "TotalBill": "134100",
+    "Total Payment": "116500",
+    "Balance": "17600"
+  },
+  {
+    "Code": "831",
+    "Acount Name": "Mr Wosillat Babalola ",
+    "Property Number/Street": "9 Losa Street, Santos Layout, ",
+    "Property Units": "4 Flats",
+    "TotalBill": "649400",
+    "Total Payment": "545000",
+    "Balance": "104400"
+  },
+  {
+    "Code": "833",
+    "Acount Name": "Lamral Memorial House",
+    "Property Number/Street": "12 Losa Street, Santos Layout, ",
+    "Property Units": "1 Duplex",
+    "TotalBill": "302000",
+    "Total Payment": "284000",
+    "Balance": "18000"
+  },
+  {
+    "Code": "834",
+    "Acount Name": "Jimoh Musa ",
+    "Property Number/Street": "14 Losa Street, Santos Layout, ",
+    "Property Units": "1 MiniFlat",
+    "TotalBill": "164334",
+    "Total Payment": "149834",
+    "Balance": "14500"
+  },
+  {
+    "Code": "835",
+    "Acount Name": "High Grade School ",
+    "Property Number/Street": "15 Losa Street, Santos Layout, ",
+    "Property Units": "1 SCHOOL,",
+    "TotalBill": "398000",
+    "Total Payment": "374000",
+    "Balance": "24000"
+  },
+  {
+    "Code": "1662",
+    "Acount Name": "Mr. Emmanuel Folorunsho",
+    "Property Number/Street": "17 Losa Street, Santos Layout, ",
+    "Property Units": "4 Flat.",
+    "TotalBill": "551500",
+    "Total Payment": "543500",
+    "Balance": "8000"
+  },
+  {
+    "Code": "4175",
+    "Acount Name": "Mrs. Chinwendu (Foodstuff)",
+    "Property Number/Street": "'115 Shasha Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "22700",
+    "Total Payment": "1800",
+    "Balance": "20900"
+  },
+  {
+    "Code": "4157",
+    "Acount Name": "ARES Eatery & Catery Services",
+    "Property Number/Street": "'43' Shasha Road, Shasha, ",
+    "Property Units": "1 Cafe /1 Shop.",
+    "TotalBill": "30000",
+    "Total Payment": "1500",
+    "Balance": "28500"
+  },
+  {
+    "Code": "4168",
+    "Acount Name": "BOUTIQUE",
+    "Property Number/Street": "'121' Shasha Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26500",
+    "Total Payment": "8900",
+    "Balance": "17600"
+  },
+  {
+    "Code": "4154",
+    "Acount Name": "LADY BISCO (EVENT PLANNER",
+    "Property Number/Street": "27', Shasha Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "25600",
+    "Total Payment": "3000",
+    "Balance": "22600"
+  },
+  {
+    "Code": "4161",
+    "Acount Name": "FOODSTUFF",
+    "Property Number/Street": "'7B Shasha Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "28400",
+    "Total Payment": "11500",
+    "Balance": "16900"
+  },
+  {
+    "Code": "4162",
+    "Acount Name": "PETIJO LOGISTICS",
+    "Property Number/Street": "114. Shasha Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26200",
+    "Total Payment": "3600",
+    "Balance": "22600"
+  },
+  {
+    "Code": "4163",
+    "Acount Name": "SLIPPERS SELLER",
+    "Property Number/Street": "'116' Shasha Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "21500",
+    "Total Payment": "5300",
+    "Balance": "16200"
+  },
+  {
+    "Code": "4164",
+    "Acount Name": "Hawt Nick Rowland Saloon",
+    "Property Number/Street": "'121 Shasha Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "26800",
+    "Total Payment": "7200",
+    "Balance": "19600"
+  },
+  {
+    "Code": "4165",
+    "Acount Name": "TAILORING /FASHION DESIGNER",
+    "Property Number/Street": "121' Shasha Road, Shasha, ",
+    "Property Units": "1 Shop.",
+    "TotalBill": "27100",
+    "Total Payment": "6000",
+    "Balance": "21100"
+  },
+  {
+    "Code": "4223",
+    "Acount Name": "LIVEHAPPY EYE CLINIC",
+    "Property Number/Street": "'39 Shasha Road, Shasha, ",
+    "Property Units": "",
+    "TotalBill": "30000",
+    "Total Payment": "4000",
+    "Balance": "26000"
+  },
+  {
+    "Code": "4201",
+    "Acount Name": "DUNSIN BREAD",
+    "Property Number/Street": "'13 Shasha Road, Shasha, ",
+    "Property Units": "1 BAKERY.",
+    "TotalBill": "105000",
+    "Total Payment": "49000",
+    "Balance": "56000"
   }
 ]
