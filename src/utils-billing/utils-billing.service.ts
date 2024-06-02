@@ -482,6 +482,59 @@ export class UtilsBillingService {
     return mappedBilling;
   }
 
+  async deleteBilling({
+    entityProfileId,
+    billingId,
+  }: {
+    entityProfileId: string;
+    billingId: string;
+  }) {
+    const billingToDelete = await this.dbManager.findOne(Billing, {
+      where: {
+        id: billingId,
+        propertySubscription: {
+          entityProfileId,
+        },
+      },
+    });
+
+    if (billingToDelete) {
+      await this.dbManager.delete(Billing, { id: billingId });
+    }
+  }
+
+  async updateArrears({entityProfileId, billingArrears, propertySubscriptionId} : {entityProfileId:string, billingArrears: string, propertySubscriptionId: string}) {
+    const associatedBillingAccount = await this.dbManager.findOne(BillingAccount, {
+      where: {
+        propertySubscription: {
+          id: propertySubscriptionId,
+          entityProfileId,
+        }
+      }
+    })
+
+    if (!associatedBillingAccount) {
+      throwBadRequest('Could not find the referenced billing Account')
+    }
+
+    let currentArrears = bignumber(associatedBillingAccount.totalBillings).minus(associatedBillingAccount.totalPayments).toNumber();
+    currentArrears = currentArrears > 0 ? currentArrears : 0;
+    
+    const newArrears = bignumber(billingArrears).toNumber();
+
+    /// update billing acount: if newArrears > currentArrears add difference to account's total billing
+    const arrearsDifference = newArrears - currentArrears;
+    if (arrearsDifference >= 0) {
+      associatedBillingAccount.totalBillings = String(bignumber(associatedBillingAccount.totalBillings).add(arrearsDifference));
+    }
+    else {
+      associatedBillingAccount.totalPayments = String(bignumber(associatedBillingAccount.totalPayments).add(arrearsDifference));
+    }
+
+    await this.dbManager.save(associatedBillingAccount);
+
+  }
+
   async generateBilling(
     generatePrintBIllingDto: GenerateBillingDto,
     entityProfileId: string,
@@ -961,6 +1014,7 @@ export class UtilsBillingService {
       currentBilling: string;
       arrears: number;
       totalBilling?: string;
+      currentBillingId?: string;
     }[] = [];
     if (!billingMonth) {
       const propertySubscriptions = await this.dbManager.find(
@@ -994,6 +1048,7 @@ export class UtilsBillingService {
           PropertySubscriptionId: propertySubscription.id,
           propertyName: propertySubscription.propertySubscriptionName,
           currentBilling: propertySubscription.billings?.[0]?.amount || '0',
+          currentBillingId: propertySubscription.billings?.[0]?.id || '0',
           arrears,
         };
       });
@@ -1064,6 +1119,18 @@ export class UtilsBillingService {
                 'billing.propertySubscriptionId = "propertySubscription"."id"',
               ),
           'currentBilling',
+        )
+        .addSelect(
+          (qb) =>
+            qb
+              .from(Billing, 'billing')
+              .select('billing.id', 'id')
+              .where(`billing.month = :billingMonth`)
+              .andWhere(`billing.year = '${billingYear}'`, { billingMonth })
+              .andWhere(
+                'billing.propertySubscriptionId = "propertySubscription"."id"',
+              ),
+          'currentBillingId',
         )
         .addSelect(
           (qb) =>
@@ -1153,24 +1220,28 @@ export class UtilsBillingService {
         .getRawMany();
     }
 
-    return billingDetails.map((result) => {
-      result['currentBilling'] = result['currentBilling'] || '0';
-      return pick(result, [
-        'streetName',
-        'propertySubscriptionId',
-        'propertyName',
-        'arrears',
-        'currentBilling',
-        'totalBilling',
-        'lastPayment',
-        'propertyUnits',
-        'streetNumber',
-      ]);
-    }) as unknown as {
+    return billingDetails
+      .filter((billing) => !!billing.currentBillingId)
+      .map((result) => {
+        result['currentBilling'] = result['currentBilling'] || '0';
+        return pick(result, [
+          'streetName',
+          'propertySubscriptionId',
+          'propertyName',
+          'arrears',
+          'currentBilling',
+          'currentBillingId',
+          'totalBilling',
+          'lastPayment',
+          'propertyUnits',
+          'streetNumber',
+        ]);
+      }) as unknown as {
       streetName: string;
       PropertySubscriptionId: string;
       propertyName: string;
       currentBilling: string;
+      currentBillingId: string;
       arrears: number;
       totalBilling?: string;
     }[];

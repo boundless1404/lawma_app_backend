@@ -330,3 +330,13 @@ export class SavePropertyUnitsDto {
   @IsNumberString()
   unitPrice: string;
 }
+
+export class UpdateArrearDto {
+  @IsNotEmpty()
+  @IsNumberString()                                                                                                                        
+  arrears: string;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  propertySubscriptionId: string;
+}

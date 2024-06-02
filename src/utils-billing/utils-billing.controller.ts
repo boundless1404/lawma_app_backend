@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -29,6 +30,7 @@ import {
   GetBillingQuery,
   PostPaymentDto,
   SavePropertyUnitsDetailsDto,
+  UpdateArrearDto,
 } from './dtos/dto';
 import { UtilsBillingService } from './utils-billing.service';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
@@ -153,6 +155,31 @@ export class UtilsBillingController {
       getBillingQuery,
       authPayload.profile.entityProfileId,
     );
+  }
+
+  @Delete('billing')
+  @UseGuards(IsAuthenticated)
+  async deleteBilling(
+    @Query('billingId') billingId: string,
+    @GetAuthPayload() authTokenPayload: AuthTokenPayload,
+  ) {
+    await this.utilService.deleteBilling({
+      billingId,
+      entityProfileId: authTokenPayload.profile.entityProfileId,
+    });
+  }
+
+  @Put('billing/account')
+  @UseGuards(IsAuthenticated)
+  async updateArrears(
+    @Body() UpdateArrearsDto: UpdateArrearDto,
+    @GetAuthPayload() authTokenPayload: AuthTokenPayload,
+  ) {
+    await this.utilService.updateArrears({
+      billingArrears: UpdateArrearsDto.arrears,
+      propertySubscriptionId: UpdateArrearsDto.propertySubscriptionId,
+      entityProfileId: authTokenPayload.profile.entityProfileId,
+    });
   }
 
   @Get('billing/account/arrears')
