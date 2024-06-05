@@ -503,36 +503,55 @@ export class UtilsBillingService {
     }
   }
 
-  async updateArrears({entityProfileId, billingArrears, propertySubscriptionId} : {entityProfileId:string, billingArrears: string, propertySubscriptionId: string}) {
-    const associatedBillingAccount = await this.dbManager.findOne(BillingAccount, {
-      where: {
-        propertySubscription: {
-          id: propertySubscriptionId,
-          entityProfileId,
-        }
-      }
-    })
+  async updateArrears({
+    entityProfileId,
+    billingArrears,
+    propertySubscriptionId,
+  }: {
+    entityProfileId: string;
+    billingArrears: string;
+    propertySubscriptionId: string;
+  }) {
+    const associatedBillingAccount = await this.dbManager.findOne(
+      BillingAccount,
+      {
+        where: {
+          propertySubscription: {
+            id: propertySubscriptionId,
+            entityProfileId,
+          },
+        },
+      },
+    );
 
     if (!associatedBillingAccount) {
-      throwBadRequest('Could not find the referenced billing Account')
+      throwBadRequest('Could not find the referenced billing Account');
     }
 
-    let currentArrears = bignumber(associatedBillingAccount.totalBillings).minus(associatedBillingAccount.totalPayments).toNumber();
+    let currentArrears = bignumber(associatedBillingAccount.totalBillings)
+      .minus(associatedBillingAccount.totalPayments)
+      .toNumber();
     currentArrears = currentArrears > 0 ? currentArrears : 0;
-    
+
     const newArrears = bignumber(billingArrears).toNumber();
 
     /// update billing acount: if newArrears > currentArrears add difference to account's total billing
     const arrearsDifference = newArrears - currentArrears;
     if (arrearsDifference >= 0) {
-      associatedBillingAccount.totalBillings = String(bignumber(associatedBillingAccount.totalBillings).add(arrearsDifference));
-    }
-    else {
-      associatedBillingAccount.totalPayments = String(bignumber(associatedBillingAccount.totalPayments).add(arrearsDifference));
+      associatedBillingAccount.totalBillings = String(
+        bignumber(associatedBillingAccount.totalBillings).add(
+          arrearsDifference,
+        ),
+      );
+    } else {
+      associatedBillingAccount.totalPayments = String(
+        bignumber(associatedBillingAccount.totalPayments).add(
+      Math.abs(arrearsDifference),
+        ),
+      );
     }
 
     await this.dbManager.save(associatedBillingAccount);
-
   }
 
   async generateBilling(
