@@ -35,6 +35,7 @@ import { ProfileCollection } from './entitties/profileCollection.entity';
 import { PhoneCode } from './entitties/phoneCode.entity';
 import { pick } from 'lodash';
 import { isNumberString } from 'class-validator';
+import ArrearsUpdate from './entitties/arrearsUpdates.entity';
 
 @Injectable()
 export class UtilsBillingService {
@@ -505,12 +506,15 @@ export class UtilsBillingService {
 
   async updateArrears({
     entityProfileId,
+    entityUserProfileId,
     billingArrears,
     propertySubscriptionId,
   }: {
     entityProfileId: string;
+    entityUserProfileId: string;
     billingArrears: string;
     propertySubscriptionId: string;
+    reason: string;
   }) {
     const associatedBillingAccount = await this.dbManager.findOne(
       BillingAccount,
@@ -552,6 +556,15 @@ export class UtilsBillingService {
     }
 
     await this.dbManager.save(associatedBillingAccount);
+
+    // track arrears update
+    const arrearsUpdate = this.dbManager.create(ArrearsUpdate, { 
+      amountAfterUpdate: newArrears.toString(),
+      amountBeforeUpdate: currentArrears.toString(),
+      reasonToUpdate: '',
+      propertySubscriptionId: propertySubscriptionId,
+      updatedByUserId: entityProfileId
+    })
   }
 
   async generateBilling(
@@ -1015,7 +1028,8 @@ export class UtilsBillingService {
       streetId,
       billingMonth,
       billingYear = new Date().getFullYear(),
-    }: { streetId: string; billingMonth?: string; billingYear?: number },
+      propertySubscriptionId,
+    }: { streetId: string; billingMonth?: string; billingYear?: number, propertySubscriptionId?: string },
   ) {
     //
     const street = await this.getStreetOrThrowError({
@@ -1232,9 +1246,10 @@ export class UtilsBillingService {
               .limit(1),
           'lastPayment',
         )
-        .where('propertySubscription.streetId = :streetId', {
+        .where(`${'propertySubscription.streetId = :streetId'} ${!!propertySubscriptionId !== false ? 'and propertySubscription.id = :propertySubscriptionId' : ''}`, {
           streetId,
           billingMonth,
+          ...(!!propertySubscriptionId !== false ? { propertySubscriptionId } : {})
         })
         .getRawMany();
     }

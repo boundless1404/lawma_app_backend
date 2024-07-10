@@ -339,4 +339,8 @@ export class UpdateArrearDto {
   @IsNotEmpty()
   @IsNumberString()
   propertySubscriptionId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  reason: string;
 }

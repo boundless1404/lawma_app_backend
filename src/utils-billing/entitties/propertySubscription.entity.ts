@@ -18,6 +18,7 @@ import { BillingAccount } from './billingAccount.entity';
 import { Billing } from './billing.entity';
 import { Payment } from './payments.entity';
 import { EntityProfile } from './entityProfile.entity';
+import ArrearsUpdate from './arrearsUpdates.entity';
 
 @Entity()
 export class PropertySubscription {
@@ -91,4 +92,10 @@ export class PropertySubscription {
   )
   @JoinColumn({ name: 'entityProfileId' })
   entityProfile: EntityProfile;
+
+  @OneToMany(
+    () => ArrearsUpdate,
+    (arrearsUpdate) => arrearsUpdate.propertySubscription,
+  )
+  arrearsUpdates: ArrearsUpdate[];
 }
