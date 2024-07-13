@@ -509,6 +509,7 @@ export class UtilsBillingService {
     entityUserProfileId,
     billingArrears,
     propertySubscriptionId,
+    reason,
   }: {
     entityProfileId: string;
     entityUserProfileId: string;
@@ -550,21 +551,25 @@ export class UtilsBillingService {
     } else {
       associatedBillingAccount.totalPayments = String(
         bignumber(associatedBillingAccount.totalPayments).add(
-      Math.abs(arrearsDifference),
+          Math.abs(arrearsDifference),
         ),
       );
     }
 
-    await this.dbManager.save(associatedBillingAccount);
+    await this.dbManager.transaction(async (transactionManager) => {
+      await transactionManager.save(associatedBillingAccount);
 
-    // track arrears update
-    const arrearsUpdate = this.dbManager.create(ArrearsUpdate, { 
-      amountAfterUpdate: newArrears.toString(),
-      amountBeforeUpdate: currentArrears.toString(),
-      reasonToUpdate: '',
-      propertySubscriptionId: propertySubscriptionId,
-      updatedByUserId: entityProfileId
-    })
+      // track arrears update
+      const arrearsUpdate = transactionManager.create(ArrearsUpdate, {
+        amountAfterUpdate: newArrears.toString(),
+        amountBeforeUpdate: currentArrears.toString(),
+        reasonToUpdate: reason,
+        propertySubscriptionId: propertySubscriptionId,
+        updatedByUserId: entityProfileId,
+      });
+
+      await transactionManager.save(arrearsUpdate);
+    });
   }
 
   async generateBilling(
@@ -1029,7 +1034,12 @@ export class UtilsBillingService {
       billingMonth,
       billingYear = new Date().getFullYear(),
       propertySubscriptionId,
-    }: { streetId: string; billingMonth?: string; billingYear?: number, propertySubscriptionId?: string },
+    }: {
+      streetId: string;
+      billingMonth?: string;
+      billingYear?: number;
+      propertySubscriptionId?: string;
+    },
   ) {
     //
     const street = await this.getStreetOrThrowError({
@@ -1246,11 +1256,20 @@ export class UtilsBillingService {
               .limit(1),
           'lastPayment',
         )
-        .where(`${'propertySubscription.streetId = :streetId'} ${!!propertySubscriptionId !== false ? 'and propertySubscription.id = :propertySubscriptionId' : ''}`, {
-          streetId,
-          billingMonth,
-          ...(!!propertySubscriptionId !== false ? { propertySubscriptionId } : {})
-        })
+        .where(
+          `${'propertySubscription.streetId = :streetId'} ${
+            !!propertySubscriptionId !== false
+              ? 'and propertySubscription.id = :propertySubscriptionId'
+              : ''
+          }`,
+          {
+            streetId,
+            billingMonth,
+            ...(!!propertySubscriptionId !== false
+              ? { propertySubscriptionId }
+              : {}),
+          },
+        )
         .getRawMany();
     }
 
