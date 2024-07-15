@@ -11,6 +11,7 @@ import {
 import { EntityProfile } from './entityProfile.entity';
 import { PhoneCode } from './phoneCode.entity';
 import { EntitySubscriberProfile } from './entitySubscriberProfile.entity';
+import ArrearsUpdate from './arrearsUpdates.entity';
 
 @Entity()
 export class EntityUserProfile {
@@ -65,4 +66,7 @@ export class EntityUserProfile {
     (entitySubscriberProfile) => entitySubscriberProfile.entityUserProfile,
   )
   createdEntitySubscriberProfiles: EntitySubscriberProfile[];
+
+  @OneToMany(() => ArrearsUpdate, (arrearsUpdate) => arrearsUpdate.entityUser)
+  arrearsUpdates: ArrearsUpdate[];
 }

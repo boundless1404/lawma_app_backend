@@ -179,6 +179,8 @@ export class UtilsBillingController {
       billingArrears: UpdateArrearsDto.arrears,
       propertySubscriptionId: UpdateArrearsDto.propertySubscriptionId,
       entityProfileId: authTokenPayload.profile.entityProfileId,
+      entityUserProfileId: authTokenPayload.profile.id,
+      reason: UpdateArrearsDto.reason,
     });
   }
 
@@ -210,12 +212,12 @@ export class UtilsBillingController {
   @UseGuards(IsAuthenticated)
   async getBillingDetails(
     @Param('streetId') streetId: string,
-    @Query() { billingMonth }: { billingMonth: string },
+    @Query() { billingMonth, propertySubscriptionId }: { billingMonth: string, propertySubscriptionId: string },
     @GetAuthPayload() authPayload: AuthTokenPayload,
   ) {
     return this.utilService.getBillingDetailsOrDefaulters(
       authPayload.profile.entityProfileId,
-      { streetId, billingMonth },
+      { streetId, billingMonth, propertySubscriptionId },
     );
   }
 
