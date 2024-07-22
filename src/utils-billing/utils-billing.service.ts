@@ -708,6 +708,7 @@ export class UtilsBillingService {
       throwBadRequest(
         `Billing already generated for ${propertySubscription.propertySubscriptionName}.`,
       );
+      return;
     }
 
     const propertySubscriptionUnits = await dbManager.find(
@@ -1126,6 +1127,8 @@ export class UtilsBillingService {
                       .andWhere(
                         'billing.propertySubscriptionId = "propertySubscription"."id"',
                       )
+                      .orderBy("billing.id", 'ASC')
+                      .limit(1)
                       .getQuery()}
                   ) :: numeric, 0) > 0
                   then "billingAccount"."totalBillings" :: numeric - "billingAccount"."totalPayments" :: numeric - coalesce((
@@ -1139,6 +1142,8 @@ export class UtilsBillingService {
                       .andWhere(
                         'billing.propertySubscriptionId = "propertySubscription"."id"',
                       )
+                      .orderBy("billing.id", 'ASC')
+                      .limit(1)
                       .getQuery()}
                   ) :: numeric, 0)
                   else 0
@@ -1160,7 +1165,9 @@ export class UtilsBillingService {
               .andWhere(`billing.year = '${billingYear}'`, { billingMonth })
               .andWhere(
                 'billing.propertySubscriptionId = "propertySubscription"."id"',
-              ),
+              )
+              .orderBy("billing.id", 'ASC')
+                      .limit(1),
           'currentBilling',
         )
         .addSelect(
@@ -1172,7 +1179,8 @@ export class UtilsBillingService {
               .andWhere(`billing.year = '${billingYear}'`, { billingMonth })
               .andWhere(
                 'billing.propertySubscriptionId = "propertySubscription"."id"',
-              ),
+              ).orderBy("billing.id", 'ASC')
+              .limit(1),
           'currentBillingId',
         )
         .addSelect(
