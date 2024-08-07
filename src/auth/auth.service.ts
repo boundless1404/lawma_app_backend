@@ -57,7 +57,7 @@ export class AuthService {
 
     const authServerRequestPath = `/project/app/${action}`;
 
-    const response = await this.requestService.requestAuth(
+    const response = await this.requestService.requestApiService(
       authServerRequestPath,
       {
         body: action === 'signup' ? authServerRequestBody : { ...signinDto },

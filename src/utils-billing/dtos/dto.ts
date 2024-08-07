@@ -331,7 +331,7 @@ export class SavePropertyUnitsDto {
   unitPrice: string;
 }
 
-export class UpdateArrearDto {
+export class UpdateAccontRecordDto {
   @IsNotEmpty()
   @IsNumberString()                                                                                                                        
   arrears: string;

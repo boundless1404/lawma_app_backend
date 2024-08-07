@@ -14,10 +14,22 @@ import {
   SavePropertyUnitsDetailsDto,
 } from './dtos/dto';
 import { ProfileTypes, SubscriberProfileRoleEnum } from '../lib/enums';
-import { throwBadRequest, throwForbidden } from '../utils/helpers';
+import {
+  throwBadRequest,
+  throwForbidden,
+  throwServerError,
+} from '../utils/helpers';
 import { EntitySubscriberProfile } from './entitties/entitySubscriberProfile.entity';
 import { EntityUserProfile } from './entitties/entityUserProfile.entity';
-import { AuthTokenPayload, AuthenticatedUserData } from '../lib/types';
+import {
+  AuthTokenPayload,
+  AuthenticatedUserData,
+  DedicatedVirtualAccountUserData,
+  PaystackCustomer,
+  PaystackWebhookData,
+  PaystackWebhookEventObject,
+  PaystackWebhookEvents,
+} from '../lib/types';
 import { Street } from './entitties/street.entity';
 import { PropertyType } from './entitties/propertyTypes.entity';
 import { PropertySubscription } from './entitties/propertySubscription.entity';
@@ -25,7 +37,11 @@ import { EntitySubscriberProperty } from './entitties/entitySubscriberProperty.e
 import { PropertySubscriptionUnit } from './entitties/PropertySubscriptionUnit.entity';
 import { BillingAccount } from './entitties/billingAccount.entity';
 import { Billing } from './entitties/billing.entity';
-import { MonthNames } from '../lib/projectConstants';
+import {
+  MonthNames,
+  PAYSTACK_SECRET_ENV,
+  sucessHttpCodes,
+} from '../lib/projectConstants';
 import { bignumber } from 'mathjs';
 import { LgaWard } from './entitties/lgaWard.entity';
 import { Lga } from './entitties/lga.entity';
@@ -36,12 +52,15 @@ import { PhoneCode } from './entitties/phoneCode.entity';
 import { pick } from 'lodash';
 import { isNumberString } from 'class-validator';
 import ArrearsUpdate from './entitties/arrearsUpdates.entity';
+import { PaystackServiceService } from '../shared/paystack_service/paystack_service.service';
+import SubscriberVirtualAccountDetail from './entitties/subscriberVirtualAccount';
 
 @Injectable()
 export class UtilsBillingService {
   constructor(
     private requestService: RequestService,
     public dbManager: EntityManager,
+    public paystackService: PaystackServiceService,
     private dataSource?: DataSource,
   ) {
     //
@@ -82,7 +101,7 @@ export class UtilsBillingService {
 
     const defaultPassword = 'no-password';
     const phoneNumber = createUserDto.phone;
-    const response = await this.requestService.requestAuth(
+    const response = await this.requestService.requestApiService(
       authServerRequestPath,
       {
         body: {
@@ -504,19 +523,125 @@ export class UtilsBillingService {
     }
   }
 
-  async updateArrears({
+  async updateAccountRecord({
     entityProfileId,
     entityUserProfileId,
     billingArrears,
     propertySubscriptionId,
     reason,
+    phone,
+    phoneCodeId,
   }: {
     entityProfileId: string;
     entityUserProfileId: string;
     billingArrears: string;
     propertySubscriptionId: string;
     reason: string;
+    phone?: string;
+    phoneCodeId?: string;
   }) {
+    if (phone && phoneCodeId) {
+      const phoneCode = await this.dbManager.findOne(PhoneCode, {
+        where: {
+          id: phoneCodeId,
+        },
+      });
+
+      if (!phoneCode) {
+        throwBadRequest('Invalide phone code parameter sent');
+        return;
+      }
+
+      // TODO: write implementation to change phone code.
+      const subscriberProperty = await this.dbManager.findOne(
+        PropertySubscription,
+        {
+          where: {
+            id: propertySubscriptionId,
+          },
+          relations: {
+            entitySubscriberProfile: true,
+          },
+        },
+      );
+
+      const entitySubscriberProfile =
+        subscriberProperty.entitySubscriberProfile;
+
+      entitySubscriberProfile.phone = phone;
+      entitySubscriberProfile.phoneCodeId = phoneCode.id;
+
+      await this.dbManager.transaction(async (transactionManager) => {
+        await transactionManager.save(entitySubscriberProfile);
+
+        // update the user profile in the central user manager
+        // make request to user manager
+        const serverResponse = await this.requestService.requestApiService(
+          '/user',
+          {
+            method: 'PUT',
+            body: {
+              phone,
+              phoneCodeId,
+              email: entitySubscriberProfile.email,
+            },
+          },
+        );
+
+        if (sucessHttpCodes.includes(serverResponse.status)) {
+          // create virtual account on fintech service (paystack)
+          const userDataForDVA: PaystackCustomer = {
+            first_name: entitySubscriberProfile.firstName,
+            last_name: entitySubscriberProfile.lastName,
+            email: entitySubscriberProfile.email,
+            phone: `${phoneCode}${phone}`,
+          };
+          const customerActionResponse =
+            await this.paystackService.createCustomer(userDataForDVA);
+
+          const customerCode = customerActionResponse?.data.customer_code;
+
+          if (!customerCode) {
+            throwServerError(
+              'Could not complete process',
+              new Error('Paystack Customer creation failed.'),
+            );
+          }
+
+          const dvaUserData: DedicatedVirtualAccountUserData = {
+            customer: customerCode,
+            preferred_bank: 'test-bank',
+            country: 'NG',
+          };
+          try {
+            const paystackServerResponse =
+              await this.paystackService.createDedicatedVirtualAccount(
+                dvaUserData,
+              );
+
+            Logger.log(paystackServerResponse);
+
+            // create virtual account details for subscriber.
+            await this.createSubscriberVirtualAccountDetail({
+              dbManager: transactionManager,
+              account_name: paystackServerResponse.data.account_name,
+              account_number: paystackServerResponse.data.account_number,
+              propertySubscriptionId,
+            });
+          } catch (error) {
+            throwServerError();
+          }
+
+          // send sucess result
+        } else if (serverResponse.status === 400) {
+          // send client error
+          throwBadRequest('One or more fields are invalid.');
+        } else {
+          throwServerError();
+        }
+      });
+      return;
+    }
     const associatedBillingAccount = await this.dbManager.findOne(
       BillingAccount,
       {
@@ -531,6 +656,7 @@ export class UtilsBillingService {
 
     if (!associatedBillingAccount) {
       throwBadRequest('Could not find the referenced billing Account');
+      return;
     }
 
     let currentArrears = bignumber(associatedBillingAccount.totalBillings)
@@ -565,11 +691,34 @@ export class UtilsBillingService {
         amountBeforeUpdate: currentArrears.toString(),
         reasonToUpdate: reason,
         propertySubscriptionId: propertySubscriptionId,
-        updatedByUserId: entityProfileId,
+        updatedByUserId: entityUserProfileId,
       });
 
       await transactionManager.save(arrearsUpdate);
     });
+  }
+
+  async createSubscriberVirtualAccountDetail({
+    dbManager,
+    account_name,
+    account_number,
+    propertySubscriptionId,
+  }: {
+    dbManager: EntityManager;
+    account_number: string;
+    account_name: string;
+    propertySubscriptionId: string;
+  }) {
+    const newSubscriberVirtualAccount = dbManager.create(
+      SubscriberVirtualAccountDetail,
+      {
+        account_name,
+        account_number,
+        propertySubscriptionId,
+      },
+    );
+
+    await dbManager.save(newSubscriberVirtualAccount);
   }
 
   async generateBilling(
@@ -1127,7 +1276,7 @@ export class UtilsBillingService {
                       .andWhere(
                         'billing.propertySubscriptionId = "propertySubscription"."id"',
                       )
-                      .orderBy("billing.id", 'ASC')
+                      .orderBy('billing.id', 'ASC')
                       .limit(1)
                       .getQuery()}
                   ) :: numeric, 0) > 0
@@ -1142,7 +1291,7 @@ export class UtilsBillingService {
                       .andWhere(
                         'billing.propertySubscriptionId = "propertySubscription"."id"',
                       )
-                      .orderBy("billing.id", 'ASC')
+                      .orderBy('billing.id', 'ASC')
                       .limit(1)
                       .getQuery()}
                   ) :: numeric, 0)
@@ -1166,8 +1315,8 @@ export class UtilsBillingService {
               .andWhere(
                 'billing.propertySubscriptionId = "propertySubscription"."id"',
               )
-              .orderBy("billing.id", 'ASC')
-                      .limit(1),
+              .orderBy('billing.id', 'ASC')
+              .limit(1),
           'currentBilling',
         )
         .addSelect(
@@ -1179,7 +1328,8 @@ export class UtilsBillingService {
               .andWhere(`billing.year = '${billingYear}'`, { billingMonth })
               .andWhere(
                 'billing.propertySubscriptionId = "propertySubscription"."id"',
-              ).orderBy("billing.id", 'ASC')
+              )
+              .orderBy('billing.id', 'ASC')
               .limit(1),
           'currentBillingId',
         )
@@ -1803,5 +1953,112 @@ export class UtilsBillingService {
     }
 
     return street;
+  }
+
+  async createNewPayment({
+    dbManager,
+    comments,
+    propertySubscriptionId,
+    amount,
+    payerName,
+    paymentDate,
+  }: {
+    amount: string;
+    payerName: string;
+    paymentDate: Date;
+    propertySubscriptionId: string;
+    dbManager: EntityManager;
+    comments?: string;
+  }) {
+    let newPayment = dbManager.create(Payment, {
+      amount,
+      payerName,
+      comments,
+      propertySubscriptionId,
+      paymentDate,
+    });
+
+    newPayment = await this.dbManager.save(newPayment);
+    return newPayment;
+  }
+
+  // webhook handles
+  async handleWebhookEvent({
+    eventData,
+    webhookSignature,
+  }: {
+    eventData: PaystackWebhookEventObject;
+    webhookSignature: string;
+  }) {
+    // validate webhook event data
+    const isValid = await this.paystackService.validatePaystackWebhookEvent(
+      webhookSignature,
+      eventData,
+    );
+    if (!isValid) {
+      return;
+    }
+
+    // check transaction is status is success
+    const transactionIsSuccessful = eventData.data.status === 'success';
+    if (!transactionIsSuccessful) {
+      return;
+    }
+
+    const eventHandlers: {
+      [key in PaystackWebhookEvents]?: (
+        eventData: Record<string, unknown>,
+      ) => Promise<void>;
+    } = {
+      'charge.success': this.chargeSuccess,
+    };
+
+    const event = eventData?.event;
+
+    const handler = eventHandlers[eventData.event];
+    await handler?.(eventData.data);
+  }
+
+  private async chargeSuccess(data: PaystackWebhookData) {
+    // find receiving_bank_account_number in the authorization object
+    // process virtual account payment
+    const isVirtualBankAccountPayment =
+      this.paystackService.checkIsVirtualBankAccoountPayment(data);
+    if (isVirtualBankAccountPayment) {
+      // fetch payers record
+      const payingSubscriberAccountDetail = await this.dbManager.findOne(
+        SubscriberVirtualAccountDetail,
+        {
+          where: {
+            account_number: data.authorization.receiver_bank_account_number,
+            bank: data.authorization.receiver_bank,
+          },
+          relations: {
+            propertySubscription: true,
+          },
+        },
+      );
+
+      await this.createNewPayment({
+        dbManager: this.dbManager,
+        comments: 'Bank Transfer Automation',
+        amount: String(data.amount),
+        paymentDate: new Date(),
+        propertySubscriptionId:
+          payingSubscriberAccountDetail.propertySubscriptionId,
+        payerName:
+          payingSubscriberAccountDetail.propertySubscription
+            ?.propertySubscriptionName ||
+          payingSubscriberAccountDetail.account_name,
+      });
+
+      // add payment to operators wallet
+      // check operator has wallet else create new wallet 
+      // add paid amount to operator's wallet.
+      // send message to subscriber
+      // send message to company's 
+    } else {
+      // TODO: handle case
+    }
   }
 }

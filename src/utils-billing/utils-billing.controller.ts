@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   Post,
   Put,
@@ -11,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { IsEntityUserAdmin } from '../shared/isEntityUserAdmin.guard';
 import { GetAuthPayload } from '../shared/getAuthenticatedUserPayload.decorator';
-import { AuthTokenPayload } from '../lib/types';
+import { AuthTokenPayload, PaystackWebhookEventObject } from '../lib/types';
 import {
   CreateLgaDto,
   CreateLgaWardDto,
@@ -30,7 +31,7 @@ import {
   GetBillingQuery,
   PostPaymentDto,
   SavePropertyUnitsDetailsDto,
-  UpdateArrearDto,
+  UpdateAccontRecordDto,
 } from './dtos/dto';
 import { UtilsBillingService } from './utils-billing.service';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
@@ -171,16 +172,16 @@ export class UtilsBillingController {
 
   @Put('billing/account')
   @UseGuards(IsAuthenticated)
-  async updateArrears(
-    @Body() UpdateArrearsDto: UpdateArrearDto,
+  async updateAccountRecord(
+    @Body() updateAccountRecordDto: UpdateAccontRecordDto,
     @GetAuthPayload() authTokenPayload: AuthTokenPayload,
   ) {
-    await this.utilService.updateArrears({
-      billingArrears: UpdateArrearsDto.arrears,
-      propertySubscriptionId: UpdateArrearsDto.propertySubscriptionId,
+    await this.utilService.updateAccountRecord({
+      billingArrears: updateAccountRecordDto.arrears,
+      propertySubscriptionId: updateAccountRecordDto.propertySubscriptionId,
       entityProfileId: authTokenPayload.profile.entityProfileId,
       entityUserProfileId: authTokenPayload.profile.id,
-      reason: UpdateArrearsDto.reason,
+      reason: updateAccountRecordDto.reason,
     });
   }
 
@@ -212,7 +213,11 @@ export class UtilsBillingController {
   @UseGuards(IsAuthenticated)
   async getBillingDetails(
     @Param('streetId') streetId: string,
-    @Query() { billingMonth, propertySubscriptionId }: { billingMonth: string, propertySubscriptionId: string },
+    @Query()
+    {
+      billingMonth,
+      propertySubscriptionId,
+    }: { billingMonth: string; propertySubscriptionId: string },
     @GetAuthPayload() authPayload: AuthTokenPayload,
   ) {
     return this.utilService.getBillingDetailsOrDefaulters(
@@ -332,5 +337,17 @@ export class UtilsBillingController {
     return await this.utilService.getDashboardMetrics(
       authPayload.profile.entityProfileId,
     );
+  }
+
+  // webhooks
+  @Post('paystack')
+  async handlePaystackWebhookEvents(
+    @Body() eventData: PaystackWebhookEventObject,
+    @Headers('x-paystack-signature') webhookSignature: string,
+  ) {
+    await this.utilService.handleWebhookEvent({
+      eventData: eventData,
+      webhookSignature,
+    });
   }
 }
