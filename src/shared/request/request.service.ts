@@ -47,6 +47,27 @@ export class RequestService {
     return pick(response, ['data', 'headers', 'request', 'status']);
   }
 
+  useDefaults() {
+    this.setOrUseDefaultBaseUrl();
+    this.setOrUseDefaultHeaders();
+  }
+
+  setOrUseDefaultBaseUrl(baseURL?: string) {
+    this.baseURL = baseURL || this.configService.getOrThrow('AUTH_SERVER_URL');
+  }
+
+  setOrUseDefaultHeaders(headers?: Record<string, unknown>) {
+    const authToken = this.getEnvVar('AUTH_SERVER_API_ACCESS_TOKEN');
+    this.headers = {
+      Authorization: `Bearer ${authToken}`,
+      ...(headers ? headers : {}),
+    }
+  }
+
+  getEnvVar(varName: string) {
+    return this.configService.getOrThrow(varName);
+  }
+
   setup(url_path: string,  headers: Record<string, string>) {
     this.url_path = url_path;
     this.headers = headers;
@@ -67,7 +88,7 @@ export class RequestService {
     } catch (error) {
       // Handle error appropriately
       throw new Error(
-        `Error creating dedicated virtual account: ${error.message}`,
+        `Error while processing request: ${error.message}`,
       );
     }
   } 

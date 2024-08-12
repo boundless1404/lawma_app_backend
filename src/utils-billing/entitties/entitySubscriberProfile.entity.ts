@@ -14,7 +14,7 @@ import { PhoneCode } from './phoneCode.entity';
 import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
 import { EntityProfile } from './entityProfile.entity';
 import { EntityUserProfile } from './entityUserProfile.entity';
-import SubscriberVirtualAccountDetail from './subscriberVirtualAccount';
+import SubscriberVirtualAccountDetail from './subscriberVirtualAccount.entity';
 
 @Entity()
 export class EntitySubscriberProfile {

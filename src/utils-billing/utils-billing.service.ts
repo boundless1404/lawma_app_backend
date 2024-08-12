@@ -13,7 +13,12 @@ import {
   SavePropertyUnitsDto,
   SavePropertyUnitsDetailsDto,
 } from './dtos/dto';
-import { ProfileTypes, SubscriberProfileRoleEnum } from '../lib/enums';
+import {
+  ProfileTypes,
+  SubscriberProfileRoleEnum,
+  Wallet_Service_Credit_Source_Type,
+  Wallet_Service_Transaction_Type,
+} from '../lib/enums';
 import {
   throwBadRequest,
   throwForbidden,
@@ -37,11 +42,7 @@ import { EntitySubscriberProperty } from './entitties/entitySubscriberProperty.e
 import { PropertySubscriptionUnit } from './entitties/PropertySubscriptionUnit.entity';
 import { BillingAccount } from './entitties/billingAccount.entity';
 import { Billing } from './entitties/billing.entity';
-import {
-  MonthNames,
-  PAYSTACK_SECRET_ENV,
-  sucessHttpCodes,
-} from '../lib/projectConstants';
+import { MonthNames, sucessHttpCodes } from '../lib/projectConstants';
 import { bignumber } from 'mathjs';
 import { LgaWard } from './entitties/lgaWard.entity';
 import { Lga } from './entitties/lga.entity';
@@ -53,7 +54,9 @@ import { pick } from 'lodash';
 import { isNumberString } from 'class-validator';
 import ArrearsUpdate from './entitties/arrearsUpdates.entity';
 import { PaystackServiceService } from '../shared/paystack_service/paystack_service.service';
-import SubscriberVirtualAccountDetail from './entitties/subscriberVirtualAccount';
+import SubscriberVirtualAccountDetail from './entitties/subscriberVirtualAccount.entity';
+import WalletReference from './entitties/walletReference.entity';
+import { WalletServiceService } from '../shared/wallet-service/wallet-service.service';
 
 @Injectable()
 export class UtilsBillingService {
@@ -61,6 +64,7 @@ export class UtilsBillingService {
     private requestService: RequestService,
     public dbManager: EntityManager,
     public paystackService: PaystackServiceService,
+    public walletService: WalletServiceService,
     private dataSource?: DataSource,
   ) {
     //
@@ -2008,6 +2012,7 @@ export class UtilsBillingService {
     const eventHandlers: {
       [key in PaystackWebhookEvents]?: (
         eventData: Record<string, unknown>,
+        ...rest: any
       ) => Promise<void>;
     } = {
       'charge.success': this.chargeSuccess,
@@ -2053,10 +2058,42 @@ export class UtilsBillingService {
       });
 
       // add payment to operators wallet
-      // check operator has wallet else create new wallet 
-      // add paid amount to operator's wallet.
-      // send message to subscriber
-      // send message to company's 
+      const adminUser = await this.dbManager.findOne(ProfileCollection, {
+        where: {
+          profileType: ProfileTypes.ENTITY_USER_PROFILE,
+          isAdmin: true,
+        },
+      });
+
+      const adminUserId = adminUser.userId;
+      // check operator has wallet else create new wallet
+      let operatorsWalletRef = await this.dbManager.findOne(WalletReference, {
+        where: {
+          authenticatedUserId: adminUserId,
+          isCompanyWallet: true,
+        },
+      });
+
+      // credit operator's wallet
+      let walletRef = operatorsWalletRef?.publicReference;
+      if (!walletRef) {
+        // create new wallet
+        operatorsWalletRef = await this.walletService.createWallet({
+          user_id: adminUserId,
+          dbManager: this.dbManager,
+        });
+      }
+
+      // credit wallet
+      await this.walletService.creditWallet({
+        public_id: operatorsWalletRef.publicReference,
+        user_id: operatorsWalletRef.authenticatedUserId,
+        amount: String(data.amount),
+        credit_source_data: JSON.stringify({ PAYSTACK: data }),
+      });
+
+      // register sms for operator
+      // register sms for subscriber user
     } else {
       // TODO: handle case
     }

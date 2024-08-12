@@ -36,17 +36,24 @@ export class PaystackServiceService {
     };
   }
 
-  async validatePaystackWebhookEvent(webhookSignature: string, eventData: Record<string, unknown>) {
-    const paystack_secret = this.configService.get(PAYSTACK_SECRET_ENV)
-    const hash = createHmac('sha512', paystack_secret).update(JSON.stringify(eventData)).digest('hex');
+  async validatePaystackWebhookEvent(
+    webhookSignature: string,
+    eventData: Record<string, unknown>,
+  ) {
+    const paystack_secret = this.configService.get(PAYSTACK_SECRET_ENV);
+    const hash = createHmac('sha512', paystack_secret)
+      .update(JSON.stringify(eventData))
+      .digest('hex');
     const isValid = hash === webhookSignature;
     return isValid;
   }
 
   async checkIsVirtualBankAccoountPayment(data: PaystackWebhookData) {
     const receivingBank = data.authorization.receiver_bank;
-    const  receivingBankAccount = data.authorization.receiver_bank_account_number;
-    const isVirtualBankAccountPayment = !!receivingBank && !!receivingBankAccount;
+    const receivingBankAccount =
+      data.authorization.receiver_bank_account_number;
+    const isVirtualBankAccountPayment =
+      !!receivingBank && !!receivingBankAccount;
     return isVirtualBankAccountPayment;
   }
 
@@ -57,7 +64,10 @@ export class PaystackServiceService {
     return (await this.requestService
       .setup(api_path, this.getHeaders())
       .send('POST', dvaUserData)) as {
-      data: { account_name: string; account_number: string }& Record<string, unknown>;
+      data: { account_name: string; account_number: string } & Record<
+        string,
+        unknown
+      >;
     } & Record<string, unknown>;
   }
 

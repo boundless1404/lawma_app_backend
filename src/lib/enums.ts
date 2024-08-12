@@ -41,3 +41,15 @@ export enum ProfileTypes {
   ENTITY_USER_PROFILE = 'entity_user_profile',
   ENTITY_SUBSCRIBER_PROFILE = 'entity_subscriber_profile',
 }
+
+export enum Wallet_Service_Transaction_Type {
+  CREDIT = 'credit',
+  DEBIT = 'debit',
+}
+
+export enum Wallet_Service_Credit_Source_Type {
+WALLET = 'wallet',
+BANK = 'bank',
+MOBILE_MONEY = 'mobile_money',
+CARD = 'card'
+}
