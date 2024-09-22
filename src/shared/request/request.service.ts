@@ -33,7 +33,7 @@ export class RequestService {
     const authToken = this.configService.getOrThrow(
       'AUTH_SERVER_API_ACCESS_TOKEN',
     );
-    baseURL = baseURL || this.baseURL || this.configService.getOrThrow('AUTH_SERVER_URL');
+    baseURL = baseURL || this.configService.getOrThrow('AUTH_SERVER_URL');
     const Authorization = headers.Authorization || `Bearer ${authToken}`;
 
     const response = await this.requestApi.axiosRef(path, {
@@ -61,35 +61,36 @@ export class RequestService {
     this.headers = {
       Authorization: `Bearer ${authToken}`,
       ...(headers ? headers : {}),
-    }
+    };
   }
 
   getEnvVar(varName: string) {
     return this.configService.getOrThrow(varName);
   }
 
-  setup(url_path: string,  headers: Record<string, string>) {
+  setup(url_path: string, headers: Record<string, string>) {
     this.url_path = url_path;
     this.headers = headers;
     return this;
   }
 
-  async send(method: 'GET' | 'POST'| 'PUT' | 'DELETE', data: Record<string, unknown>) {
+  async send(
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    data: Record<string, unknown>,
+  ) {
     try {
-      if(!this.url_path) {
-        throw new Error('urlPath not saved')
+      if (!this.url_path) {
+        throw new Error('urlPath not saved');
       }
       const response = await this.requestApiService(this.url_path, {
         method,
-        ...(data ? {body: data} : {}),
+        ...(data ? { body: data } : {}),
         headers: this.headers,
       });
       return response.data;
     } catch (error) {
       // Handle error appropriately
-      throw new Error(
-        `Error while processing request: ${error.message}`,
-      );
+      throw new Error(`Error while processing request: ${error.message}`);
     }
-  } 
+  }
 }

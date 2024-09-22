@@ -41,6 +41,8 @@ import { WalletServiceService } from './wallet-service/wallet-service.service';
     HelpersService,
     ProfileService,
     RequestService,
+    PaystackServiceService,
+    WalletServiceService,
   ],
 })
 export class SharedModule {}

@@ -100,6 +100,10 @@ export class PropertySubscription {
   )
   arrearsUpdates: ArrearsUpdate[];
 
-  @OneToMany(() => SubscriberVirtualAccountDetail, (subscriberVirtualAccountDetial) => subscriberVirtualAccountDetial.propertySubscription)
-    subscriberVirtualAccountDetails: SubscriberVirtualAccountDetail[];
+  @OneToMany(
+    () => SubscriberVirtualAccountDetail,
+    (subscriberVirtualAccountDetial) =>
+      subscriberVirtualAccountDetial.propertySubscription,
+  )
+  subscriberVirtualAccountDetails: SubscriberVirtualAccountDetail[];
 }
