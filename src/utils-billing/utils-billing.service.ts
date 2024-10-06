@@ -2075,7 +2075,7 @@ export class UtilsBillingService {
       });
 
       // credit operator's wallet
-      let walletRef = operatorsWalletRef?.publicReference;
+      const walletRef = operatorsWalletRef?.publicReference;
       if (!walletRef) {
         // create new wallet
         operatorsWalletRef = await this.walletService.createWallet({

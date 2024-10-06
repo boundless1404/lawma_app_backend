@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AxiosHeaders } from 'axios';
 import { pick } from 'lodash';
 
 @Injectable()
@@ -11,7 +12,7 @@ export class RequestService {
   ) {}
 
   baseURL: string;
-  headers: Record<string, unknown>;
+  headers: Record<string, unknown> & { Authorization?: string };
   url_path: string;
   async requestApiService(
     path: string,
@@ -30,14 +31,14 @@ export class RequestService {
     } = {},
   ) {
     //
-    const authToken = this.configService.getOrThrow(
-      'AUTH_SERVER_API_ACCESS_TOKEN',
-    );
-    baseURL = baseURL || this.configService.getOrThrow('AUTH_SERVER_URL');
-    const Authorization = headers.Authorization || `Bearer ${authToken}`;
+    // const authToken = this.configService.getOrThrow(
+    //   'AUTH_SERVER_API_ACCESS_TOKEN',
+    // );
+    // baseURL = baseURL || this.configService.getOrThrow('AUTH_SERVER_URL');
+    // const Authorization = headers.Authorization || `Bearer ${authToken}`;
 
     const response = await this.requestApi.axiosRef(path, {
-      headers: { ...headers, Authorization },
+      headers: { ...(headers ? headers : this.headers) } as AxiosHeaders,
       params: query,
       data: body,
       method,
