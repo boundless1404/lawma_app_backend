@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosHeaders } from 'axios';
+import { isNotEmptyObject } from 'class-validator';
 import { pick } from 'lodash';
 
 @Injectable()
@@ -37,12 +38,20 @@ export class RequestService {
     // baseURL = baseURL || this.configService.getOrThrow('AUTH_SERVER_URL');
     // const Authorization = headers.Authorization || `Bearer ${authToken}`;
 
+    if (!baseURL) {
+      this.setOrUseDefaultBaseUrl(baseURL);
+    }
+
+    this.setOrUseDefaultHeaders(headers || this.headers);
+
     const response = await this.requestApi.axiosRef(path, {
-      headers: { ...(headers ? headers : this.headers) } as AxiosHeaders,
+      headers: {
+        ...(isNotEmptyObject(headers) ? headers : this.headers),
+      } as AxiosHeaders,
       params: query,
       data: body,
       method,
-      baseURL,
+      baseURL: baseURL || this.baseURL,
     });
 
     return pick(response, ['data', 'headers', 'request', 'status']);
