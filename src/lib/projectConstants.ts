@@ -12,3 +12,7 @@ export const MonthNames = {
   11: 'November',
   12: 'December',
 };
+
+export const sucessHttpCodes = [200, 201, 204];
+
+export const PAYSTACK_SECRET_ENV = 'PAYSTACK_SECRET';

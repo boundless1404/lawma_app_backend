@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -13,6 +14,7 @@ import { PhoneCode } from './phoneCode.entity';
 import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
 import { EntityProfile } from './entityProfile.entity';
 import { EntityUserProfile } from './entityUserProfile.entity';
+import SubscriberVirtualAccountDetail from './subscriberVirtualAccount.entity';
 
 @Entity()
 export class EntitySubscriberProfile {
@@ -39,6 +41,9 @@ export class EntitySubscriberProfile {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
+
+  @DeleteDateColumn({ type: 'timestamptz' })
+  deletedAt: Date;
 
   // foreign key
   @Column({ type: 'bigint', nullable: true })

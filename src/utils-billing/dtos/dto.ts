@@ -10,7 +10,6 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
-  ValidateNested,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -331,9 +330,9 @@ export class SavePropertyUnitsDto {
   unitPrice: string;
 }
 
-export class UpdateArrearDto {
+export class UpdateAccontRecordDto {
   @IsNotEmpty()
-  @IsNumberString()                                                                                                                        
+  @IsNumberString()
   arrears: string;
 
   @IsNotEmpty()
@@ -343,4 +342,14 @@ export class UpdateArrearDto {
   @IsNotEmpty()
   @IsString()
   reason: string;
+}
+
+export class UpdatePropertyNameDto {
+  @IsNotEmpty()
+  @IsString()
+  propertySubscriptionId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertySubscriptionName: string;
 }
