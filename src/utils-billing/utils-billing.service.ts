@@ -80,20 +80,24 @@ export class UtilsBillingService {
   }
 
   // update the property subscription name
-  async updatePropertySubscriptionName(
-    propertySubscriptionId: string,
-    name: string,
-  ) {
+  async updatePropertySubscriptionName({
+    propertySubscriptionId,
+    name,
+    entityProfileId,
+  }: {
+    propertySubscriptionId: string;
+    name: string;
+    entityProfileId: string;
+  }) {
     const propertySubscription = await this.dbManager.findOne(
       PropertySubscription,
-      { where: { id: propertySubscriptionId } },
+      { where: { id: propertySubscriptionId, entityProfileId } },
     );
     if (!propertySubscription) {
       throwBadRequest('Property subscription not found');
     }
     propertySubscription.propertySubscriptionName = name;
     await this.dbManager.save(propertySubscription);
-    return propertySubscription;
   }
 
   async createUser(

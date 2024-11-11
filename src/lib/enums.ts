@@ -48,8 +48,13 @@ export enum Wallet_Service_Transaction_Type {
 }
 
 export enum Wallet_Service_Credit_Source_Type {
-WALLET = 'wallet',
-BANK = 'bank',
-MOBILE_MONEY = 'mobile_money',
-CARD = 'card'
+  WALLET = 'wallet',
+  BANK = 'bank',
+  MOBILE_MONEY = 'mobile_money',
+  CARD = 'card',
+}
+
+export enum UpdatePropertySubscriptionAction {
+  UPDATE_PROPERTY_NAME = 'update-property-name',
+  UPDATE_PHONE = 'update-phone',
 }

@@ -32,10 +32,12 @@ import {
   PostPaymentDto,
   SavePropertyUnitsDetailsDto,
   UpdateAccontRecordDto,
+  UpdatePropertyNameDto,
 } from './dtos/dto';
 import { UtilsBillingService } from './utils-billing.service';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
 import { ProfileTypes } from '../lib/enums';
+import { UpdatePropertySubscriptionValidationPipe } from './dtos/custom-pipes';
 
 @Controller('utils-billing')
 export class UtilsBillingController {
@@ -132,6 +134,22 @@ export class UtilsBillingController {
     );
 
     return;
+  }
+
+  @Put('subscription/:action')
+  @UseGuards(IsAuthenticated)
+  async updateSubscriptionDetails(
+    @Param('action') param: string,
+    @Body(UpdatePropertySubscriptionValidationPipe)
+    body: UpdatePropertyNameDto,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    //
+    await this.utilService.updatePropertySubscriptionName({
+      name: body.propertySubscriptionName,
+      propertySubscriptionId: body.propertySubscriptionId,
+      entityProfileId: authPayload.profile.entityProfileId,
+    });
   }
 
   @Post('billing')
