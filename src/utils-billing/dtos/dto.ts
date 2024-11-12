@@ -1,12 +1,14 @@
 import { ProfileTypes } from '@/src/lib/enums';
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
+  IsBooleanString,
+  IsDateString,
   IsEnum,
   IsNotEmpty,
   IsNumber,
   IsNumberString,
   IsOptional,
-  IsPositive,
   IsString,
 } from 'class-validator';
 
@@ -112,6 +114,10 @@ export class CreateLgaWardDto {
 }
 
 export class CreatePropertyTypesDto {
+  @IsOptional()
+  @IsNumberString()
+  id: string;
+
   @IsNotEmpty()
   @IsString()
   // @Max(50)
@@ -138,6 +144,10 @@ export class PostPaymentDto {
   @IsNotEmpty()
   @IsNumberString()
   propertySubscriptionId: string;
+
+  @IsNotEmpty()
+  @IsDateString()
+  paymentDate: string;
 }
 
 export class GetLgaQuery {
@@ -188,12 +198,158 @@ export class GetPhoneCodesQuery {
 
 export class GetSubscriptionQuery {
   @IsOptional()
-  @IsNumber()
-  // @IsPositive()
-  limit: number;
+  @IsNumberString()
+  rowsPerPage: string;
 
   @IsOptional()
   @IsNumber()
-  // @IsPositive()
+  limit: number;
+
+  @IsOptional()
+  @IsString()
+  sortBy: string;
+
+  @IsOptional()
+  @IsBooleanString()
+  descending: string;
+
+  @IsOptional()
+  @IsNumberString()
   page: number;
+
+  @IsOptional()
+  @IsString()
+  filter?: string;
+
+  @IsOptional()
+  @IsNumberString()
+  streetId: string;
+}
+
+export class GenerateBillingDto {
+  @IsOptional()
+  @IsString()
+  streetId: string;
+
+  @IsOptional()
+  @IsString()
+  propertySuscriptionId: string;
+
+  @IsOptional()
+  @IsString()
+  year: string;
+
+  @IsOptional()
+  @IsString()
+  month: string;
+
+  @IsOptional()
+  @IsBoolean()
+  forAllProperties: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  forPropertiesOnStreet: boolean;
+}
+
+export class GetBillingQuery {
+  @IsOptional()
+  @IsString()
+  streetId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertySuscriptionId: string;
+
+  @IsOptional()
+  @IsString()
+  year: string;
+
+  @IsOptional()
+  @IsString()
+  month: string;
+
+  @IsOptional()
+  @IsBoolean()
+  forAllProperties: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  forPropertiesOnStreet: boolean;
+}
+
+export class GetPaymentsQuery {
+  @IsOptional()
+  @IsString()
+  month: string;
+
+  @IsOptional()
+  @IsString()
+  year: string;
+
+  @IsOptional()
+  @IsString()
+  propertySubscriptionId: string;
+}
+
+export class GetBillingAccountArrear {
+  @IsOptional()
+  @IsNumber()
+  page: number;
+
+  @IsOptional()
+  @IsNumber()
+  limit: number;
+}
+
+export class SavePropertyUnitsDetailsDto {
+  @IsNotEmpty()
+  @IsNumberString()
+  propertySubscriptionId: string;
+
+  @Type(() => SavePropertyUnitsDto)
+  // @ValidateNested()
+  propertySubscriptionUnits: SavePropertyUnitsDto[];
+}
+
+export class SavePropertyUnitsDto {
+  @IsOptional()
+  @IsNumberString()
+  propertyTypeId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertyType: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  propertyUnit: string;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  unitPrice: string;
+}
+
+export class UpdateAccontRecordDto {
+  @IsNotEmpty()
+  @IsNumberString()
+  arrears: string;
+
+  @IsNotEmpty()
+  @IsNumberString()
+  propertySubscriptionId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  reason: string;
+}
+
+export class UpdatePropertyNameDto {
+  @IsNotEmpty()
+  @IsString()
+  propertySubscriptionId: string;
+
+  @IsNotEmpty()
+  @IsString()
+  propertySubscriptionName: string;
 }

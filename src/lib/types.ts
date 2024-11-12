@@ -74,6 +74,38 @@ export interface BrevoSmtpEmail {
   attachment?: { url?: string; name?: string; content?: string }[];
 }
 
+export type PaystackCustomer = {
+  first_name: string;
+  last_name: string;
+  phone?: string;
+  email: string;
+};
+
+export type DedicatedVirtualAccountUserData = {
+  preferred_bank: string;
+  country?: string;
+} & ({ customer: string } | PaystackCustomer);
+
+export type PaystackWebhookEventObject = {
+  event: PaystackWebhookEvents;
+  data: PaystackWebhookData;
+};
+
+export type PaystackWebhookEvents = 'charge.success' | 'transfer.success';
+
+export type PaystackWebhookData = {
+  id: number;
+  domain: 'live' | 'test';
+  status: 'success' | 'failed';
+  reference: string;
+  amount: number;
+  authorization: {
+    receiver_bank_account_number: string;
+    receiver_bank: 'Wema Bank' | 'Titan-Paystack';
+  } & Record<string, unknown>;
+  customer: {} & Record<string, unknown>;
+} & Record<string, unknown>;
+
 export interface MTNSmsOptions {
   /**
    * The sender address to use for the message. If this is provided, it will take precedence over the serviceCode.

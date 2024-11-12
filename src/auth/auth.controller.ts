@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { EntityProfileSignUpDto, SignInDto } from './dto/dto';
 import { AuthService } from './auth.service';
 import { ProfileService } from '../shared/profile/profile.service';
@@ -13,6 +13,11 @@ export class AuthController {
   ) {
     //
   }
+  @Get()
+  getHello(): string {
+    return 'Hello Lawma App is up and running!';
+  }
+
   @Post('signup')
   async signupCompanyUser(@Body() signupDto: EntityProfileSignUpDto) {
     //

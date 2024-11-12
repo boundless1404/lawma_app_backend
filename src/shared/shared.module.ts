@@ -6,6 +6,8 @@ import { RequestService } from './request/request.service';
 import { HelpersService } from './helpers/helpers.service';
 import { ProfileService } from './profile/profile.service';
 import { HttpModule } from '@nestjs/axios';
+import { PaystackServiceService } from './paystack_service/paystack_service.service';
+import { WalletServiceService } from './wallet-service/wallet-service.service';
 @Module({
   imports: [
     ConfigModule,
@@ -30,6 +32,8 @@ import { HttpModule } from '@nestjs/axios';
     RequestService,
     HelpersService,
     ProfileService,
+    PaystackServiceService,
+    WalletServiceService,
   ],
   exports: [
     SharedService,
@@ -37,6 +41,8 @@ import { HttpModule } from '@nestjs/axios';
     HelpersService,
     ProfileService,
     RequestService,
+    PaystackServiceService,
+    WalletServiceService,
   ],
 })
 export class SharedModule {}

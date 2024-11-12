@@ -1,7 +1,18 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Headers,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { IsEntityUserAdmin } from '../shared/isEntityUserAdmin.guard';
 import { GetAuthPayload } from '../shared/getAuthenticatedUserPayload.decorator';
-import { AuthTokenPayload } from '../lib/types';
+import { AuthTokenPayload, PaystackWebhookEventObject } from '../lib/types';
 import {
   CreateLgaDto,
   CreateLgaWardDto,
@@ -15,11 +26,18 @@ import {
   GetPropertyTypeQuery,
   GetPhoneCodesQuery,
   GetSubscriptionQuery,
+  GenerateBillingDto,
+  GetPaymentsQuery,
+  GetBillingQuery,
+  PostPaymentDto,
+  SavePropertyUnitsDetailsDto,
+  UpdateAccontRecordDto,
+  UpdatePropertyNameDto,
 } from './dtos/dto';
 import { UtilsBillingService } from './utils-billing.service';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
-import { query } from 'express';
 import { ProfileTypes } from '../lib/enums';
+import { UpdatePropertySubscriptionValidationPipe } from './dtos/custom-pipes';
 
 @Controller('utils-billing')
 export class UtilsBillingController {
@@ -81,8 +99,174 @@ export class UtilsBillingController {
     //
     return await this.utilService.getSubscriptions(
       authPayload.profile.entityProfileId,
-      getSubscriptionQuery,
+      {
+        rowsPerPage: Number(getSubscriptionQuery.rowsPerPage || 10),
+        page: Number(getSubscriptionQuery.page || 1),
+        descending: JSON.parse(getSubscriptionQuery.descending || 'false'),
+        filter: getSubscriptionQuery.filter,
+        sortBy: getSubscriptionQuery.sortBy,
+        streetId: getSubscriptionQuery.streetId,
+      },
     );
+  }
+
+  @Get('subscription/details')
+  @UseGuards(IsAuthenticated)
+  async getSubscriptionDetails(
+    @Query() query: Record<string, string>,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.getSubscriptionDetails(
+      authPayload.profile.entityProfileId,
+      query.propertySubscriptionId,
+    );
+  }
+
+  @Put('subscription/property-units')
+  @UseGuards(IsAuthenticated)
+  async savePropertyUnits(
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+    @Body() propertyUnits: SavePropertyUnitsDetailsDto,
+  ) {
+    await this.utilService.savePropertyUnits(
+      authPayload.profile.entityProfileId,
+      propertyUnits,
+    );
+
+    return;
+  }
+
+  @Put('subscription/:action')
+  @UseGuards(IsAuthenticated)
+  async updateSubscriptionDetails(
+    @Param('action') param: string,
+    @Body(UpdatePropertySubscriptionValidationPipe)
+    body: UpdatePropertyNameDto,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    //
+    await this.utilService.updatePropertySubscriptionName({
+      name: body.propertySubscriptionName,
+      propertySubscriptionId: body.propertySubscriptionId,
+      entityProfileId: authPayload.profile.entityProfileId,
+    });
+  }
+
+  @Post('billing')
+  @UseGuards(IsAuthenticated)
+  async generateBilling(
+    @Body() generateBillingDto: GenerateBillingDto,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.generateBilling(
+      generateBillingDto,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Get('billing')
+  @UseGuards(IsAuthenticated)
+  async getBilling(
+    @Query() getBillingQuery: GetBillingQuery,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.getBilling(
+      getBillingQuery,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Delete('billing')
+  @UseGuards(IsAuthenticated)
+  async deleteBilling(
+    @Query('billingId') billingId: string,
+    @GetAuthPayload() authTokenPayload: AuthTokenPayload,
+  ) {
+    await this.utilService.deleteBilling({
+      billingId,
+      entityProfileId: authTokenPayload.profile.entityProfileId,
+    });
+  }
+
+  @Put('billing/account')
+  @UseGuards(IsAuthenticated)
+  async updateAccountRecord(
+    @Body() updateAccountRecordDto: UpdateAccontRecordDto,
+    @GetAuthPayload() authTokenPayload: AuthTokenPayload,
+  ) {
+    await this.utilService.updateAccountRecord({
+      billingArrears: updateAccountRecordDto.arrears,
+      propertySubscriptionId: updateAccountRecordDto.propertySubscriptionId,
+      entityProfileId: authTokenPayload.profile.entityProfileId,
+      entityUserProfileId: authTokenPayload.profile.id,
+      reason: updateAccountRecordDto.reason,
+    });
+  }
+
+  @Get('billing/account/arrears')
+  @UseGuards(IsAuthenticated)
+  async getBillingAccountArrears(
+    @Query() query: { page: number; limit: number },
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getBillingAccountArrears(
+      authPayload.profile.entityProfileId,
+      query,
+    );
+  }
+
+  @Get('billing/account/street/:streetId/defaulter')
+  @UseGuards(IsAuthenticated)
+  async getBillingPaymentDefaulters(
+    @Param('streetId') streetId: string,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getBillingDetailsOrDefaulters(
+      authPayload.profile.entityProfileId,
+      { streetId },
+    );
+  }
+
+  @Get('billing/account/street/:streetId/detail')
+  @UseGuards(IsAuthenticated)
+  async getBillingDetails(
+    @Param('streetId') streetId: string,
+    @Query()
+    {
+      billingMonth,
+      propertySubscriptionId,
+    }: { billingMonth: string; propertySubscriptionId: string },
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getBillingDetailsOrDefaulters(
+      authPayload.profile.entityProfileId,
+      { streetId, billingMonth, propertySubscriptionId },
+    );
+  }
+
+  @Post('payment')
+  @UseGuards(IsAuthenticated)
+  async postPayment(
+    @Body() postPaymentDto: PostPaymentDto,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    await this.utilService.postPayment(
+      postPaymentDto,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Get('payment')
+  @UseGuards(IsAuthenticated)
+  async getPayments(
+    @Query()
+    query: GetPaymentsQuery,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return this.utilService.getPayments({
+      ...query,
+      entityProfileId: authPayload.profile.entityProfileId,
+    });
   }
 
   @Post('lga')
@@ -163,5 +347,25 @@ export class UtilsBillingController {
   @UseGuards(IsAuthenticated)
   async getPhoneCodes(@Query() query: GetPhoneCodesQuery) {
     return await this.utilService.getPhoneCode(query);
+  }
+
+  @Get('/dashboard/metrics')
+  @UseGuards(IsAuthenticated)
+  async getDashboardMetrics(@GetAuthPayload() authPayload: AuthTokenPayload) {
+    return await this.utilService.getDashboardMetrics(
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  // webhooks
+  @Post('paystack')
+  async handlePaystackWebhookEvents(
+    @Body() eventData: PaystackWebhookEventObject,
+    @Headers('x-paystack-signature') webhookSignature: string,
+  ) {
+    await this.utilService.handleWebhookEvent({
+      eventData: eventData,
+      webhookSignature,
+    });
   }
 }

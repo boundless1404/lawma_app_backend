@@ -4,6 +4,9 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
+  DeleteDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { PropertySubscription } from './propertySubscription.entity';
 
@@ -16,13 +19,22 @@ export class Payment {
   amount: string;
 
   @Column({ type: 'date', default: () => 'now()' })
-  date: Date;
+  paymentDate: Date;
 
   @Column({ type: 'varchar' })
   payerName: string;
 
   @Column({ type: 'varchar', nullable: true })
   comments: string;
+
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ type: 'timestamptz' })
+  deletedAt: Date;
 
   // foreign keys
   @Column({ type: 'bigint' })
