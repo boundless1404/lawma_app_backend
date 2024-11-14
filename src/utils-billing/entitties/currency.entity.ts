@@ -4,15 +4,17 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Country } from './country.entity';
+import WalletReference from './walletReference.entity';
 
 @Entity()
 export class Currency {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id: number;
+  id: string;
 
   @Column({ type: 'varchar' })
   name: string;
@@ -37,4 +39,7 @@ export class Currency {
   @ManyToOne(() => Country, (country) => country.currencies)
   @JoinColumn({ name: 'countryId' })
   country: Country;
+
+  @OneToMany(() => WalletReference, (walletRef) => walletRef.currency)
+    walletReferences: WalletReference[];
 }

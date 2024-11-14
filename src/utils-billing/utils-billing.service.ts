@@ -13,11 +13,28 @@ import {
   SavePropertyUnitsDto,
   SavePropertyUnitsDetailsDto,
 } from './dtos/dto';
-import { ProfileTypes, SubscriberProfileRoleEnum } from '../lib/enums';
-import { throwBadRequest, throwForbidden } from '../utils/helpers';
+import {
+  ProfileTypes,
+  SubscriberProfileRoleEnum,
+  Wallet_Service_Credit_Source_Type,
+  Wallet_Service_Transaction_Type,
+} from '../lib/enums';
+import {
+  throwBadRequest,
+  throwForbidden,
+  throwServerError,
+} from '../utils/helpers';
 import { EntitySubscriberProfile } from './entitties/entitySubscriberProfile.entity';
 import { EntityUserProfile } from './entitties/entityUserProfile.entity';
-import { AuthTokenPayload, AuthenticatedUserData } from '../lib/types';
+import {
+  AuthTokenPayload,
+  AuthenticatedUserData,
+  DedicatedVirtualAccountUserData,
+  PaystackCustomer,
+  PaystackWebhookData,
+  PaystackWebhookEventObject,
+  PaystackWebhookEvents,
+} from '../lib/types';
 import { Street } from './entitties/street.entity';
 import { PropertyType } from './entitties/propertyTypes.entity';
 import { PropertySubscription } from './entitties/propertySubscription.entity';
@@ -25,7 +42,7 @@ import { EntitySubscriberProperty } from './entitties/entitySubscriberProperty.e
 import { PropertySubscriptionUnit } from './entitties/PropertySubscriptionUnit.entity';
 import { BillingAccount } from './entitties/billingAccount.entity';
 import { Billing } from './entitties/billing.entity';
-import { MonthNames } from '../lib/projectConstants';
+import { MonthNames, sucessHttpCodes } from '../lib/projectConstants';
 import { bignumber } from 'mathjs';
 import { LgaWard } from './entitties/lgaWard.entity';
 import { Lga } from './entitties/lga.entity';
@@ -35,12 +52,19 @@ import { ProfileCollection } from './entitties/profileCollection.entity';
 import { PhoneCode } from './entitties/phoneCode.entity';
 import { pick } from 'lodash';
 import { isNumberString } from 'class-validator';
+import ArrearsUpdate from './entitties/arrearsUpdates.entity';
+import { PaystackServiceService } from '../shared/paystack_service/paystack_service.service';
+import SubscriberVirtualAccountDetail from './entitties/subscriberVirtualAccount.entity';
+import WalletReference from './entitties/walletReference.entity';
+import { WalletServiceService } from '../shared/wallet-service/wallet-service.service';
 
 @Injectable()
 export class UtilsBillingService {
   constructor(
     private requestService: RequestService,
     public dbManager: EntityManager,
+    public paystackService: PaystackServiceService,
+    public walletService: WalletServiceService,
     private dataSource?: DataSource,
   ) {
     //
@@ -53,6 +77,27 @@ export class UtilsBillingService {
     } else {
       this.dbManager = dbManager;
     }
+  }
+
+  // update the property subscription name
+  async updatePropertySubscriptionName({
+    propertySubscriptionId,
+    name,
+    entityProfileId,
+  }: {
+    propertySubscriptionId: string;
+    name: string;
+    entityProfileId: string;
+  }) {
+    const propertySubscription = await this.dbManager.findOne(
+      PropertySubscription,
+      { where: { id: propertySubscriptionId, entityProfileId } },
+    );
+    if (!propertySubscription) {
+      throwBadRequest('Property subscription not found');
+    }
+    propertySubscription.propertySubscriptionName = name;
+    await this.dbManager.save(propertySubscription);
   }
 
   async createUser(
@@ -81,7 +126,7 @@ export class UtilsBillingService {
 
     const defaultPassword = 'no-password';
     const phoneNumber = createUserDto.phone;
-    const response = await this.requestService.requestAuth(
+    const response = await this.requestService.requestApiService(
       authServerRequestPath,
       {
         body: {
@@ -482,6 +527,225 @@ export class UtilsBillingService {
     return mappedBilling;
   }
 
+  async deleteBilling({
+    entityProfileId,
+    billingId,
+  }: {
+    entityProfileId: string;
+    billingId: string;
+  }) {
+    const billingToDelete = await this.dbManager.findOne(Billing, {
+      where: {
+        id: billingId,
+        propertySubscription: {
+          entityProfileId,
+        },
+      },
+    });
+
+    if (billingToDelete) {
+      await this.dbManager.delete(Billing, { id: billingId });
+    }
+  }
+
+  async updateAccountRecord({
+    entityProfileId,
+    entityUserProfileId,
+    billingArrears,
+    propertySubscriptionId,
+    reason,
+    phone,
+    phoneCodeId,
+  }: {
+    entityProfileId: string;
+    entityUserProfileId: string;
+    billingArrears: string;
+    propertySubscriptionId: string;
+    reason: string;
+    phone?: string;
+    phoneCodeId?: string;
+  }) {
+    if (phone && phoneCodeId) {
+      const phoneCode = await this.dbManager.findOne(PhoneCode, {
+        where: {
+          id: phoneCodeId,
+        },
+      });
+
+      if (!phoneCode) {
+        throwBadRequest('Invalide phone code parameter sent');
+        return;
+      }
+
+      // TODO: write implementation to change phone code.
+      const subscriberProperty = await this.dbManager.findOne(
+        PropertySubscription,
+        {
+          where: {
+            id: propertySubscriptionId,
+          },
+          relations: {
+            entitySubscriberProfile: true,
+          },
+        },
+      );
+
+      const entitySubscriberProfile =
+        subscriberProperty.entitySubscriberProfile;
+
+      entitySubscriberProfile.phone = phone;
+      entitySubscriberProfile.phoneCodeId = phoneCode.id;
+
+      await this.dbManager.transaction(async (transactionManager) => {
+        await transactionManager.save(entitySubscriberProfile);
+
+        // update the user profile in the central user manager
+        // make request to user manager
+        const serverResponse = await this.requestService.requestApiService(
+          '/user',
+          {
+            method: 'PUT',
+            body: {
+              phone,
+              phoneCodeId,
+              email: entitySubscriberProfile.email,
+            },
+          },
+        );
+
+        if (sucessHttpCodes.includes(serverResponse.status)) {
+          // create virtual account on fintech service (paystack)
+          const userDataForDVA: PaystackCustomer = {
+            first_name: entitySubscriberProfile.firstName,
+            last_name: entitySubscriberProfile.lastName,
+            email: entitySubscriberProfile.email,
+            phone: `${phoneCode}${phone}`,
+          };
+          const customerActionResponse =
+            await this.paystackService.createCustomer(userDataForDVA);
+
+          const customerCode = customerActionResponse?.data.customer_code;
+
+          if (!customerCode) {
+            throwServerError(
+              'Could not complete process',
+              new Error('Paystack Customer creation failed.'),
+            );
+          }
+
+          const dvaUserData: DedicatedVirtualAccountUserData = {
+            customer: customerCode,
+            preferred_bank: 'test-bank',
+            country: 'NG',
+          };
+          try {
+            const paystackServerResponse =
+              await this.paystackService.createDedicatedVirtualAccount(
+                dvaUserData,
+              );
+
+            Logger.log(paystackServerResponse);
+
+            // create virtual account details for subscriber.
+            await this.createSubscriberVirtualAccountDetail({
+              dbManager: transactionManager,
+              account_name: paystackServerResponse.data.account_name,
+              account_number: paystackServerResponse.data.account_number,
+              propertySubscriptionId,
+            });
+          } catch (error) {
+            throwServerError();
+          }
+
+          // send sucess result
+        } else if (serverResponse.status === 400) {
+          // send client error
+          throwBadRequest('One or more fields are invalid.');
+        } else {
+          throwServerError();
+        }
+      });
+      return;
+    }
+    const associatedBillingAccount = await this.dbManager.findOne(
+      BillingAccount,
+      {
+        where: {
+          propertySubscription: {
+            id: propertySubscriptionId,
+            entityProfileId,
+          },
+        },
+      },
+    );
+
+    if (!associatedBillingAccount) {
+      throwBadRequest('Could not find the referenced billing Account');
+      return;
+    }
+
+    let currentArrears = bignumber(associatedBillingAccount.totalBillings)
+      .minus(associatedBillingAccount.totalPayments)
+      .toNumber();
+    currentArrears = currentArrears > 0 ? currentArrears : 0;
+
+    const newArrears = bignumber(billingArrears).toNumber();
+
+    /// update billing acount: if newArrears > currentArrears add difference to account's total billing
+    const arrearsDifference = newArrears - currentArrears;
+    if (arrearsDifference >= 0) {
+      associatedBillingAccount.totalBillings = String(
+        bignumber(associatedBillingAccount.totalBillings).add(
+          arrearsDifference,
+        ),
+      );
+    } else {
+      associatedBillingAccount.totalPayments = String(
+        bignumber(associatedBillingAccount.totalPayments).add(
+          Math.abs(arrearsDifference),
+        ),
+      );
+    }
+
+    await this.dbManager.transaction(async (transactionManager) => {
+      await transactionManager.save(associatedBillingAccount);
+
+      // track arrears update
+      const arrearsUpdate = transactionManager.create(ArrearsUpdate, {
+        amountAfterUpdate: newArrears.toString(),
+        amountBeforeUpdate: currentArrears.toString(),
+        reasonToUpdate: reason,
+        propertySubscriptionId: propertySubscriptionId,
+        updatedByUserId: entityUserProfileId,
+      });
+
+      await transactionManager.save(arrearsUpdate);
+    });
+  }
+
+  async createSubscriberVirtualAccountDetail({
+    dbManager,
+    account_name,
+    account_number,
+    propertySubscriptionId,
+  }: {
+    dbManager: EntityManager;
+    account_number: string;
+    account_name: string;
+    propertySubscriptionId: string;
+  }) {
+    const newSubscriberVirtualAccount = dbManager.create(
+      SubscriberVirtualAccountDetail,
+      {
+        account_name,
+        account_number,
+        propertySubscriptionId,
+      },
+    );
+
+    await dbManager.save(newSubscriberVirtualAccount);
+  }
+
   async generateBilling(
     generatePrintBIllingDto: GenerateBillingDto,
     entityProfileId: string,
@@ -618,6 +882,7 @@ export class UtilsBillingService {
       throwBadRequest(
         `Billing already generated for ${propertySubscription.propertySubscriptionName}.`,
       );
+      return;
     }
 
     const propertySubscriptionUnits = await dbManager.find(
@@ -943,7 +1208,13 @@ export class UtilsBillingService {
       streetId,
       billingMonth,
       billingYear = new Date().getFullYear(),
-    }: { streetId: string; billingMonth?: string; billingYear?: number },
+      propertySubscriptionId,
+    }: {
+      streetId: string;
+      billingMonth?: string;
+      billingYear?: number;
+      propertySubscriptionId?: string;
+    },
   ) {
     //
     const street = await this.getStreetOrThrowError({
@@ -961,6 +1232,7 @@ export class UtilsBillingService {
       currentBilling: string;
       arrears: number;
       totalBilling?: string;
+      currentBillingId?: string;
     }[] = [];
     if (!billingMonth) {
       const propertySubscriptions = await this.dbManager.find(
@@ -994,6 +1266,7 @@ export class UtilsBillingService {
           PropertySubscriptionId: propertySubscription.id,
           propertyName: propertySubscription.propertySubscriptionName,
           currentBilling: propertySubscription.billings?.[0]?.amount || '0',
+          currentBillingId: propertySubscription.billings?.[0]?.id || '0',
           arrears,
         };
       });
@@ -1028,6 +1301,8 @@ export class UtilsBillingService {
                       .andWhere(
                         'billing.propertySubscriptionId = "propertySubscription"."id"',
                       )
+                      .orderBy('billing.id', 'ASC')
+                      .limit(1)
                       .getQuery()}
                   ) :: numeric, 0) > 0
                   then "billingAccount"."totalBillings" :: numeric - "billingAccount"."totalPayments" :: numeric - coalesce((
@@ -1041,6 +1316,8 @@ export class UtilsBillingService {
                       .andWhere(
                         'billing.propertySubscriptionId = "propertySubscription"."id"',
                       )
+                      .orderBy('billing.id', 'ASC')
+                      .limit(1)
                       .getQuery()}
                   ) :: numeric, 0)
                   else 0
@@ -1062,8 +1339,24 @@ export class UtilsBillingService {
               .andWhere(`billing.year = '${billingYear}'`, { billingMonth })
               .andWhere(
                 'billing.propertySubscriptionId = "propertySubscription"."id"',
-              ),
+              )
+              .orderBy('billing.id', 'ASC')
+              .limit(1),
           'currentBilling',
+        )
+        .addSelect(
+          (qb) =>
+            qb
+              .from(Billing, 'billing')
+              .select('billing.id', 'id')
+              .where(`billing.month = :billingMonth`)
+              .andWhere(`billing.year = '${billingYear}'`, { billingMonth })
+              .andWhere(
+                'billing.propertySubscriptionId = "propertySubscription"."id"',
+              )
+              .orderBy('billing.id', 'ASC')
+              .limit(1),
+          'currentBillingId',
         )
         .addSelect(
           (qb) =>
@@ -1146,31 +1439,45 @@ export class UtilsBillingService {
               .limit(1),
           'lastPayment',
         )
-        .where('propertySubscription.streetId = :streetId', {
-          streetId,
-          billingMonth,
-        })
+        .where(
+          `${'propertySubscription.streetId = :streetId'} ${
+            !!propertySubscriptionId !== false
+              ? 'and propertySubscription.id = :propertySubscriptionId'
+              : ''
+          }`,
+          {
+            streetId,
+            billingMonth,
+            ...(!!propertySubscriptionId !== false
+              ? { propertySubscriptionId }
+              : {}),
+          },
+        )
         .getRawMany();
     }
 
-    return billingDetails.map((result) => {
-      result['currentBilling'] = result['currentBilling'] || '0';
-      return pick(result, [
-        'streetName',
-        'propertySubscriptionId',
-        'propertyName',
-        'arrears',
-        'currentBilling',
-        'totalBilling',
-        'lastPayment',
-        'propertyUnits',
-        'streetNumber',
-      ]);
-    }) as unknown as {
+    return billingDetails
+      .filter((billing) => !!billing.currentBillingId)
+      .map((result) => {
+        result['currentBilling'] = result['currentBilling'] || '0';
+        return pick(result, [
+          'streetName',
+          'propertySubscriptionId',
+          'propertyName',
+          'arrears',
+          'currentBilling',
+          'currentBillingId',
+          'totalBilling',
+          'lastPayment',
+          'propertyUnits',
+          'streetNumber',
+        ]);
+      }) as unknown as {
       streetName: string;
       PropertySubscriptionId: string;
       propertyName: string;
       currentBilling: string;
+      currentBillingId: string;
       arrears: number;
       totalBilling?: string;
     }[];
@@ -1671,5 +1978,145 @@ export class UtilsBillingService {
     }
 
     return street;
+  }
+
+  async createNewPayment({
+    dbManager,
+    comments,
+    propertySubscriptionId,
+    amount,
+    payerName,
+    paymentDate,
+  }: {
+    amount: string;
+    payerName: string;
+    paymentDate: Date;
+    propertySubscriptionId: string;
+    dbManager: EntityManager;
+    comments?: string;
+  }) {
+    let newPayment = dbManager.create(Payment, {
+      amount,
+      payerName,
+      comments,
+      propertySubscriptionId,
+      paymentDate,
+    });
+
+    newPayment = await this.dbManager.save(newPayment);
+    return newPayment;
+  }
+
+  // webhook handles
+  async handleWebhookEvent({
+    eventData,
+    webhookSignature,
+  }: {
+    eventData: PaystackWebhookEventObject;
+    webhookSignature: string;
+  }) {
+    // validate webhook event data
+    const isValid = await this.paystackService.validatePaystackWebhookEvent(
+      webhookSignature,
+      eventData,
+    );
+    if (!isValid) {
+      return;
+    }
+
+    // check transaction is status is success
+    const transactionIsSuccessful = eventData.data.status === 'success';
+    if (!transactionIsSuccessful) {
+      return;
+    }
+
+    const eventHandlers: {
+      [key in PaystackWebhookEvents]?: (
+        eventData: Record<string, unknown>,
+        ...rest: any
+      ) => Promise<void>;
+    } = {
+      'charge.success': this.chargeSuccess,
+    };
+
+    const event = eventData?.event;
+
+    const handler = eventHandlers[eventData.event];
+    await handler?.(eventData.data);
+  }
+
+  private async chargeSuccess(data: PaystackWebhookData) {
+    // find receiving_bank_account_number in the authorization object
+    // process virtual account payment
+    const isVirtualBankAccountPayment =
+      this.paystackService.checkIsVirtualBankAccoountPayment(data);
+    if (isVirtualBankAccountPayment) {
+      // fetch payers record
+      const payingSubscriberAccountDetail = await this.dbManager.findOne(
+        SubscriberVirtualAccountDetail,
+        {
+          where: {
+            account_number: data.authorization.receiver_bank_account_number,
+            bank: data.authorization.receiver_bank,
+          },
+          relations: {
+            propertySubscription: true,
+          },
+        },
+      );
+
+      await this.createNewPayment({
+        dbManager: this.dbManager,
+        comments: 'Bank Transfer Automation',
+        amount: String(data.amount),
+        paymentDate: new Date(),
+        propertySubscriptionId:
+          payingSubscriberAccountDetail.propertySubscriptionId,
+        payerName:
+          payingSubscriberAccountDetail.propertySubscription
+            ?.propertySubscriptionName ||
+          payingSubscriberAccountDetail.account_name,
+      });
+
+      // add payment to operators wallet
+      const adminUser = await this.dbManager.findOne(ProfileCollection, {
+        where: {
+          profileType: ProfileTypes.ENTITY_USER_PROFILE,
+          isAdmin: true,
+        },
+      });
+
+      const adminUserId = adminUser.userId;
+      // check operator has wallet else create new wallet
+      let operatorsWalletRef = await this.dbManager.findOne(WalletReference, {
+        where: {
+          authenticatedUserId: adminUserId,
+          isCompanyWallet: true,
+        },
+      });
+
+      // credit operator's wallet
+      const walletRef = operatorsWalletRef?.publicReference;
+      if (!walletRef) {
+        // create new wallet
+        operatorsWalletRef = await this.walletService.createWallet({
+          user_id: adminUserId,
+          dbManager: this.dbManager,
+        });
+      }
+
+      // credit wallet
+      await this.walletService.creditWallet({
+        public_id: operatorsWalletRef.publicReference,
+        user_id: operatorsWalletRef.authenticatedUserId,
+        amount: String(data.amount),
+        credit_source_data: JSON.stringify({ PAYSTACK: data }),
+      });
+
+      // register sms for operator
+      // register sms for subscriber user
+    } else {
+      // TODO: handle case
+    }
   }
 }

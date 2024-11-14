@@ -16,7 +16,6 @@ import {
 } from '../lib/types';
 import { EntityProfile } from '../utils-billing/entitties/entityProfile.entity';
 import { omit } from 'lodash';
-import { UserData } from './userData';
 import { SharedService } from '../shared/shared.service';
 import { ProfileService } from '../shared/profile/profile.service';
 import { ProfileTypes } from '../lib/enums';
@@ -57,7 +56,7 @@ export class AuthService {
 
     const authServerRequestPath = `/project/app/${action}`;
 
-    const response = await this.requestService.requestAuth(
+    const response = await this.requestService.requestApiService(
       authServerRequestPath,
       {
         body: action === 'signup' ? authServerRequestBody : { ...signinDto },
