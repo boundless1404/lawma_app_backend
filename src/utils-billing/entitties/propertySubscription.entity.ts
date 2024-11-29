@@ -18,6 +18,8 @@ import { BillingAccount } from './billingAccount.entity';
 import { Billing } from './billing.entity';
 import { Payment } from './payments.entity';
 import { EntityProfile } from './entityProfile.entity';
+import ArrearsUpdate from './arrearsUpdates.entity';
+import SubscriberVirtualAccountDetail from './subscriberVirtualAccount.entity';
 
 @Entity()
 export class PropertySubscription {
@@ -30,7 +32,7 @@ export class PropertySubscription {
   @Column({ type: 'enum', enum: SubscriberProfileRoleEnum })
   subscriberProfileRole: SubscriberProfileRoleEnum;
 
-  @Column({ type: 'bigint', nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   oldCode: string;
 
   @Column({ type: 'varchar' })
@@ -91,4 +93,17 @@ export class PropertySubscription {
   )
   @JoinColumn({ name: 'entityProfileId' })
   entityProfile: EntityProfile;
+
+  @OneToMany(
+    () => ArrearsUpdate,
+    (arrearsUpdate) => arrearsUpdate.propertySubscription,
+  )
+  arrearsUpdates: ArrearsUpdate[];
+
+  @OneToMany(
+    () => SubscriberVirtualAccountDetail,
+    (subscriberVirtualAccountDetial) =>
+      subscriberVirtualAccountDetial.propertySubscription,
+  )
+  subscriberVirtualAccountDetails: SubscriberVirtualAccountDetail[];
 }

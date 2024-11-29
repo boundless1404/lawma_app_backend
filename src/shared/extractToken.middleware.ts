@@ -18,13 +18,15 @@ export class ExtractTokenMiddleWare implements NestMiddleware {
 
       if (auth.length > 0) {
         const authToken = auth.split(' ')[1];
-        const authPayload = (await this.sharedService.veryfyJwtToken(
-          authToken,
-        )) as AuthTokenPayload;
+        if (authToken !== 'undefined') {
+          const authPayload = (await this.sharedService.veryfyJwtToken(
+            authToken,
+          )) as AuthTokenPayload;
 
-        if (authPayload) {
-          if ('userData' in authPayload && 'email' in authPayload.userData) {
-            req.authPayload = authPayload;
+          if (authPayload) {
+            if ('userData' in authPayload && 'email' in authPayload.userData) {
+              req.authPayload = authPayload;
+            }
           }
         }
       }

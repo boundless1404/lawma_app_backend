@@ -55,3 +55,7 @@ export const throwForbidden = (message: string) => {
 export const throwUnathorized = (message: string) => {
   throw new HttpException(message, HttpStatus.UNAUTHORIZED);
 };
+
+export const throwServerError = (message = 'Something went wrong.', cause?: Error) => {
+  throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR, { cause })
+}
