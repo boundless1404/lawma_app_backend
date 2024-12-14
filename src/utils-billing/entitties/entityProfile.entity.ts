@@ -12,6 +12,10 @@ import { PropertySubscription } from './propertySubscription.entity';
 import { Street } from './street.entity';
 import { PropertyType } from './propertyTypes.entity';
 import { EntitySubscriberProfile } from './entitySubscriberProfile.entity';
+import VirtualAccountDetail from './virtualAccountDetail.entity';
+import EntityProfileBankAccountDetails from './entityProfileBankAcountDetails.entity';
+import PaymentTransfer from './paymentTransfer.entity';
+import VirtualAccountReceivedPayment from './virtualAccountReceivedPayment.entity';
 
 @Entity()
 export class EntityProfile {
@@ -59,4 +63,29 @@ export class EntityProfile {
     (entitySubscriberProfile) => entitySubscriberProfile.entityProfile,
   )
   entitySubscriberProfiles: EntitySubscriberProfile[];
+
+  @OneToMany(
+    () => VirtualAccountDetail,
+    (virtualAccountDetail) => virtualAccountDetail.entityProfile,
+  )
+  virtualAccountsDetails: VirtualAccountDetail[];
+
+  @OneToOne(
+    () => EntityProfileBankAccountDetails,
+    (entityProfileBankAccount) => entityProfileBankAccount.entityProfile,
+  )
+  entityProfileBankAccountDetail: EntityProfileBankAccountDetails;
+
+  @OneToMany(
+    () => PaymentTransfer,
+    (paymentTransfer) => paymentTransfer.entityProfile,
+  )
+  paymentTransfers: PaymentTransfer[];
+
+  @OneToMany(
+    () => VirtualAccountReceivedPayment,
+    (virtualAccountReceivedPayment) =>
+      virtualAccountReceivedPayment.entityProfile,
+  )
+  virtualAccountReceivedPayments: VirtualAccountReceivedPayment[];
 }

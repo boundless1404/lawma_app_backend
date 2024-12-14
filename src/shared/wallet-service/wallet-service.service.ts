@@ -35,7 +35,7 @@ export class WalletServiceService {
         name: string;
         public_id: string;
         status: 'active' | 'inactive';
-        currency: string;
+        currency: { fullname: string };
         balance: string;
       };
 
@@ -57,11 +57,11 @@ export class WalletServiceService {
     dbManager: EntityManager;
     authenticatedUserId: string;
     publicReference: string;
-    currency: string;
+    currency: { fullname: string };
   }) {
     const walletCurrency = await dbManager.findOne(Currency, {
       where: {
-        name: currency,
+        fullname: currency.fullname,
       },
     });
 
@@ -76,32 +76,29 @@ export class WalletServiceService {
     return newWalletReference;
   }
 
-  async creditWallet({
+  async transactOperatorWallet({
     public_id,
     user_id,
     amount,
     credit_source_data,
+    type,
   }: {
     public_id: string;
     user_id: string;
     amount: string;
     credit_source_data: string;
+    type: Wallet_Service_Transaction_Type;
   }) {
-    const serverResponse = await this.requestService.requestApiService(
-      '/wallet',
-      {
-        body: {
-          public_id,
-          user_id,
-          amount,
-          credit_source_data,
-          credit_source_type: Wallet_Service_Credit_Source_Type.BANK,
-          type: Wallet_Service_Transaction_Type.CREDIT,
-        },
-        method: 'PUT',
+    await this.requestService.requestApiService('/wallet', {
+      body: {
+        public_id,
+        user_id,
+        amount,
+        credit_source_data,
+        credit_source_type: Wallet_Service_Credit_Source_Type.BANK,
+        type,
       },
-    );
-
-    // todo: handle possible errors
+      method: 'PUT',
+    });
   }
 }
