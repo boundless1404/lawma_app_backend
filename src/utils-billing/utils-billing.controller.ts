@@ -200,6 +200,8 @@ export class UtilsBillingController {
       entityProfileId: authTokenPayload.profile.entityProfileId,
       entityUserProfileId: authTokenPayload.profile.id,
       reason: updateAccountRecordDto.reason,
+      phone: updateAccountRecordDto.phone,
+      phoneCodeId: updateAccountRecordDto.phoneCodeId,
     });
   }
 
@@ -365,11 +367,12 @@ export class UtilsBillingController {
   }
 
   // webhooks
-  @Post('paystack')
+  @Post('hooks')
   async handlePaystackWebhookEvents(
     @Body() eventData: PaystackWebhookEventObject,
     @Headers('x-paystack-signature') webhookSignature: string,
   ) {
+    console.log(JSON.stringify(eventData));
     await this.utilService.handleWebhookEvent({
       eventData: eventData,
       webhookSignature,
