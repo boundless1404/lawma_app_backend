@@ -10,6 +10,7 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
+  ValidateIf,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -331,15 +332,24 @@ export class SavePropertyUnitsDto {
 }
 
 export class UpdateAccontRecordDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumberString()
   arrears: string;
+
+  @IsOptional()
+  @IsNumberString()
+  @ValidateIf((o) => o.phoneCodeId !== undefined)
+  phone: string;
+
+  @IsOptional()
+  @IsNumberString()
+  phoneCodeId: string;
 
   @IsNotEmpty()
   @IsNumberString()
   propertySubscriptionId: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   reason: string;
 }
