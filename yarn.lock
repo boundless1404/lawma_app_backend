@@ -778,10 +778,10 @@
     path-to-regexp "3.2.0"
     tslib "2.5.3"
 
-"@nestjs/event-emitter@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@nestjs/event-emitter/-/event-emitter-2.0.4.tgz#de7d3986cfeb82639bb95181fab4fe5525437c74"
-  integrity sha512-quMiw8yOwoSul0pp3mOonGz8EyXWHSBTqBy8B0TbYYgpnG1Ix2wGUnuTksLWaaBiiOTDhciaZ41Y5fJZsSJE1Q==
+"@nestjs/event-emitter@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@nestjs/event-emitter/-/event-emitter-2.1.1.tgz#4e34edc487c507edbe6d02033e3dd014a19210f9"
+  integrity sha512-6L6fBOZTyfFlL7Ih/JDdqlCzZeCW0RjCX28wnzGyg/ncv5F/EOeT1dfopQr1loBRQ3LTgu8OWM7n4zLN4xigsg==
   dependencies:
     eventemitter2 "6.4.9"
 
@@ -1185,6 +1185,11 @@
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@types/until-promise/-/until-promise-0.3.1.tgz#b73ad906c32b74cddc1b137da1deb7129c88df5c"
   integrity sha512-u7kRRjihvj5o+QS3hmQF/KZZvvKuggbKJe+HyPZn2gdAUvskm7KJAVJKDlWlh0BohnIsstqjgJHqY8cZ5tfHog==
+
+"@types/uuid@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-10.0.0.tgz#e9c07fe50da0f53dc24970cca94d619ff03f6f6d"
+  integrity sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==
 
 "@types/validator@^13.7.10":
   version "13.11.2"
