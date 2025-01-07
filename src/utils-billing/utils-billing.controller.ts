@@ -202,6 +202,7 @@ export class UtilsBillingController {
       reason: updateAccountRecordDto.reason,
       phone: updateAccountRecordDto.phone,
       phoneCodeId: updateAccountRecordDto.phoneCodeId,
+      phoneCode: updateAccountRecordDto.phoneCode,
     });
   }
 
@@ -372,7 +373,7 @@ export class UtilsBillingController {
     @Body() eventData: PaystackWebhookEventObject,
     @Headers('x-paystack-signature') webhookSignature: string,
   ) {
-    console.log(JSON.stringify(eventData));
+    // console.log(JSON.stringify(eventData));
     await this.utilService.handleWebhookEvent({
       eventData: eventData,
       webhookSignature,
