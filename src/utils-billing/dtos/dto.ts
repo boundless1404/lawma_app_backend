@@ -345,6 +345,10 @@ export class UpdateAccontRecordDto {
   @IsNumberString()
   phoneCodeId: string;
 
+  @IsOptional()
+  @IsNumberString()
+  phoneCode: string;
+
   @IsNotEmpty()
   @IsNumberString()
   propertySubscriptionId: string;

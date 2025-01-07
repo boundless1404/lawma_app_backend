@@ -559,6 +559,7 @@ export class UtilsBillingService {
     reason,
     phone,
     phoneCodeId,
+    phoneCode = '',
   }: {
     entityProfileId: string;
     entityUserProfileId: string;
@@ -567,15 +568,20 @@ export class UtilsBillingService {
     reason: string;
     phone?: string;
     phoneCodeId?: string;
+    phoneCode?: string;
   }) {
-    if (phone && phoneCodeId) {
-      const phoneCode = await this.dbManager.findOne(PhoneCode, {
+    if (phone) {
+      if (!phoneCode && !phoneCodeId) {
+        throwBadRequest('Phone code is required to update phone number.');
+      }
+
+      const phoneCodeRef = await this.dbManager.findOne(PhoneCode, {
         where: {
-          id: phoneCodeId,
+          ...(phoneCodeId ? { id: phoneCodeId } : { name: phoneCode }),
         },
       });
 
-      if (!phoneCode) {
+      if (!phoneCodeRef) {
         throwBadRequest('Invalide phone code parameter sent');
         return;
       }
@@ -597,7 +603,7 @@ export class UtilsBillingService {
         subscriberProperty.entitySubscriberProfile;
 
       entitySubscriberProfile.phone = phone;
-      entitySubscriberProfile.phoneCodeId = phoneCode.id;
+      entitySubscriberProfile.phoneCodeId = phoneCodeRef.id;
 
       await this.dbManager.transaction(async (transactionManager) => {
         await transactionManager.save(entitySubscriberProfile);
@@ -619,25 +625,35 @@ export class UtilsBillingService {
         if (sucessHttpCodes.includes(serverResponse.status)) {
           // create virtual account on fintech service (paystack)
           // check if virtual account exist form this account:
+          const dvaEmail = entitySubscriberProfile.email.toLocaleLowerCase();
           const existingDVA = await this.dbManager.findOne(
             VirtualAccountDetail,
             {
               where: {
-                email: entitySubscriberProfile.email,
+                email: dvaEmail,
                 bank: virtualAccountTargetBank,
+              },
+            },
+          );
+
+          const entityProfileBankAccountDetail = await this.dbManager.findOne(
+            EntityProfileBankAccountDetails,
+            {
+              where: {
+                entityProfileId,
               },
             },
           );
 
           if (!existingDVA) {
             const dvaUserData: SingleStepDVAUserData = {
-              email: entitySubscriberProfile.email.toLocaleLowerCase(),
-              first_name: entitySubscriberProfile.firstName,
+              email: dvaEmail,
+              first_name: entityProfileBankAccountDetail.accountName,
               middle_name:
                 entitySubscriberProfile.middleName ||
                 entitySubscriberProfile.lastName,
-              last_name: entitySubscriberProfile.lastName,
-              phone: `${phoneCode.name}${entitySubscriberProfile.phone}`,
+              last_name: subscriberProperty.propertySubscriptionName,
+              phone: `${phoneCodeRef.name}${entitySubscriberProfile.phone}`,
               preferred_bank: virtualAccountTargetBank,
             };
 
@@ -1017,6 +1033,7 @@ export class UtilsBillingService {
           entitySubscriberProfile: {
             phoneCode: true,
           },
+          subscriberVirtualAccountDetails: true,
           propertySubscriptionUnits: {
             entitySubscriberProperty: {
               propertyType: true,
@@ -1448,6 +1465,18 @@ export class UtilsBillingService {
               .limit(1),
           'lastPayment',
         )
+        .addSelect(
+          (qb) =>
+            qb
+              .from(VirtualAccountDetail, 'virtualAccountDetail')
+              .select(
+                `json_agg(json_build_object('account_name', "virtualAccountDetail"."account_name", 'account_number', "virtualAccountDetail"."account_number"))`,
+              )
+              .where(
+                'virtualAccountDetail.propertySubscriptionId = "propertySubscription"."id"',
+              ),
+          'subscriberVirtualAccountDetails',
+        )
         .where(
           `${'propertySubscription.streetId = :streetId'} ${
             !!propertySubscriptionId !== false
@@ -1480,6 +1509,7 @@ export class UtilsBillingService {
           'lastPayment',
           'propertyUnits',
           'streetNumber',
+          'subscriberVirtualAccountDetails',
         ]);
       }) as unknown as {
       streetName: string;
@@ -1603,37 +1633,12 @@ export class UtilsBillingService {
 
   async postPayment(postPaymentDto: PostPaymentDto, entityProfileId: string) {
     //
-    const propertySubscription = await this.dbManager.findOne(
-      PropertySubscription,
-      {
-        where: {
-          id: postPaymentDto.propertySubscriptionId,
-          entityProfileId,
-        },
-        relations: {
-          billingAccount: true,
-        },
-      },
-    );
-
-    if (!propertySubscription) {
-      throwBadRequest('Property subscription not found.');
-    }
-
-    const billingAccount = propertySubscription.billingAccount;
-    const totalPayments = bignumber(billingAccount.totalPayments)
-      .add(postPaymentDto.amount)
-      .toNumber();
-
-    billingAccount.totalPayments = String(totalPayments);
-
     await this.dbManager.transaction(async (transactionManager) => {
-      const payment = transactionManager.create(Payment, {
+      await this.createNewPayment({
         ...postPaymentDto,
+        dbManager: transactionManager,
+        entityProfileId,
       });
-
-      await transactionManager.save(payment);
-      await transactionManager.save(billingAccount);
     });
   }
 
@@ -1673,6 +1678,10 @@ export class UtilsBillingService {
         relations: {
           propertySubscription: true,
         },
+
+        order: {
+          createdAt: 'DESC',
+        },
       });
     } else {
       payments = await this.dbManager.find(Payment, {
@@ -1685,6 +1694,9 @@ export class UtilsBillingService {
         },
         relations: {
           propertySubscription: true,
+        },
+        order: {
+          createdAt: 'DESC',
         },
       });
     }
@@ -1996,23 +2008,49 @@ export class UtilsBillingService {
     amount,
     payerName,
     paymentDate,
+    entityProfileId,
   }: {
     amount: string;
     payerName: string;
-    paymentDate: Date;
+    paymentDate: string | Date;
     propertySubscriptionId: string;
     dbManager: EntityManager;
     comments?: string;
+    entityProfileId?: string;
   }) {
+    const propertySubscription = await this.dbManager.findOne(
+      PropertySubscription,
+      {
+        where: {
+          id: propertySubscriptionId,
+          ...(entityProfileId ? { entityProfileId } : {}),
+        },
+        relations: {
+          billingAccount: true,
+        },
+      },
+    );
+
+    if (!propertySubscription) {
+      throwBadRequest('Property subscription not found.');
+    }
+
+    const billingAccount = propertySubscription.billingAccount;
+    const totalPayments = bignumber(billingAccount.totalPayments)
+      .add(amount)
+      .toNumber();
+
+    billingAccount.totalPayments = String(totalPayments);
     let newPayment = dbManager.create(Payment, {
       amount,
       payerName,
-      comments,
       propertySubscriptionId,
-      paymentDate,
+      paymentDate: paymentDate as string,
+      comments,
     });
 
     newPayment = await dbManager.save(newPayment);
+    await dbManager.save(billingAccount);
     return newPayment;
   }
 
@@ -2081,11 +2119,12 @@ export class UtilsBillingService {
         },
       );
 
+      const koboFactor = 100;
       await this.dbManager.transaction(async (transactionManager) => {
         await this.createNewPayment({
           dbManager: transactionManager,
           comments: 'Bank Transfer Automation',
-          amount: String(data.amount),
+          amount: String(data.amount / koboFactor),
           paymentDate: new Date(),
           propertySubscriptionId:
             payingSubscriberAccountDetail.propertySubscriptionId,
@@ -2260,6 +2299,7 @@ export class UtilsBillingService {
       });
 
       // TODO: send sms to company
+      console.log('transfer webhook received');
     }
   }
 
@@ -2299,7 +2339,7 @@ export class UtilsBillingService {
         data.dedicated_account.account_name;
       dvaVirtualAccountDetail.account_number =
         data.dedicated_account.account_number;
-      dvaVirtualAccountDetail.bank = data.dedicated_account.bank.name;
+      dvaVirtualAccountDetail.bank = data.dedicated_account.bank.slug;
 
       await this.dbManager.save(dvaVirtualAccountDetail);
     }
