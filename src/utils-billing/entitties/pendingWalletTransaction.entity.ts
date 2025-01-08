@@ -21,6 +21,6 @@ export default class PendingWalletTransaction {
   @Column({ type: 'varchar' })
   creditSourceData: string;
 
-  @Column({ type: 'enum', enum: Wallet_Service_Transaction_Type })
+  @Column({ type: 'varchar' })
   type: Wallet_Service_Transaction_Type;
 }
