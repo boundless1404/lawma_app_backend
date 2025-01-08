@@ -2212,14 +2212,14 @@ export class UtilsBillingService {
           const trnasferReference = v4();
 
           try {
-            await this.paystackService.makeTransfer({
-              amount: amountToCreditOperator,
-              account_number: entityProfileBankAccountDetail.accountNumber,
-              bank_code: entityProfileBankAccountDetail.bankCode,
-              name: entityProfileBankAccountDetail.accountName,
-              currency: entityProfileBankAccountDetail.currency,
-              reference: trnasferReference,
-            });
+            // await this.paystackService.makeTransfer({
+            //   amount: amountToCreditOperator,
+            //   account_number: entityProfileBankAccountDetail.accountNumber,
+            //   bank_code: entityProfileBankAccountDetail.bankCode,
+            //   name: entityProfileBankAccountDetail.accountName,
+            //   currency: entityProfileBankAccountDetail.currency,
+            //   reference: trnasferReference,
+            // });
 
             // add pending wallet transaction
             const pendingWalletTransaction = new PendingWalletTransaction();
