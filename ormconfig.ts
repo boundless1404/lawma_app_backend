@@ -42,7 +42,9 @@ const defaultDataSourceOptions: TypeOrmDataSourceOptions = {
   maxQueryExecutionTime: 15000, //Ideal should be 10000 (10s)
   installExtensions: true,
   logNotifications: true,
-  //ssl: true,
+  ssl: {
+    rejectUnauthorized: false,
+  },
   extra: {
     max: databaseConfig.maxPoolConnCount,
     connectionTimeoutMillis: 30000,

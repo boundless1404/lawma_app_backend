@@ -39,7 +39,7 @@ export class RequestService {
     // const Authorization = headers.Authorization || `Bearer ${authToken}`;
 
     if (!baseURL) {
-      this.setOrUseDefaultBaseUrl(baseURL);
+      this.setOrUseDefaultBaseUrl(this.baseURL);
     }
 
     this.setOrUseDefaultHeaders(headers || this.headers);
@@ -64,6 +64,7 @@ export class RequestService {
 
   setOrUseDefaultBaseUrl(baseURL?: string) {
     this.baseURL = baseURL || this.configService.getOrThrow('AUTH_SERVER_URL');
+    return this;
   }
 
   setOrUseDefaultHeaders(headers?: Record<string, unknown>) {
@@ -87,6 +88,7 @@ export class RequestService {
   async send(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     data: Record<string, unknown>,
+    baseURL?: string,
   ) {
     try {
       if (!this.url_path) {
@@ -96,6 +98,7 @@ export class RequestService {
         method,
         ...(data ? { body: data } : {}),
         headers: this.headers,
+        baseURL,
       });
       return response.data;
     } catch (error) {

@@ -21,6 +21,7 @@ import { ExtractTokenMiddleWare } from './shared/extractToken.middleware';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { UtilsBillingModule } from './utils-billing/utils-billing.module';
+import { AppController } from './app.controller';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cors = require('cors');
@@ -109,6 +110,7 @@ const validator = new ValidationPipe({
     UtilsBillingModule,
     AppModule,
   ],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_PIPE,
