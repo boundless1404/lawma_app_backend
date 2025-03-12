@@ -19,7 +19,7 @@ export class Payment {
   amount: string;
 
   @Column({ type: 'date', default: () => 'now()' })
-  paymentDate: Date;
+  paymentDate: string;
 
   @Column({ type: 'varchar' })
   payerName: string;

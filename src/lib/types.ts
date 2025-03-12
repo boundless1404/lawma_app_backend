@@ -86,24 +86,69 @@ export type DedicatedVirtualAccountUserData = {
   country?: string;
 } & ({ customer: string } | PaystackCustomer);
 
+export type SingleStepDVAUserData = DedicatedVirtualAccountUserData & {
+  middle_name?: string;
+  bvn?: string;
+  bank_code?: string;
+  account_number?: string;
+};
+
+type Bank = {
+  name: string;
+  id: number;
+  slug: string;
+};
+
+type Assignment = {
+  integration: number;
+  assignee_id: number;
+  assignee_type: string;
+  expired: boolean;
+  account_type: string;
+  assigned_at: string;
+  expired_at: string | null;
+};
+
+type DedicatedAccount = {
+  bank: Bank;
+  account_name: string;
+  account_number: string;
+  assigned: boolean;
+  currency: string;
+  metadata: any | null; // Adjust `any` if metadata structure is known
+  active: boolean;
+  id: number;
+  created_at: string;
+  updated_at: string;
+  assignment: Assignment;
+};
+
 export type PaystackWebhookEventObject = {
   event: PaystackWebhookEvents;
   data: PaystackWebhookData;
 };
 
-export type PaystackWebhookEvents = 'charge.success' | 'transfer.success';
+export type PaystackWebhookEvents =
+  | 'charge.success'
+  | 'transfer.success'
+  | 'dedicatedaccount.assign.success'
+  | 'transfer.failed'
+  | 'transfer.reversed';
 
 export type PaystackWebhookData = {
   id: number;
   domain: 'live' | 'test';
   status: 'success' | 'failed';
   reference: string;
+  narration: string;
   amount: number;
+  fees?: number;
   authorization: {
     receiver_bank_account_number: string;
     receiver_bank: 'Wema Bank' | 'Titan-Paystack';
   } & Record<string, unknown>;
-  customer: {} & Record<string, unknown>;
+  customer?: Record<string, unknown> & PaystackCustomer;
+  dedicated_account?: DedicatedAccount;
 } & Record<string, unknown>;
 
 export interface MTNSmsOptions {

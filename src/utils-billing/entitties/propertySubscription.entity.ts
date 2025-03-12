@@ -19,7 +19,7 @@ import { Billing } from './billing.entity';
 import { Payment } from './payments.entity';
 import { EntityProfile } from './entityProfile.entity';
 import ArrearsUpdate from './arrearsUpdates.entity';
-import SubscriberVirtualAccountDetail from './subscriberVirtualAccount.entity';
+import VirtualAccountDetail from './virtualAccountDetail.entity';
 
 @Entity()
 export class PropertySubscription {
@@ -101,9 +101,9 @@ export class PropertySubscription {
   arrearsUpdates: ArrearsUpdate[];
 
   @OneToMany(
-    () => SubscriberVirtualAccountDetail,
+    () => VirtualAccountDetail,
     (subscriberVirtualAccountDetial) =>
       subscriberVirtualAccountDetial.propertySubscription,
   )
-  subscriberVirtualAccountDetails: SubscriberVirtualAccountDetail[];
+  subscriberVirtualAccountDetails: VirtualAccountDetail[];
 }
