@@ -182,4 +182,23 @@ export class PaystackServiceService {
     });
     return transfer;
   }
+  
+  async checkBalance(): Promise<{ currency: string; balance: number }[]> {
+    const api_path = '/balance';
+
+    try {
+      const response = await this.requestService
+        .setup(api_path, this.getHeaders())
+        .send('GET', null, this.baseURL);
+
+      if (response.status === true) {
+        return response.data;
+      } else {
+        throw new Error('Failed to retrieve Paystack balance');
+      }
+    } catch (error) {
+      console.error('Error checking Paystack balance:', error);
+      throw new Error('Could not check Paystack balance');
+    }
+  }
 }
