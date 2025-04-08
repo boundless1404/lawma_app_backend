@@ -2394,10 +2394,7 @@ export class UtilsBillingService {
         const propertySubscriptions = await this.dbManager.find(
           PropertySubscription,
           {
-            relations: [
-              'entitySubscriberProfile',
-              'billings',
-            ],
+            relations: ['entitySubscriberProfile', 'billings'],
           },
         );
 
@@ -2448,7 +2445,7 @@ export class UtilsBillingService {
       }
     }
   }
-  @Cron(CronExpression.EVERY_5_SECONDS) 
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
     if (today.getDate() === 25) {
