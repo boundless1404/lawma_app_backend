@@ -2575,9 +2575,6 @@ export class UtilsBillingService {
   async sendBillingSmsNotifications() {
     const today = new Date();
     if (today.getDate() === 25) {
-      // Check if today is the 25th
-      Logger.log('Running SMS notification cron job for the 25th...');
-
       try {
         // Fetch all property subscriptions with their related entities
         const propertySubscriptions = await this.dbManager.find(
@@ -2637,13 +2634,10 @@ export class UtilsBillingService {
       }
     }
   }
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT) 
+  @Cron(CronExpression.EVERY_5_SECONDS) 
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
     if (today.getDate() === 25) {
-      // Check if today is the 25th
-      Logger.log('Running Billing Generation for the 25th...');
-
       try {
         const propertySubscriptions = await this.dbManager.find(
           PropertySubscription,
