@@ -59,6 +59,10 @@ import EntityProfileBankAccountDetails from './entitties/entityProfileBankAcount
 import VirtualAccountReceivedPayment from './entitties/virtualAccountReceivedPayment.entity';
 import { v4 } from 'uuid';
 import PendingWalletTransaction from './entitties/pendingWalletTransaction.entity';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { getCurrentMonth, getCurrentYear } from '../utils/functions/billing.function';
+import { generateBillingSmsMessage } from '../utils/functions/smsLayout.function';
+import { SharedService } from '../shared/shared.service';
 
 @Injectable()
 export class UtilsBillingService {
@@ -68,6 +72,7 @@ export class UtilsBillingService {
     public paystackService: PaystackServiceService,
     public walletService: WalletServiceService,
     private configService: ConfigService,
+    private readonly sharedService: SharedService,
     private dataSource?: DataSource,
   ) {
     //
@@ -2087,12 +2092,197 @@ export class UtilsBillingService {
     }
   }
 
+  //   private async chargeSuccess(data: PaystackWebhookData) {
+  //     // process virtual account payment
+  //     const isVirtualBankAccountPayment =
+  //       this.paystackService.checkIsVirtualBankAccoountPayment(data);
+  //     if (isVirtualBankAccountPayment) {
+  //       // check is already processed payment
+  //       const virtualAccountReceivedPament = await this.dbManager.findOne(
+  //         VirtualAccountReceivedPayment,
+  //         {
+  //           where: {
+  //             paymentReference: data.reference,
+  //           },
+  //         },
+  //       );
+
+  //       if (virtualAccountReceivedPament) {
+  //         return;
+  //       }
+
+  //       // fetch payers record
+  //       const payingSubscriberAccountDetail = await this.dbManager.findOne(
+  //         VirtualAccountDetail,
+  //         {
+  //           where: {
+  //             account_number: data.authorization.receiver_bank_account_number,
+  //           },
+  //           relations: {
+  //             propertySubscription: true,
+  //           },
+  //         },
+  //       );
+
+  //       const koboFactor = 100;
+  //       await this.dbManager.transaction(async (transactionManager) => {
+  //         await this.createNewPayment({
+  //           dbManager: transactionManager,
+  //           comments: 'Bank Transfer Automation',
+  //           amount: String(data.amount / koboFactor),
+  //           paymentDate: new Date(),
+  //           propertySubscriptionId:
+  //             payingSubscriberAccountDetail.propertySubscriptionId,
+  //           payerName:
+  //             payingSubscriberAccountDetail.propertySubscription
+  //               ?.propertySubscriptionName ||
+  //             payingSubscriberAccountDetail.account_name,
+  //         });
+
+  //         // add payment to operators wallet
+  //         const adminUser = await transactionManager.findOne(ProfileCollection, {
+  //           where: {
+  //             profileType: ProfileTypes.ENTITY_USER_PROFILE,
+  //             isAdmin: true,
+  //             profileTypeId:
+  //               payingSubscriberAccountDetail.propertySubscription
+  //                 .entityProfileId,
+  //           },
+  //         });
+
+  //         const adminUserId = adminUser.userId;
+  //         // check operator has wallet else create new wallet
+  //         let operatorsWalletRef = await transactionManager.findOne(
+  //           WalletReference,
+  //           {
+  //             where: {
+  //               authenticatedUserId: adminUserId,
+  //               isCompanyWallet: true,
+  //             },
+  //           },
+  //         );
+
+  //         // credit operator's wallet
+  //         const walletRef = operatorsWalletRef?.publicReference;
+  //         if (!walletRef) {
+  //           // create new wallet
+  //           operatorsWalletRef = await this.walletService.createWallet({
+  //             user_id: adminUserId,
+  //             dbManager: transactionManager,
+  //           });
+  //         }
+
+  //         // deduct paystck fees
+  //         const paystackFees = data.fees as number;
+  //         const chargedAmount = data.amount;
+
+  //         // deduct boundless fees
+  //         const boundelsssDeductionPercentage = 0.04;
+  //         const boundelsssDeductionPercentageAmount =
+  //           boundelsssDeductionPercentage * chargedAmount;
+
+  //         const currencyDenominator = 100;
+  //         const boundelsssDeductionMax = 5000 * currencyDenominator;
+
+  //         const boundlessDeduction =
+  //           boundelsssDeductionPercentageAmount > boundelsssDeductionMax
+  //             ? boundelsssDeductionMax
+  //             : boundelsssDeductionPercentageAmount;
+
+  //         const amountToCreditOperator =
+  //           chargedAmount - (paystackFees + boundlessDeduction);
+  //         // credit wallet
+  //         await this.walletService.transactOperatorWallet({
+  //           public_id: operatorsWalletRef.publicReference,
+  //           user_id: operatorsWalletRef.authenticatedUserId,
+  //           amount: String(amountToCreditOperator),
+  //           credit_source_data: JSON.stringify({ PAYSTACK: data }),
+  //           type: Wallet_Service_Transaction_Type.CREDIT,
+  //         });
+
+  //         // transfer fund to operator bank account
+  //         const entityProfileBankAccountDetail = await this.dbManager.findOne(
+  //           EntityProfileBankAccountDetails,
+  //           {
+  //             where: {
+  //               entityProfileId:
+  //                 payingSubscriberAccountDetail.propertySubscription
+  //                   .entityProfileId,
+  //             },
+  //           },
+  //         );
+
+  //         if (entityProfileBankAccountDetail) {
+  //           // make transfer
+  //           const trnasferReference = v4();
+  // // TODO NOW...
+  //           try {
+  //             // await this.paystackService.makeTransfer({
+  //             //   amount: amountToCreditOperator,
+  //             //   account_number: entityProfileBankAccountDetail.accountNumber,
+  //             //   bank_code: entityProfileBankAccountDetail.bankCode,
+  //             //   name: entityProfileBankAccountDetail.accountName,
+  //             //   currency: entityProfileBankAccountDetail.currency,
+  //             //   reference: trnasferReference,
+  //             // });
+
+  //             // add pending wallet transaction
+  //             const pendingWalletTransaction = new PendingWalletTransaction();
+  //             pendingWalletTransaction.amount = String(amountToCreditOperator);
+  //             pendingWalletTransaction.walletReference =
+  //               operatorsWalletRef.publicReference;
+  //             pendingWalletTransaction.type =
+  //               Wallet_Service_Transaction_Type.DEBIT;
+  //             pendingWalletTransaction.sourcePaymentReference = trnasferReference;
+  //             pendingWalletTransaction.userId =
+  //               operatorsWalletRef.authenticatedUserId;
+
+  //             pendingWalletTransaction.creditSourceData = JSON.stringify({
+  //               PAYSTACK: data,
+  //             });
+
+  //             await transactionManager.save(pendingWalletTransaction);
+
+  //             // mark webhook data as received
+  //             await this.dbManager.save(
+  //               this.dbManager.create(VirtualAccountReceivedPayment, {
+  //                 paymentReference: data.reference,
+  //                 entityProfileId:
+  //                   payingSubscriberAccountDetail.propertySubscription
+  //                     .entityProfileId,
+  //                 virtualAccountDetailId: payingSubscriberAccountDetail.id,
+  //               }),
+  //             );
+
+  //             // TODO: send sms to subscriber
+  //           } catch (error) {
+  //             // debit wallet
+  //             await this.walletService.transactOperatorWallet({
+  //               public_id: operatorsWalletRef.publicReference,
+  //               user_id: operatorsWalletRef.authenticatedUserId,
+  //               amount: String(amountToCreditOperator),
+  //               credit_source_data: JSON.stringify({ PAYSTACK: data }),
+  //               type: Wallet_Service_Transaction_Type.DEBIT,
+  //             });
+  //             // log error
+  //             Logger.log(error);
+  //             // throw error
+  //             throw new Error('Could not complete process');
+  //           }
+  //         } else {
+  //           // TODO: handle
+  //         }
+  //       });
+  //     } else {
+  //       // TODO: handle case
+  //     }
+  //   }
   private async chargeSuccess(data: PaystackWebhookData) {
     // process virtual account payment
     const isVirtualBankAccountPayment =
       this.paystackService.checkIsVirtualBankAccoountPayment(data);
     if (isVirtualBankAccountPayment) {
-      // check is already processed payment
+      // check if payment is already processed
       const virtualAccountReceivedPament = await this.dbManager.findOne(
         VirtualAccountReceivedPayment,
         {
@@ -2103,10 +2293,10 @@ export class UtilsBillingService {
       );
 
       if (virtualAccountReceivedPament) {
-        return;
+        return; // Exit if payment is already processed
       }
 
-      // fetch payers record
+      // fetch payer's record
       const payingSubscriberAccountDetail = await this.dbManager.findOne(
         VirtualAccountDetail,
         {
@@ -2134,7 +2324,7 @@ export class UtilsBillingService {
             payingSubscriberAccountDetail.account_name,
         });
 
-        // add payment to operators wallet
+        // add payment to operator's wallet
         const adminUser = await transactionManager.findOne(ProfileCollection, {
           where: {
             profileType: ProfileTypes.ENTITY_USER_PROFILE,
@@ -2146,7 +2336,7 @@ export class UtilsBillingService {
         });
 
         const adminUserId = adminUser.userId;
-        // check operator has wallet else create new wallet
+        // check if operator has a wallet, else create a new wallet
         let operatorsWalletRef = await transactionManager.findOne(
           WalletReference,
           {
@@ -2167,7 +2357,7 @@ export class UtilsBillingService {
           });
         }
 
-        // deduct paystck fees
+        // deduct Paystack fees
         const paystackFees = data.fees as number;
         const chargedAmount = data.amount;
 
@@ -2186,6 +2376,7 @@ export class UtilsBillingService {
 
         const amountToCreditOperator =
           chargedAmount - (paystackFees + boundlessDeduction);
+
         // credit wallet
         await this.walletService.transactOperatorWallet({
           public_id: operatorsWalletRef.publicReference,
@@ -2212,46 +2403,59 @@ export class UtilsBillingService {
           const trnasferReference = v4();
 
           try {
-            // await this.paystackService.makeTransfer({
-            //   amount: amountToCreditOperator,
-            //   account_number: entityProfileBankAccountDetail.accountNumber,
-            //   bank_code: entityProfileBankAccountDetail.bankCode,
-            //   name: entityProfileBankAccountDetail.accountName,
-            //   currency: entityProfileBankAccountDetail.currency,
-            //   reference: trnasferReference,
-            // });
+            // Step 1: Check Paystack balance
+            const balanceResponse = await this.paystackService.checkBalance();
+            const availableBalance =
+              balanceResponse.find((b) => b.currency === 'NGN')?.balance || 0;
 
-            // add pending wallet transaction
-            const pendingWalletTransaction = new PendingWalletTransaction();
-            pendingWalletTransaction.amount = String(amountToCreditOperator);
-            pendingWalletTransaction.walletReference =
-              operatorsWalletRef.publicReference;
-            pendingWalletTransaction.type =
-              Wallet_Service_Transaction_Type.DEBIT;
-            pendingWalletTransaction.sourcePaymentReference = trnasferReference;
-            pendingWalletTransaction.userId =
-              operatorsWalletRef.authenticatedUserId;
+            if (availableBalance >= amountToCreditOperator) {
+              // Step 2: Initiate transfer to entity operator's account
+              await this.paystackService.makeTransfer({
+                amount: amountToCreditOperator,
+                account_number: entityProfileBankAccountDetail.accountNumber,
+                bank_code: entityProfileBankAccountDetail.bankCode,
+                name: entityProfileBankAccountDetail.accountName,
+                currency: entityProfileBankAccountDetail.currency,
+                reference: trnasferReference,
+              });
 
-            pendingWalletTransaction.creditSourceData = JSON.stringify({
-              PAYSTACK: data,
-            });
+              // Step 3: Add pending wallet transaction
+              const pendingWalletTransaction = new PendingWalletTransaction();
+              pendingWalletTransaction.amount = String(amountToCreditOperator);
+              pendingWalletTransaction.walletReference =
+                operatorsWalletRef.publicReference;
+              pendingWalletTransaction.type =
+                Wallet_Service_Transaction_Type.DEBIT;
+              pendingWalletTransaction.sourcePaymentReference =
+                trnasferReference;
+              pendingWalletTransaction.userId =
+                operatorsWalletRef.authenticatedUserId;
 
-            await transactionManager.save(pendingWalletTransaction);
+              pendingWalletTransaction.creditSourceData = JSON.stringify({
+                PAYSTACK: data,
+              });
 
-            // mark webhook data as received
-            await this.dbManager.save(
-              this.dbManager.create(VirtualAccountReceivedPayment, {
-                paymentReference: data.reference,
-                entityProfileId:
-                  payingSubscriberAccountDetail.propertySubscription
-                    .entityProfileId,
-                virtualAccountDetailId: payingSubscriberAccountDetail.id,
-              }),
-            );
+              await transactionManager.save(pendingWalletTransaction);
 
-            // TODO: send sms to subscriber
+              // Step 4: Mark webhook data as received
+              await this.dbManager.save(
+                this.dbManager.create(VirtualAccountReceivedPayment, {
+                  paymentReference: data.reference,
+                  entityProfileId:
+                    payingSubscriberAccountDetail.propertySubscription
+                      .entityProfileId,
+                  virtualAccountDetailId: payingSubscriberAccountDetail.id,
+                }),
+              );
+
+              // TODO: Send SMS to subscriber
+            } else {
+              throw new Error(
+                'Insufficient balance on Paystack to complete transfer',
+              );
+            }
           } catch (error) {
-            // debit wallet
+            // debit wallet if transfer fails
             await this.walletService.transactOperatorWallet({
               public_id: operatorsWalletRef.publicReference,
               user_id: operatorsWalletRef.authenticatedUserId,
@@ -2265,14 +2469,13 @@ export class UtilsBillingService {
             throw new Error('Could not complete process');
           }
         } else {
-          // TODO: handle
+          // TODO: Handle case where entity operator's bank account details are missing
         }
       });
     } else {
-      // TODO: handle case
+      // TODO: Handle case for non-virtual account payments
     }
   }
-
   private async transferSuccess(data: PaystackWebhookData) {
     //
     const transferReference = data.reference;
@@ -2367,5 +2570,120 @@ export class UtilsBillingService {
       );
     }
     return operatorMetrics;
+  }
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async sendBillingSmsNotifications() {
+    const today = new Date();
+    if (today.getDate() === 25) {
+      try {
+        // Fetch all property subscriptions with their related entities
+        const propertySubscriptions = await this.dbManager.find(
+          PropertySubscription,
+          {
+            relations: [
+              'entitySubscriberProfile',
+              'billings',
+            ],
+          },
+        );
+
+        // Send SMS notifications to each subscriber
+        await Promise.all(
+          propertySubscriptions.map(async (subscription) => {
+            // Get the entity subscriber details
+            const subscriber = subscription.entitySubscriberProfile;
+            const subscriberName = `${subscriber.firstName} ${subscriber.lastName}`;
+            const subscriberPhone = subscriber.phone;
+
+            // Get the latest billing for the current month and year
+            const currentMonth = getCurrentMonth();
+            const currentYear = getCurrentYear();
+            const latestBilling = subscription.billings.find(
+              (billing) =>
+                billing.month === currentMonth && billing.year === currentYear,
+            );
+
+            if (!latestBilling) {
+              Logger.warn(
+                `No billing found for subscription ${subscription.id} for ${currentMonth} ${currentYear}.`,
+              );
+              return;
+            }
+
+            // Generate the SMS message
+            const smsMessage = generateBillingSmsMessage(
+              subscriberName,
+              currentMonth,
+              currentYear,
+              latestBilling.amount,
+            );
+
+            // Send the SMS
+            const termiiSms = {
+              to: subscriberPhone,
+              sms: smsMessage,
+            };
+
+            await this.sharedService.sendTermiiSms(termiiSms);
+          }),
+        );
+
+        Logger.log('SMS notifications sent successfully.');
+      } catch (error) {
+        Logger.error('Error sending SMS notifications:', error);
+      }
+    }
+  }
+  @Cron(CronExpression.EVERY_5_SECONDS) 
+  async generateBillingsForAllEntitySubscribers() {
+    const today = new Date();
+    if (today.getDate() === 25) {
+      try {
+        const propertySubscriptions = await this.dbManager.find(
+          PropertySubscription,
+          {
+            relations: ['entityProfile'],
+          },
+        );
+
+        // Group property subscriptions by entityProfileId
+        const subscriptionsByEntityProfile = propertySubscriptions.reduce(
+          (acc, subscription) => {
+            const entityProfileId = subscription.entityProfileId;
+            if (!acc[entityProfileId]) {
+              acc[entityProfileId] = [];
+            }
+            acc[entityProfileId].push(subscription);
+            return acc;
+          },
+          {} as Record<string, PropertySubscription[]>,
+        );
+
+        // Generate billings for each entity profile
+        for (const [entityProfileId, subscriptions] of Object.entries<
+          PropertySubscription[]
+        >(subscriptionsByEntityProfile)) {
+          await this.dbManager.transaction(async (transactionManager) => {
+            await Promise.all(
+              subscriptions.map(async (subscription) => {
+                await this.generateMonthBilling(
+                  subscription.id,
+                  getCurrentMonth(),
+                  {
+                    year: getCurrentYear(),
+                    throwError: false,
+                    transactionManager,
+                  },
+                );
+              }),
+            );
+          });
+        }
+
+        Logger.log('Billing generation completed successfully.');
+      } catch (error) {
+        Logger.error('Error generating billings:', error);
+      }
+    }
   }
 }

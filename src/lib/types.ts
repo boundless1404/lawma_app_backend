@@ -244,3 +244,19 @@ export type ProfileSummary = {
   profileType: ProfileTypes;
   entityProfileId?: string;
 };
+
+export type TermiiSmsBody = {
+  to: string;
+  sms: string;
+  media?: {
+    url: string;
+    caption: string;
+  };
+};
+
+export type TermiiSmsConfig = {
+  from: string;
+  type: string;
+  channel: string;
+  api_key: string;
+};

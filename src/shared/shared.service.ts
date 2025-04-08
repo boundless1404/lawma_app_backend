@@ -13,6 +13,8 @@ import {
   MTNSmsResponse,
   MTNRegisterCallbackUrlOptions,
   AuthTokenPayload,
+  TermiiSmsBody,
+  TermiiSmsConfig,
 } from 'src/lib/types';
 import axios from 'axios';
 
@@ -255,5 +257,27 @@ export class SharedService {
       delete dataCopy[field];
     });
     return dataCopy as Omit<T, (typeof fields)[number]>;
+  }
+
+  async sendTermiiSms(termiiSms: TermiiSmsBody) {
+    const termiiSmsConfig: TermiiSmsConfig = {
+      api_key: this.config.get('TERMII_API_KEY'),
+      from: this.config.get('TERMII_AUTH_SENDER_ID'),
+      channel: 'generic',
+      type: 'plain',
+    };
+
+    const url = `${this.config.get('TERMII_API_URL')}/sms/send`;
+    const termiiServerResponse = await axios.post(
+      url,
+      { ...termiiSms, ...termiiSmsConfig },
+      {
+        headers: {
+          'Content-Type': ['application/json', 'application/json'],
+        },
+      },
+    );
+
+    Logger.log(termiiServerResponse);
   }
 }
