@@ -60,7 +60,10 @@ import VirtualAccountReceivedPayment from './entitties/virtualAccountReceivedPay
 import { v4 } from 'uuid';
 import PendingWalletTransaction from './entitties/pendingWalletTransaction.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { getCurrentMonth, getCurrentYear } from '../utils/functions/billing.function';
+import {
+  getCurrentMonth,
+  getCurrentYear,
+} from '../utils/functions/billing.function';
 import { generateBillingSmsMessage } from '../utils/functions/smsLayout.function';
 import { SharedService } from '../shared/shared.service';
 
@@ -2176,17 +2179,18 @@ export class UtilsBillingService {
         const chargedAmount = data.amount;
 
         // deduct boundless fees
-        const boundelsssDeductionPercentage = 0.04;
+        const boundelsssDeductionPercentage = 0.06; // 6%
         const boundelsssDeductionPercentageAmount =
           boundelsssDeductionPercentage * chargedAmount;
 
+        const boundlessDeductionMinimumAmount = 10000;
+
         const currencyDenominator = 100;
         const boundelsssDeductionMax = 5000 * currencyDenominator;
-
-        const boundlessDeduction =
-          boundelsssDeductionPercentageAmount > boundelsssDeductionMax
-            ? boundelsssDeductionMax
-            : boundelsssDeductionPercentageAmount;
+        const boundlessDeduction = Math.max(
+          Math.min(boundelsssDeductionPercentageAmount, boundelsssDeductionMax),
+          boundlessDeductionMinimumAmount,
+        );
 
         const amountToCreditOperator =
           chargedAmount - (paystackFees + boundlessDeduction);
@@ -2224,6 +2228,7 @@ export class UtilsBillingService {
 
             if (availableBalance >= amountToCreditOperator) {
               // Step 2: Initiate transfer to entity operator's account
+
               await this.paystackService.makeTransfer({
                 amount: amountToCreditOperator,
                 account_number: entityProfileBankAccountDetail.accountNumber,
@@ -2394,10 +2399,7 @@ export class UtilsBillingService {
         const propertySubscriptions = await this.dbManager.find(
           PropertySubscription,
           {
-            relations: [
-              'entitySubscriberProfile',
-              'billings',
-            ],
+            relations: ['entitySubscriberProfile', 'billings'],
           },
         );
 
@@ -2448,7 +2450,7 @@ export class UtilsBillingService {
       }
     }
   }
-  @Cron(CronExpression.EVERY_5_SECONDS) 
+  @Cron(CronExpression.EVERY_5_SECONDS)
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
     if (today.getDate() === 25) {
