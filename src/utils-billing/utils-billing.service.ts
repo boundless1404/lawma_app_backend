@@ -2179,7 +2179,7 @@ export class UtilsBillingService {
         const chargedAmount = data.amount;
 
         // deduct boundless fees
-        const boundelsssDeductionPercentage = 0.06; // 6%
+        const boundelsssDeductionPercentage = 0.04; // 4%
         const boundelsssDeductionPercentageAmount =
           boundelsssDeductionPercentage * chargedAmount;
 
