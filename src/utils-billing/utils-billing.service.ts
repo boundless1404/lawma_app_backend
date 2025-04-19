@@ -2297,14 +2297,14 @@ export class UtilsBillingService {
 
   private async transferSuccess(data: PaystackWebhookData) {
     const transferReference = data.reference;
-    const pendingTransaction = await this.dbManager.findOne(
+    const associatedPendingWalletTransaction = await this.dbManager.findOne(
       PendingWalletTransaction,
       {
         where: { sourcePaymentReference: transferReference },
       },
     );
 
-    if (!pendingTransaction) {
+    if (!associatedPendingWalletTransaction) {
       Logger.warn(
         `Pending transaction not found for reference: ${transferReference}`,
       );
@@ -2314,16 +2314,16 @@ export class UtilsBillingService {
     try {
       // 2. Process the wallet transaction
       await this.walletService.transactOperatorWallet({
-        public_id: pendingTransaction.walletReference,
-        user_id: pendingTransaction.userId,
-        amount: pendingTransaction.amount,
-        credit_source_data: pendingTransaction.creditSourceData,
-        type: pendingTransaction.type as Wallet_Service_Transaction_Type,
+        public_id: associatedPendingWalletTransaction.walletReference,
+        user_id: associatedPendingWalletTransaction.userId,
+        amount: associatedPendingWalletTransaction.amount,
+        credit_source_data: JSON.stringify({ PAYSTACK: data }),
+        type: Wallet_Service_Transaction_Type.DEBIT,
       });
 
       // 3. Clean up pending transaction
       await this.dbManager.delete(PendingWalletTransaction, {
-        id: pendingTransaction.id,
+        id: associatedPendingWalletTransaction.id,
       });
 
       // 4. Find the original virtual account payment record
@@ -2349,7 +2349,7 @@ export class UtilsBillingService {
           virtualAccountPayment.virtualAccountDetail,
           {
             ...data,
-            amount: Number(pendingTransaction.amount) * 100,
+            amount: Number(associatedPendingWalletTransaction.amount) * 100,
           },
         );
       }
