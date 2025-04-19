@@ -36,6 +36,7 @@ export function transferSuccessfulOperator(
   bankName?: string,
   accountNumber?: string,
   date: Date = new Date(),
+  supportUrl: string = 'https://paystack.com/help', // Default Paystack URL
 ): string {
   const formattedDate = date.toLocaleString('en-NG', {
     day: 'numeric',
@@ -47,6 +48,7 @@ export function transferSuccessfulOperator(
 
   let message = `🏦 Funds Transfer Notification\n\n`;
   message += `Dear ${operatorName || 'Valued Operator'},\n\n`;
+  message += `✅ Transfer Successful\n\n`;
   message += `💰 Amount: ${amount}\n`;
   message += `📅 Date: ${formattedDate}\n`;
   message += `🔢 Transaction Ref: ${reference}\n`;
@@ -55,9 +57,12 @@ export function transferSuccessfulOperator(
     message += `🏛️ Destination: ${bankName} (${accountNumber})\n\n`;
   }
 
-  message += `The transfer has been successfully processed to your designated bank account.\n\n`;
-  message += `For any inquiries, please contact support with the reference above.\n\n`;
-  message += `Best regards,\n${process.env.APP_NAME || 'Payment Team'}`;
+  message += `The funds have been successfully credited to your bank account.\n\n`;
+  message += `Need help?\n`;
+  message += `▸ Contact Paystack Support: ${supportUrl}\n`;
+  message += `▸ Or visit: https://boundlesedge.com/support\n\n`;
+  message += `Thank you for using our services.\n\n`;
+  message += `Best regards,\nBoundlessEdge Payment Solutions`;
 
   return message;
 }
