@@ -439,7 +439,7 @@ export class UtilsBillingService {
   ) {
     //
     let propertyType: PropertyType;
-    if (createPropertyTypesDto.id === undefined) {
+    if (createPropertyTypesDto.id !== undefined) {
     propertyType = await this.dbManager.findOne(PropertyType, {
       where: {
         id: createPropertyTypesDto.id,
