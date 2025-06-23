@@ -438,13 +438,14 @@ export class UtilsBillingService {
     entityProfileId: string,
   ) {
     //
-    let propertyType = await this.dbManager.findOne(PropertyType, {
+    let propertyType: PropertyType;
+    if (createPropertyTypesDto.id === undefined) {
+    propertyType = await this.dbManager.findOne(PropertyType, {
       where: {
         id: createPropertyTypesDto.id,
       },
     });
 
-    if (propertyType) {
       propertyType.name = createPropertyTypesDto.name;
       propertyType.unitPrice = createPropertyTypesDto.unitPrice;
     } else {
@@ -2179,7 +2180,7 @@ export class UtilsBillingService {
         const chargedAmount = data.amount;
 
         // deduct boundless fees
-        const boundelsssDeductionPercentage = 0.06; // 6%
+        const boundelsssDeductionPercentage = 0.04; // 4%
         const boundelsssDeductionPercentageAmount =
           boundelsssDeductionPercentage * chargedAmount;
 
