@@ -449,7 +449,8 @@ export class UtilsBillingService {
       propertyType = await this.dbManager.findOne(PropertyType, {
         where: {
           id: createPropertyTypesDto.id,
-          entityProfileId, // ensures the property type belongs to the entity profile
+          // ensures the property type belongs to the entity profile
+          entityProfileId,
         },
       });
       if (!propertyType) {
