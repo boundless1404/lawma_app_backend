@@ -438,25 +438,21 @@ export class UtilsBillingService {
     entityProfileId: string,
   ) {
     //
-    let propertyType: PropertyType;
-    if (createPropertyTypesDto.id === undefined) {
-      propertyType = this.dbManager.create(PropertyType, {
-        name: createPropertyTypesDto.name,
-        unitPrice: createPropertyTypesDto.unitPrice,
-        entityProfileId,
-      });
-    } else {
-      propertyType = await this.dbManager.findOne(PropertyType, {
-        where: {
-          id: createPropertyTypesDto.id,
-          entityProfileId, // ensures the property type belongs to the entity profile
-        },
-      });
-      if (!propertyType) {
-        throwBadRequest('Property type not found.');
-      }
+    let propertyType = await this.dbManager.findOne(PropertyType, {
+      where: {
+        id: createPropertyTypesDto.id,
+      },
+    });
+
+    if (propertyType) {
       propertyType.name = createPropertyTypesDto.name;
       propertyType.unitPrice = createPropertyTypesDto.unitPrice;
+    } else {
+      propertyType = this.dbManager.create(PropertyType, {
+        unitPrice: createPropertyTypesDto.unitPrice,
+        name: createPropertyTypesDto.name,
+        entityProfileId,
+      });
     }
 
     await this.dbManager.save(propertyType);
@@ -2183,7 +2179,7 @@ export class UtilsBillingService {
         const chargedAmount = data.amount;
 
         // deduct boundless fees
-        const boundelsssDeductionPercentage = 0.04; // 4%
+        const boundelsssDeductionPercentage = 0.06; // 6%
         const boundelsssDeductionPercentageAmount =
           boundelsssDeductionPercentage * chargedAmount;
 
