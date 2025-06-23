@@ -108,7 +108,6 @@ const validator = new ValidationPipe({
     AuthModule,
     SharedModule,
     UtilsBillingModule,
-    AppModule,
   ],
   controllers: [AppController],
   providers: [
