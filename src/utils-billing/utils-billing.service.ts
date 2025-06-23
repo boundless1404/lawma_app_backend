@@ -438,13 +438,14 @@ export class UtilsBillingService {
     entityProfileId: string,
   ) {
     //
-    let propertyType = await this.dbManager.findOne(PropertyType, {
+    let propertyType: PropertyType;
+    if (createPropertyTypesDto.id === undefined) {
+    propertyType = await this.dbManager.findOne(PropertyType, {
       where: {
         id: createPropertyTypesDto.id,
       },
     });
 
-    if (propertyType) {
       propertyType.name = createPropertyTypesDto.name;
       propertyType.unitPrice = createPropertyTypesDto.unitPrice;
     } else {
