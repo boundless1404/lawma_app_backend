@@ -439,21 +439,24 @@ export class UtilsBillingService {
   ) {
     //
     let propertyType: PropertyType;
-    if (createPropertyTypesDto.id !== undefined) {
-    propertyType = await this.dbManager.findOne(PropertyType, {
-      where: {
-        id: createPropertyTypesDto.id,
-      },
-    });
-
-      propertyType.name = createPropertyTypesDto.name;
-      propertyType.unitPrice = createPropertyTypesDto.unitPrice;
-    } else {
+    if (createPropertyTypesDto.id === undefined) {
       propertyType = this.dbManager.create(PropertyType, {
-        unitPrice: createPropertyTypesDto.unitPrice,
         name: createPropertyTypesDto.name,
+        unitPrice: createPropertyTypesDto.unitPrice,
         entityProfileId,
       });
+    } else {
+      propertyType = await this.dbManager.findOne(PropertyType, {
+        where: {
+          id: createPropertyTypesDto.id,
+          entityProfileId, // ensures the property type belongs to the entity profile
+        },
+      });
+      if (!propertyType) {
+        throwBadRequest('Property type not found.');
+      }
+      propertyType.name = createPropertyTypesDto.name;
+      propertyType.unitPrice = createPropertyTypesDto.unitPrice;
     }
 
     await this.dbManager.save(propertyType);
