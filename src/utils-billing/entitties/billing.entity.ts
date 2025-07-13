@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -24,6 +25,9 @@ export class Billing {
   // foreign keys
   @Column({ type: 'bigint' })
   propertySubscriptionId: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 
   // @Column({ type: 'bigint' })
   // entitySubscriptionId: string;

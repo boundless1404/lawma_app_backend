@@ -3,6 +3,13 @@
 import { UserData } from '../auth/userData';
 import { ProfileTypes } from './enums';
 
+export type NotificationType =
+  | 'invoice'
+  | 'payment'
+  | 'alert'
+  | 'update'
+  | 'system';
+
 export enum FileUploadExtensions {
   PDF = 'pdf',
   WORD_DOC = 'doc',
@@ -49,11 +56,18 @@ export interface PlatformRequest extends Request {
   authPayload: AuthTokenPayload;
 }
 
-export interface AuthTokenPayload {
+export type AuthTokenPayload = {
   userData?: AuthenticatedUserData;
-  profile?: ProfileSummary;
-  exp?: number | unknown;
-}
+  profile?: {
+    id: string;
+    profileType: string;
+    profileTypeId: string;
+    entityProfileId?: string;
+  };
+  propertySubscriptionId?: string;
+  entitySubscriberProfileId?: string;
+  type?: 'serviced-client';
+};
 
 export interface AuthenticatedUserData {
   id: string;

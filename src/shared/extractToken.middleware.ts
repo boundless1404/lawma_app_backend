@@ -26,6 +26,13 @@ export class ExtractTokenMiddleWare implements NestMiddleware {
           if (authPayload) {
             if ('userData' in authPayload && 'email' in authPayload.userData) {
               req.authPayload = authPayload;
+            } else if (
+              'type' in authPayload &&
+              authPayload.type === 'serviced-client' &&
+              'propertySubscriptionId' in authPayload &&
+              authPayload.propertySubscriptionId
+            ) {
+              req.authPayload = authPayload;
             }
           }
         }

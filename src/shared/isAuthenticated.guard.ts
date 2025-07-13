@@ -13,22 +13,43 @@ export class IsAuthenticated implements CanActivate {
   }
 
   private checkUserAccess(context: ExecutionContext) {
-    const userData = this.getContextData(
-      context,
-      'userData',
-    ) as AuthenticatedUserData;
-    const isAuthenticated = !!userData && !!userData.id;
+    const props = ['userData', 'type', 'apiData'];
+    let isAuthenticated = false;
+
+    for (const prop of props) {
+      const data = this.getContextData(
+        context,
+        prop as 'userData' | 'apiData' | 'type',
+      );
+      if (prop === 'userData') {
+        isAuthenticated = !!data && !!data.id;
+      } else if (
+        prop === 'type' &&
+        data.type === 'serviced-client' &&
+        data.propertySubscriptionId
+      ) {
+        isAuthenticated = true;
+      } else if (prop === 'apiData') {
+        isAuthenticated = !!data;
+      }
+      if (isAuthenticated) {
+        break;
+      }
+    }
 
     return isAuthenticated;
   }
 
   private getContextData(
     context: ExecutionContext,
-    dataProp: 'userData' | 'apiData',
+    dataProp: 'userData' | 'apiData' | 'type',
   ) {
     const req = context.switchToHttp().getRequest() as PlatformRequest;
     const authPayload = req.authPayload;
-    const data = authPayload ? authPayload[dataProp] : undefined;
+    let data = authPayload ? authPayload[dataProp] : undefined;
+    if (dataProp === 'type' && authPayload['type'] === 'serviced-client') {
+      data = authPayload;
+    }
     return data;
   }
 }

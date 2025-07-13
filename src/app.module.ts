@@ -22,6 +22,7 @@ import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { UtilsBillingModule } from './utils-billing/utils-billing.module';
 import { AppController } from './app.controller';
+import { ServiceClientModule } from './service-client/service-client.module';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cors = require('cors');
@@ -98,7 +99,7 @@ const validator = new ValidationPipe({
 
         return {
           signOptions: {
-            expiresIn: configService.get('app.JWT_EXPIRY', '8h'),
+            expiresIn: '1d',
           },
           secret: configService.get('app.JWT_SECRET'),
         };
@@ -108,6 +109,7 @@ const validator = new ValidationPipe({
     AuthModule,
     SharedModule,
     UtilsBillingModule,
+    ServiceClientModule,
   ],
   controllers: [AppController],
   providers: [

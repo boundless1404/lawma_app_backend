@@ -6,7 +6,7 @@ import { Email } from './email.entity';
 import { ContentTypes } from 'src/lib/types';
 import axios from 'axios';
 import { SharedService } from './shared.service';
-import { Cron, CronExpression } from '@nestjs/schedule';
+// import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class BackgroundJobs {
@@ -16,7 +16,7 @@ export class BackgroundJobs {
   @Inject()
   private sharedService: SharedService;
 
-  @Cron(CronExpression.EVERY_5_MINUTES)
+  // @Cron(CronExpression.EVERY_5_MINUTES)
   async sendMails() {
     try {
       const dbManager = this.dbSource.manager;

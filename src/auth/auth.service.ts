@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager } from 'typeorm';
-import { EntityProfileSignUpDto, SignInDto } from './dto/dto';
+import {
+  EntityProfileSignUpDto,
+  ServiceClientSignInDto,
+  SignInDto,
+} from './dto/dto';
 import { EntityUserProfile } from '../utils-billing/entitties/entityUserProfile.entity';
 import { HelpersService } from '../shared/helpers/helpers.service';
 import {
@@ -19,6 +23,7 @@ import { omit } from 'lodash';
 import { SharedService } from '../shared/shared.service';
 import { ProfileService } from '../shared/profile/profile.service';
 import { ProfileTypes } from '../lib/enums';
+import { PropertySubscription } from '../utils-billing/entitties/propertySubscription.entity';
 
 @Injectable()
 export class AuthService {
@@ -172,6 +177,35 @@ export class AuthService {
     );
 
     return authTokenPayload;
+  }
+
+  async serviceClientSignin(dto: ServiceClientSignInDto) {
+    const property = await this.dbManager.findOne(PropertySubscription, {
+      where: { id: dto.propertyCode },
+      relations: ['entitySubscriberProfile'],
+    });
+
+    if (
+      !property ||
+      !property.entitySubscriberProfile ||
+      property.entitySubscriberProfile.phone !== dto.phone
+    ) {
+      throwUnathorized('Invalid property code or phone number.');
+    }
+
+    // If validation passes, generate a token for the client
+    const clientAuthPayload = {
+      propertySubscriptionId: property.id,
+      entitySubscriberProfileId: property.entitySubscriberProfile.id,
+      type: 'serviced-client', // Custom type for client tokens
+    } as AuthTokenPayload;
+
+    const token = this.sharedService.signPayload(clientAuthPayload);
+
+    return {
+      token,
+      message: 'OTP sent successfully. Please verify to complete login.', // Mock message
+    };
   }
 
   async generateAuthToken(

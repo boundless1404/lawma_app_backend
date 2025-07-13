@@ -59,7 +59,7 @@ import EntityProfileBankAccountDetails from './entitties/entityProfileBankAcount
 import VirtualAccountReceivedPayment from './entitties/virtualAccountReceivedPayment.entity';
 import { v4 } from 'uuid';
 import PendingWalletTransaction from './entitties/pendingWalletTransaction.entity';
-import { Cron, CronExpression } from '@nestjs/schedule';
+// import { Cron, CronExpression } from '@nestjs/schedule';
 import {
   getCurrentMonth,
   getCurrentYear,
@@ -2395,7 +2395,7 @@ export class UtilsBillingService {
     }
     return operatorMetrics;
   }
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async sendBillingSmsNotifications() {
     const today = new Date();
     if (today.getDate() === 25) {
@@ -2455,7 +2455,7 @@ export class UtilsBillingService {
       }
     }
   }
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
     if (today.getDate() === 25) {
