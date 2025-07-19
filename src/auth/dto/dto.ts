@@ -51,3 +51,13 @@ export class SignInDto {
   @IsString()
   password: string;
 }
+
+export class ServiceClientSignInDto {
+  @IsNotEmpty()
+  @IsString()
+  propertyCode: string;
+
+  @IsNotEmpty()
+  @IsString()
+  phone: string;
+}

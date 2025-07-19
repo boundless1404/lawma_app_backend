@@ -59,7 +59,7 @@ import EntityProfileBankAccountDetails from './entitties/entityProfileBankAcount
 import VirtualAccountReceivedPayment from './entitties/virtualAccountReceivedPayment.entity';
 import { v4 } from 'uuid';
 import PendingWalletTransaction from './entitties/pendingWalletTransaction.entity';
-import { Cron, CronExpression } from '@nestjs/schedule';
+// import { Cron, CronExpression } from '@nestjs/schedule';
 import {
   getCurrentMonth,
   getCurrentYear,
@@ -1666,7 +1666,7 @@ export class UtilsBillingService {
     year = new Date().getFullYear().toString(),
     month,
   }: {
-    propertySubscriptionId: string;
+    propertySubscriptionId?: string;
     entityProfileId: string;
     year?: string;
     month?: string;
@@ -1684,6 +1684,9 @@ export class UtilsBillingService {
               month: this.getMonthNumber(month),
             },
           ),
+          createdAt: Raw(($alias) => `extract(year from ${$alias}) = :year`, {
+            year: parseInt(year),
+          }),
           propertySubscription: {
             entityProfileId: entityProfileId,
           },
@@ -1699,11 +1702,20 @@ export class UtilsBillingService {
     } else {
       payments = await this.dbManager.find(Payment, {
         where: {
-          propertySubscriptionId: propertySubscriptionId,
+          ...(propertySubscriptionId ? { propertySubscriptionId } : {}),
           propertySubscription: {
             entityProfileId: entityProfileId,
           },
-          ...(year ? { year } : {}),
+          ...(year
+            ? {
+                createdAt: Raw(
+                  ($alias) => `extract(year from ${$alias}) = :year`,
+                  {
+                    year: parseInt(year),
+                  },
+                ),
+              }
+            : {}),
         },
         relations: {
           propertySubscription: true,
@@ -1724,7 +1736,214 @@ export class UtilsBillingService {
       month: MonthNames[new Date(payment.paymentDate).getMonth() + 1],
       propertySubscriptionName:
         payment.propertySubscription.propertySubscriptionName,
+      createdAt: payment.createdAt,
+      comments: payment.comments,
     }));
+  }
+
+  async deletePayment(paymentId: string, entityProfileId: string) {
+    // First, find the payment and verify it belongs to the entity
+    const payment = await this.dbManager.findOne(Payment, {
+      where: {
+        id: paymentId,
+        propertySubscription: {
+          entityProfileId: entityProfileId,
+        },
+      },
+      relations: {
+        propertySubscription: {
+          billingAccount: true,
+        },
+      },
+    });
+
+    if (!payment) {
+      throw new Error('Payment not found or unauthorized');
+    }
+
+    await this.dbManager.transaction(async (transactionManager) => {
+      // Update billing account - subtract the deleted payment amount from totalPayments
+      const billingAccount = payment.propertySubscription.billingAccount;
+      const updatedTotalPayments = bignumber(billingAccount.totalPayments)
+        .minus(payment.amount)
+        .toNumber();
+
+      // Ensure totalPayments doesn't go below 0
+      billingAccount.totalPayments = String(Math.max(0, updatedTotalPayments));
+
+      // Save the updated billing account
+      await transactionManager.save(billingAccount);
+
+      // Perform soft delete of the payment
+      await transactionManager.delete(Payment, paymentId);
+    });
+  }
+
+  private escapeCSVField(field: any): string {
+    const stringField = String(field || '');
+    // Escape commas and quotes in CSV fields
+    if (
+      stringField.includes(',') ||
+      stringField.includes('"') ||
+      stringField.includes('\n')
+    ) {
+      return `"${stringField.replace(/"/g, '""')}"`;
+    }
+    return stringField;
+  }
+
+  private generatePaymentsCSV(
+    payments: Payment[],
+    options?: {
+      includeSummary?: boolean;
+      summaryPeriod?: string;
+    },
+  ): string {
+    const csvHeaders = [
+      'Payment ID',
+      'Payer Name',
+      'Payment Date',
+      'Amount (₦)',
+      'Property Name',
+      'Street Name',
+      'Subscriber Name',
+      'Subscriber Phone',
+      'Comments',
+      'Created At',
+    ];
+
+    const csvRows = payments.map((payment) => [
+      payment.id,
+      payment.payerName || '',
+      new Date(payment.paymentDate).toLocaleDateString('en-US'),
+      payment.amount,
+      payment.propertySubscription?.propertySubscriptionName || '',
+      payment.propertySubscription?.street?.name || '',
+      `${
+        payment.propertySubscription?.entitySubscriberProfile?.firstName || ''
+      } ${
+        payment.propertySubscription?.entitySubscriberProfile?.lastName || ''
+      }`.trim(),
+      payment.propertySubscription?.entitySubscriberProfile?.phone || '',
+      payment.comments || '',
+      new Date(payment.createdAt).toLocaleString('en-US'),
+    ]);
+
+    const csvContent = [
+      csvHeaders.join(','),
+      ...csvRows.map((row) =>
+        row.map((field) => this.escapeCSVField(field)).join(','),
+      ),
+    ];
+
+    // Add summary if requested
+    if (options?.includeSummary) {
+      const totalAmount = payments.reduce(
+        (sum, payment) => sum + parseFloat(payment.amount),
+        0,
+      );
+      const summaryRow = [
+        '',
+        '',
+        '',
+        `TOTAL: ${totalAmount.toFixed(2)}`,
+        `Count: ${payments.length} payments`,
+        options.summaryPeriod || '',
+        '',
+        '',
+        '',
+        '',
+      ];
+
+      csvContent.push(''); // Empty row before summary
+      csvContent.push(
+        summaryRow.map((field) => this.escapeCSVField(field)).join(','),
+      );
+    }
+
+    return csvContent.join('\n');
+  }
+
+  async getDailyPaymentsCSV(date: string, entityProfileId: string) {
+    // Validate date format
+    if (!date || isNaN(Date.parse(date))) {
+      throw new Error(
+        'Invalid date format. Please provide a valid date (YYYY-MM-DD).',
+      );
+    }
+
+    // Parse the date and get all payments for that day
+    const payments = await this.dbManager.find(Payment, {
+      where: {
+        paymentDate: Raw(($alias) => `DATE(${$alias}) = :date`, { date }),
+        propertySubscription: {
+          entityProfileId: entityProfileId,
+        },
+      },
+      relations: {
+        propertySubscription: {
+          street: true,
+          entitySubscriberProfile: true,
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return this.generatePaymentsCSV(payments);
+  }
+
+  async getDateRangePaymentsCSV(
+    startDate: string,
+    endDate: string,
+    entityProfileId: string,
+  ) {
+    // Validate date format
+    if (!startDate || isNaN(Date.parse(startDate))) {
+      throw new Error(
+        'Invalid start date format. Please provide a valid date (YYYY-MM-DD).',
+      );
+    }
+
+    if (!endDate || isNaN(Date.parse(endDate))) {
+      throw new Error(
+        'Invalid end date format. Please provide a valid date (YYYY-MM-DD).',
+      );
+    }
+
+    // Validate date range
+    if (new Date(startDate) > new Date(endDate)) {
+      throw new Error('Start date cannot be after end date.');
+    }
+
+    // Get all payments within the date range
+    const payments = await this.dbManager.find(Payment, {
+      where: {
+        paymentDate: Raw(
+          ($alias) => `DATE(${$alias}) BETWEEN :startDate AND :endDate`,
+          { startDate, endDate },
+        ),
+        propertySubscription: {
+          entityProfileId: entityProfileId,
+        },
+      },
+      relations: {
+        propertySubscription: {
+          street: true,
+          entitySubscriberProfile: true,
+        },
+      },
+      order: {
+        paymentDate: 'DESC',
+        createdAt: 'DESC',
+      },
+    });
+
+    return this.generatePaymentsCSV(payments, {
+      includeSummary: true,
+      summaryPeriod: `Period: ${startDate} to ${endDate}`,
+    });
   }
 
   async createStreet(
@@ -2395,7 +2614,7 @@ export class UtilsBillingService {
     }
     return operatorMetrics;
   }
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async sendBillingSmsNotifications() {
     const today = new Date();
     if (today.getDate() === 25) {
@@ -2455,7 +2674,7 @@ export class UtilsBillingService {
       }
     }
   }
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
     if (today.getDate() === 25) {

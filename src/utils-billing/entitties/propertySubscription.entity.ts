@@ -20,6 +20,7 @@ import { Payment } from './payments.entity';
 import { EntityProfile } from './entityProfile.entity';
 import ArrearsUpdate from './arrearsUpdates.entity';
 import VirtualAccountDetail from './virtualAccountDetail.entity';
+import { Notification } from './notification.entity';
 
 @Entity()
 export class PropertySubscription {
@@ -106,4 +107,10 @@ export class PropertySubscription {
       subscriberVirtualAccountDetial.propertySubscription,
   )
   subscriberVirtualAccountDetails: VirtualAccountDetail[];
+
+  @OneToMany(
+    () => Notification,
+    (notification) => notification.propertySubscription,
+  )
+  notifications: Notification[];
 }

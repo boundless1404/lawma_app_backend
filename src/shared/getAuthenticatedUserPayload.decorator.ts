@@ -11,9 +11,6 @@ export const GetAuthPayload = createParamDecorator(
         : undefined;
     }
 
-    return {
-      userData: request.authPayload?.userData,
-      profile: request.authPayload?.profile,
-    } as AuthTokenPayload;
+    return request.authPayload as AuthTokenPayload;
   },
 );

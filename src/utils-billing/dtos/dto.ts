@@ -1,5 +1,5 @@
 import { ProfileTypes } from '@/src/lib/enums';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsBoolean,
   IsBooleanString,
@@ -282,15 +282,25 @@ export class GetBillingQuery {
 export class GetPaymentsQuery {
   @IsOptional()
   @IsString()
-  month: string;
+  @Transform(({ value }) =>
+    value === '' || value === 'null' || value === 'undefined'
+      ? undefined
+      : value,
+  )
+  month?: string;
 
   @IsOptional()
   @IsString()
-  year: string;
+  @Transform(({ value }) =>
+    value === '' || value === 'null' || value === 'undefined'
+      ? undefined
+      : value,
+  )
+  year?: string;
 
   @IsOptional()
   @IsString()
-  propertySubscriptionId: string;
+  propertySubscriptionId?: string;
 }
 
 export class GetBillingAccountArrear {
