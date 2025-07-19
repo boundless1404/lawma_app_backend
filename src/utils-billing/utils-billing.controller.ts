@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { IsEntityUserAdmin } from '../shared/isEntityUserAdmin.guard';
@@ -270,6 +271,60 @@ export class UtilsBillingController {
       ...query,
       entityProfileId: authPayload.profile.entityProfileId,
     });
+  }
+
+  @Delete('payment/:id')
+  @UseGuards(IsAuthenticated)
+  async deletePayment(
+    @Param('id') paymentId: string,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    await this.utilService.deletePayment(
+      paymentId,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Get('payment/daily-csv')
+  @UseGuards(IsAuthenticated)
+  async getDailyPaymentsCSV(
+    @Query('date') date: string,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+    @Res() res: any,
+  ) {
+    const csvContent = await this.utilService.getDailyPaymentsCSV(
+      date,
+      authPayload.profile.entityProfileId,
+    );
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="daily-payments-${date}.csv"`,
+    );
+    res.send(csvContent);
+  }
+
+  @Get('payment/range-csv')
+  @UseGuards(IsAuthenticated)
+  async getDateRangePaymentsCSV(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+    @Res() res: any,
+  ) {
+    const csvContent = await this.utilService.getDateRangePaymentsCSV(
+      startDate,
+      endDate,
+      authPayload.profile.entityProfileId,
+    );
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="payments-range-${startDate}-to-${endDate}.csv"`,
+    );
+    res.send(csvContent);
   }
 
   @Post('lga')
