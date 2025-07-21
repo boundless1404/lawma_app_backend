@@ -18,26 +18,26 @@ export class ServiceClientService {
   private dbManager: EntityManager;
 
   async getDashboardMetrics(user: AuthTokenPayload, year?: number) {
-    console.log('Raw user object received:', JSON.stringify(user, null, 2));
+    // console.log('Raw user object received:', JSON.stringify(user, null, 2));
 
     const { propertySubscriptionId } = user;
     const selectedYear = year || new Date().getFullYear();
     const currentYear = new Date().getFullYear();
 
-    console.log('Getting dashboard metrics for user:', {
-      propertySubscriptionId,
-      selectedYear,
-      currentYear,
-      userType: user.type,
-    });
+    // console.log('Getting dashboard metrics for user:', {
+    //   propertySubscriptionId,
+    //   selectedYear,
+    //   currentYear,
+    //   userType: user.type,
+    // });
 
     if (!propertySubscriptionId) {
-      console.error('Missing propertySubscriptionId in user object:', user);
+      // console.error('Missing propertySubscriptionId in user object:', user);
 
       // For testing purposes, return mock data when no propertySubscriptionId is found
-      console.warn(
-        'Returning mock data for testing - this should not happen in production',
-      );
+      // console.warn(
+      //   'Returning mock data for testing - this should not happen in production',
+      // );
       return {
         currentOutstandingBill: 0,
         monthlyPaymentTotals: Array(12).fill(0),
@@ -59,7 +59,7 @@ export class ServiceClientService {
       order: { id: 'DESC' },
     });
 
-    console.log('Outstanding bill found:', outstandingBill);
+    // console.log('Outstanding bill found:', outstandingBill);
 
     // 2. Get all payments for the selected year
     const payments = await this.dbManager.find(Payment, {
@@ -72,14 +72,14 @@ export class ServiceClientService {
       },
     });
 
-    console.log(
-      'Payments found for selected year:',
-      payments.length,
-      'for propertySubscriptionId:',
-      propertySubscriptionId,
-      'year:',
-      selectedYear,
-    );
+    // console.log(
+    //   'Payments found for selected year:',
+    //   payments.length,
+    //   'for propertySubscriptionId:',
+    //   propertySubscriptionId,
+    //   'year:',
+    //   selectedYear,
+    // );
 
     // 3. Calculate monthly payment totals
     const monthlyTotals = Array(12).fill(0);
@@ -87,10 +87,10 @@ export class ServiceClientService {
       const month = new Date(p.createdAt).getMonth();
       const amount = parseFloat(p.amount) || 0; // Convert string to number
       monthlyTotals[month] += amount;
-      console.log(`Payment in month ${month}: ${amount}`);
+      // console.log(`Payment in month ${month}: ${amount}`);
     });
 
-    console.log('Monthly totals calculated:', monthlyTotals);
+    // console.log('Monthly totals calculated:', monthlyTotals);
 
     // 4. Calculate aggregates for selected year
     const totalPaidThisYear = payments.reduce(
@@ -107,13 +107,13 @@ export class ServiceClientService {
     const paymentPerformance =
       this.calculatePaymentPerformance(monthsWithPayments);
 
-    console.log('Final calculations:', {
-      selectedYear,
-      totalPaidThisYear,
-      monthsWithPayments,
-      avgMonthlyPayment,
-      paymentPerformance,
-    });
+    // console.log('Final calculations:', {
+    //   selectedYear,
+    //   totalPaidThisYear,
+    //   monthsWithPayments,
+    //   avgMonthlyPayment,
+    //   paymentPerformance,
+    // });
 
     return {
       currentOutstandingBill: parseFloat(outstandingBill?.amount || '0'),
@@ -149,13 +149,13 @@ export class ServiceClientService {
     year?: number,
     status?: 'paid' | 'unpaid' | 'overdue',
   ) {
-    console.log('Getting billing for user:', {
-      propertySubscriptionId: user.propertySubscriptionId,
-      page,
-      limit,
-      year,
-      status,
-    });
+    // console.log('Getting billing for user:', {
+    //   propertySubscriptionId: user.propertySubscriptionId,
+    //   page,
+    //   limit,
+    //   year,
+    //   status,
+    // });
 
     const { propertySubscriptionId } = user;
 
@@ -441,12 +441,12 @@ export class ServiceClientService {
     limit: number = 10,
     year?: number,
   ) {
-    console.log('Getting payments for user:', {
-      propertySubscriptionId: user.propertySubscriptionId,
-      page,
-      limit,
-      year,
-    });
+    // console.log('Getting payments for user:', {
+    //   propertySubscriptionId: user.propertySubscriptionId,
+    //   page,
+    //   limit,
+    //   year,
+    // });
 
     const { propertySubscriptionId } = user;
 
@@ -540,10 +540,10 @@ export class ServiceClientService {
   }
 
   async getVirtualAccount(user: AuthTokenPayload) {
-    console.log(
-      'Getting virtual account for user:',
-      user.propertySubscriptionId,
-    );
+    // console.log(
+    //   'Getting virtual account for user:',
+    //   user.propertySubscriptionId,
+    // );
 
     const { propertySubscriptionId } = user;
 
@@ -1108,12 +1108,12 @@ export class ServiceClientService {
     limit: number = 10,
     filter?: 'all' | 'unread' | 'alerts',
   ) {
-    console.log('Getting notifications for user:', {
-      propertySubscriptionId: user.propertySubscriptionId,
-      page,
-      limit,
-      filter,
-    });
+    // console.log('Getting notifications for user:', {
+    //   propertySubscriptionId: user.propertySubscriptionId,
+    //   page,
+    //   limit,
+    //   filter,
+    // });
 
     const { propertySubscriptionId } = user;
 
