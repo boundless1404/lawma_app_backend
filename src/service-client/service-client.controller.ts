@@ -97,6 +97,33 @@ export class ServiceClientController {
   }
   */
 
+  @Get('billing/:id/download-pdf')
+  async downloadBillPDF(
+    @Param('id') billId: string,
+    @GetAuthPayload() user: AuthTokenPayload,
+    @Res() res: Response,
+  ) {
+    try {
+      const pdfBuffer = await this.serviceClientService.generateBillPDF(
+        user,
+        billId,
+      );
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="bill-${billId}.pdf"`,
+      );
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Error generating bill PDF:', error);
+      if (error instanceof Error && error.message === 'Bill not found') {
+        throw new NotFoundException('Bill not found');
+      }
+      throw new InternalServerErrorException('Failed to generate bill PDF');
+    }
+  }
+
   @Get('billing/:id/download')
   async downloadBill(
     @Param('id') billId: string,
