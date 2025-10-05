@@ -38,8 +38,8 @@ export class ServiceClientController {
   @Get('billing')
   getBilling(
     @GetAuthPayload() user: AuthTokenPayload,
-    @Query('page') page: string = '1',
-    @Query('limit') limit: string = '10',
+    @Query('page') page = '1',
+    @Query('limit') limit = '10',
     @Query('year') year?: string,
     @Query('status') status?: 'paid' | 'unpaid' | 'overdue',
   ) {
@@ -58,8 +58,8 @@ export class ServiceClientController {
   @Get('payments')
   getPayments(
     @GetAuthPayload() user: AuthTokenPayload,
-    @Query('page') page: string = '1',
-    @Query('limit') limit: string = '10',
+    @Query('page') page = '1',
+    @Query('limit') limit = '10',
     @Query('year') year?: string,
   ) {
     const pageNum = parseInt(page, 10);
@@ -109,12 +109,18 @@ export class ServiceClientController {
         billId,
       );
 
+      // Set proper headers for PDF response
       res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Length', pdfBuffer.length);
       res.setHeader(
         'Content-Disposition',
         `attachment; filename="bill-${billId}.pdf"`,
       );
-      res.send(pdfBuffer);
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+
+      res.end(pdfBuffer);
     } catch (error) {
       console.error('Error generating bill PDF:', error);
       if (error instanceof Error && error.message === 'Bill not found') {
