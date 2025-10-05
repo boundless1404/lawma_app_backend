@@ -8,7 +8,7 @@ import { PropertySubscription } from '../utils-billing/entitties/propertySubscri
 import { Notification } from '../utils-billing/entitties/notification.entity';
 import VirtualAccountDetail from '../utils-billing/entitties/virtualAccountDetail.entity';
 import VirtualAccountReceivedPayment from '../utils-billing/entitties/virtualAccountReceivedPayment.entity';
-import * as puppeteer from 'puppeteer';
+import jsPDF from 'jspdf';
 
 @Injectable()
 export class ServiceClientService {
@@ -145,8 +145,8 @@ export class ServiceClientService {
 
   async getBilling(
     user: AuthTokenPayload,
-    page: number = 1,
-    limit: number = 10,
+    page = 1,
+    limit = 10,
     year?: number,
     status?: 'paid' | 'unpaid' | 'overdue',
   ) {
@@ -438,8 +438,8 @@ export class ServiceClientService {
 
   async getPayments(
     user: AuthTokenPayload,
-    page: number = 1,
-    limit: number = 10,
+    page = 1,
+    limit = 10,
     year?: number,
   ) {
     // console.log('Getting payments for user:', {
@@ -784,38 +784,480 @@ export class ServiceClientService {
     user: AuthTokenPayload,
     billId: string,
   ): Promise<Buffer> {
-    // First get the HTML content
-    const htmlContent = await this.generateBillHTML(user, billId);
-
-    // Launch puppeteer browser
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-
     try {
-      const page = await browser.newPage();
+      // Get bill data for PDF generation
+      const billData = await this.getBillDataForPDF(user, billId);
 
-      // Set the HTML content
-      await page.setContent(htmlContent, {
-        waitUntil: 'networkidle0',
+      // Create a new jsPDF instance
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
       });
 
-      // Generate PDF with proper formatting for bills
-      const pdfBuffer = await page.pdf({
-        format: 'A4',
-        printBackground: true,
-        margin: {
-          top: '20px',
-          right: '20px',
-          bottom: '20px',
-          left: '20px',
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      let yPosition = 20;
+
+      // Header Section
+      doc.setFontSize(16);
+      doc.setFont(undefined, 'bold');
+      doc.text('LAGOS STATE GOVERNMENT', pageWidth / 2, yPosition, {
+        align: 'center',
+      });
+      yPosition += 8;
+
+      doc.setFontSize(14);
+      doc.text(
+        'Lagos Waste Management Authority (LAWMA)',
+        pageWidth / 2,
+        yPosition,
+        { align: 'center' },
+      );
+      yPosition += 15;
+
+      // Title
+      doc.setFontSize(18);
+      doc.setFont(undefined, 'bold');
+      doc.text('WASTE MANAGEMENT BILL', pageWidth / 2, yPosition, {
+        align: 'center',
+      });
+      yPosition += 5;
+
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      doc.text('Issued by: Golden Rising Sun', pageWidth / 2, yPosition, {
+        align: 'center',
+      });
+      yPosition += 20;
+
+      // Bill Details Section
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      doc.text('BILL DETAILS', 20, yPosition);
+      yPosition += 8;
+
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(10);
+
+      // Left column
+      const leftCol = 20;
+      const rightCol = 120;
+
+      doc.text(
+        `Bill Reference: GRS-${user.propertySubscriptionId}`,
+        leftCol,
+        yPosition,
+      );
+      doc.text(`Bill Date: ${billData.billDate}`, rightCol, yPosition);
+      yPosition += 6;
+
+      doc.text(
+        `Billing Reference: Billing-${billData.billId}`,
+        leftCol,
+        yPosition,
+      );
+      doc.text(
+        `Generated: ${new Date().toLocaleDateString()}`,
+        rightCol,
+        yPosition,
+      );
+      yPosition += 15;
+
+      // Customer Details Section with Virtual Account beside it
+      const billToStartY = yPosition;
+
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      doc.text('BILL TO', leftCol, yPosition);
+      yPosition += 8;
+
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(10);
+      doc.text(billData.accountName, leftCol, yPosition);
+      yPosition += 6;
+      doc.text(billData.propertyAddress, leftCol, yPosition);
+      yPosition += 6;
+      if (billData.phone && billData.phone !== 'N/A') {
+        doc.text(billData.phone, leftCol, yPosition);
+        yPosition += 6;
+      }
+
+      // Virtual Account Details Section (positioned to the right of BILL TO)
+      if (billData.virtualAccount) {
+        const virtualAccountStartY = billToStartY;
+        const virtualAccountLeftCol = rightCol;
+
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
+        doc.text(
+          'PAYMENT ACCOUNT',
+          virtualAccountLeftCol,
+          virtualAccountStartY,
+        );
+
+        // Virtual account box - increased height for two-line account name
+        const boxHeight = 28;
+        const boxWidth = pageWidth - virtualAccountLeftCol - 20;
+        doc.rect(
+          virtualAccountLeftCol,
+          virtualAccountStartY + 5,
+          boxWidth,
+          boxHeight,
+        );
+
+        let virtualAccountY = virtualAccountStartY + 13;
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(8);
+        doc.text(
+          `Account: ${billData.virtualAccount.accountNumber}`,
+          virtualAccountLeftCol + 3,
+          virtualAccountY,
+        );
+        virtualAccountY += 4;
+
+        // Split account name into two lines for better formatting
+        const accountName = billData.virtualAccount.accountName;
+        const maxWidth = boxWidth - 6; // Leave some padding
+        const words = accountName.split(' ');
+
+        if (words.length > 2) {
+          // Split into two lines
+          const midPoint = Math.ceil(words.length / 2);
+          const firstLine = words.slice(0, midPoint).join(' ');
+          const secondLine = words.slice(midPoint).join(' ');
+
+          doc.text(
+            `Name: ${firstLine}`,
+            virtualAccountLeftCol + 3,
+            virtualAccountY,
+          );
+          virtualAccountY += 4;
+          doc.text(`${secondLine}`, virtualAccountLeftCol + 9, virtualAccountY);
+          virtualAccountY += 4;
+        } else {
+          // Keep on one line if short
+          doc.text(
+            `Name: ${accountName}`,
+            virtualAccountLeftCol + 3,
+            virtualAccountY,
+          );
+          virtualAccountY += 4;
+        }
+
+        doc.text(
+          `Bank: ${billData.virtualAccount.bankName}`,
+          virtualAccountLeftCol + 3,
+          virtualAccountY,
+        );
+      }
+
+      yPosition += 10;
+
+      // Property Units Details Section
+      if (billData.propertyUnits && billData.propertyUnits.length > 0) {
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
+        doc.text('PROPERTY UNITS BREAKDOWN', leftCol, yPosition);
+        yPosition += 10;
+
+        // Table headers
+        doc.setFontSize(9);
+        doc.setFont(undefined, 'bold');
+        doc.text('Property Type', leftCol, yPosition);
+        doc.text('Units', leftCol + 60, yPosition);
+        doc.text('Rate (N)', leftCol + 90, yPosition);
+        doc.text('Amount (N)', leftCol + 130, yPosition);
+        yPosition += 3;
+
+        // Draw line under headers
+        doc.line(leftCol, yPosition, pageWidth - 20, yPosition);
+        yPosition += 6;
+
+        // Property units details
+        doc.setFont(undefined, 'normal');
+        billData.propertyUnits.forEach((unit: any) => {
+          const unitAmount = unit.count * unit.rate;
+          doc.text(unit.type, leftCol, yPosition);
+          doc.text(unit.count.toString(), leftCol + 60, yPosition);
+          doc.text(unit.rate.toLocaleString(), leftCol + 90, yPosition);
+          doc.text(unitAmount.toLocaleString(), leftCol + 130, yPosition);
+          yPosition += 6;
+        });
+        yPosition += 5;
+      }
+
+      // Billing Summary Table
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      doc.text('BILLING SUMMARY', leftCol, yPosition);
+      yPosition += 10;
+
+      // Table headers - Use simple text to avoid encoding issues
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'bold');
+      doc.text('Description', leftCol, yPosition);
+      doc.text('Amount (N)', rightCol + 40, yPosition);
+      yPosition += 2;
+
+      // Draw line under headers
+      doc.line(leftCol, yPosition, pageWidth - 20, yPosition);
+      yPosition += 8;
+
+      // Table content
+      doc.setFont(undefined, 'normal');
+      doc.text('Current Month Charges', leftCol, yPosition);
+      doc.text(
+        parseFloat(billData.currentCharges).toLocaleString(),
+        rightCol + 40,
+        yPosition,
+      );
+      yPosition += 6;
+
+      doc.text('Previous Balance', leftCol, yPosition);
+      doc.text(
+        parseFloat(billData.previousBalance).toLocaleString(),
+        rightCol + 40,
+        yPosition,
+      );
+      yPosition += 8;
+
+      // Draw line before total
+      doc.line(leftCol, yPosition, pageWidth - 20, yPosition);
+      yPosition += 8;
+
+      // Total - Use simple formatting to avoid encoding issues
+      doc.setFont(undefined, 'bold');
+      doc.setFontSize(12);
+      doc.text('TOTAL AMOUNT DUE', leftCol, yPosition);
+      doc.text(
+        `N${parseFloat(billData.totalAmount).toLocaleString()}`,
+        rightCol + 40,
+        yPosition,
+      );
+      yPosition += 20;
+
+      // Last Payment Section
+      if (billData.lastPayment) {
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
+        doc.text('LAST PAYMENT', leftCol, yPosition);
+        yPosition += 8;
+
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(10);
+        doc.text(
+          `Amount: N${parseFloat(
+            billData.lastPayment.amount,
+          ).toLocaleString()}`,
+          leftCol,
+          yPosition,
+        );
+        yPosition += 6;
+        doc.text(`Date: ${billData.lastPayment.date}`, leftCol, yPosition);
+        yPosition += 6;
+        doc.text(
+          `Payer: ${billData.lastPayment.payerName}`,
+          leftCol,
+          yPosition,
+        );
+        yPosition += 15;
+      }
+
+      // Footer
+      doc.setFontSize(8);
+      doc.text(
+        'This bill is issued by Golden Rising Sun on behalf of the Lagos State Government',
+        leftCol,
+        pageHeight - 30,
+      );
+      doc.text(
+        'by Virtue of Section 18 of the Lagos Waste Management Authority Law No. 127 Vol. 40,',
+        leftCol,
+        pageHeight - 26,
+      );
+      doc.text(
+        'Law of Lagos State 2007. Failure to pay attracts penalties as prescribed by law.',
+        leftCol,
+        pageHeight - 22,
+      );
+
+      doc.text(
+        'Enquiries: 08052323309, 08095323309, 08082562771',
+        leftCol,
+        pageHeight - 15,
+      );
+      doc.text(
+        'LAWMA Response Center (LRC): 07080601020',
+        leftCol,
+        pageHeight - 11,
+      );
+
+      // Convert to buffer
+      const pdfOutput = doc.output('arraybuffer');
+      return Buffer.from(pdfOutput);
+    } catch (error) {
+      console.error('Error generating bill PDF:', error);
+      throw new Error(`Failed to generate bill PDF: ${error.message}`);
+    }
+  }
+
+  private async getBillDataForPDF(
+    user: AuthTokenPayload,
+    billId: string,
+  ): Promise<any> {
+    try {
+      // Get the billing data using the same approach as generateBillHTML
+      const { propertySubscriptionId } = user;
+
+      if (!propertySubscriptionId) {
+        throw new Error('Property subscription ID is required');
+      }
+
+      // Get the specific bill
+      const billing = await this.dbManager.findOne(Billing, {
+        where: {
+          id: billId,
+          propertySubscriptionId: propertySubscriptionId.toString(),
         },
       });
 
-      return Buffer.from(pdfBuffer);
-    } finally {
-      await browser.close();
+      if (!billing) {
+        throw new Error('Bill not found');
+      }
+
+      // Get property subscription details with units
+      const propertySubscription = await this.dbManager.findOne(
+        PropertySubscription,
+        {
+          where: { id: propertySubscriptionId.toString() },
+          relations: [
+            'entitySubscriberProfile',
+            'propertySubscriptionUnits',
+            'propertySubscriptionUnits.entitySubscriberProperty',
+            'propertySubscriptionUnits.entitySubscriberProperty.propertyType',
+          ],
+        },
+      );
+
+      // Get billing account for arrears
+      const billingAccount = await this.dbManager.findOne(BillingAccount, {
+        where: { propertySubscriptionId: propertySubscriptionId.toString() },
+      });
+
+      const currentArrears = billingAccount
+        ? parseFloat(billingAccount.totalBillings) -
+          parseFloat(billingAccount.totalPayments)
+        : 0;
+
+      // Get last payment
+      const lastPayment = await this.dbManager.findOne(Payment, {
+        where: { propertySubscriptionId: propertySubscriptionId.toString() },
+        order: { createdAt: 'DESC' },
+      });
+
+      // Get virtual account details
+      const virtualAccount = await this.dbManager.findOne(
+        VirtualAccountDetail,
+        {
+          where: { propertySubscriptionId: propertySubscriptionId.toString() },
+        },
+      );
+
+      // Format month name
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      const monthNumber = parseInt(billing.month, 10);
+      const monthName = monthNames[monthNumber - 1] || billing.month;
+
+      // Build property units breakdown
+      const propertyUnits =
+        propertySubscription?.propertySubscriptionUnits?.map((unit) => ({
+          type:
+            unit.entitySubscriberProperty?.propertyType?.name ||
+            'Standard Property',
+          count: unit.propertyUnits,
+          rate: parseFloat(
+            unit.entitySubscriberProperty?.propertyType?.unitPrice || '0',
+          ),
+        })) || [
+          {
+            type: 'Standard Property',
+            count: 1,
+            rate: parseFloat(billing.amount),
+          },
+        ];
+
+      const billDataResult = {
+        billId: billing.id,
+        accountName: propertySubscription?.entitySubscriberProfile
+          ? `${propertySubscription.entitySubscriberProfile.firstName || ''} ${
+              propertySubscription.entitySubscriberProfile.lastName || ''
+            }`.trim()
+          : 'N/A',
+        propertyAddress:
+          `${propertySubscription?.streetNumber || ''} ${
+            propertySubscription?.propertySubscriptionName || ''
+          }`.trim() || 'N/A',
+        billDate: `${monthName} ${billing.year}`,
+        dueDate: 'End of Month',
+        currentCharges: parseFloat(billing.amount).toFixed(2),
+        previousBalance: Math.max(
+          0,
+          currentArrears - parseFloat(billing.amount),
+        ).toFixed(2),
+        totalAmount: (
+          parseFloat(billing.amount) +
+          Math.max(0, currentArrears - parseFloat(billing.amount))
+        ).toFixed(2),
+        phone: propertySubscription?.entitySubscriberProfile?.phone || 'N/A',
+        propertyUnits,
+        lastPayment: lastPayment
+          ? {
+              amount: parseFloat(lastPayment.amount).toFixed(2),
+              date: lastPayment.paymentDate,
+              payerName: lastPayment.payerName,
+            }
+          : null,
+        virtualAccount: virtualAccount
+          ? {
+              accountNumber: virtualAccount.account_number,
+              accountName: virtualAccount.account_name,
+              bankName: virtualAccount.bank,
+            }
+          : null,
+      };
+
+      return billDataResult;
+    } catch (error) {
+      console.error('Error getting bill data for PDF:', error);
+      // Return default data if there's an error
+      return {
+        billId: billId,
+        accountName: 'N/A',
+        propertyAddress: 'N/A',
+        billDate: new Date().toLocaleDateString(),
+        dueDate: 'N/A',
+        currentCharges: '0.00',
+        previousBalance: '0.00',
+        totalAmount: '0.00',
+        phone: 'N/A',
+        propertyUnits: [],
+        lastPayment: null,
+        virtualAccount: null,
+      };
     }
   }
 
@@ -1144,8 +1586,8 @@ export class ServiceClientService {
   // Notification Methods
   async getNotifications(
     user: AuthTokenPayload,
-    page: number = 1,
-    limit: number = 10,
+    page = 1,
+    limit = 10,
     filter?: 'all' | 'unread' | 'alerts',
   ) {
     // console.log('Getting notifications for user:', {

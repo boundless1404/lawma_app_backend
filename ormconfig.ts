@@ -25,7 +25,7 @@ const defaultDataSourceOptions: TypeOrmDataSourceOptions = {
   type: 'postgres',
   ...omit(databaseConfig, ['maxPoolConnCount']),
   synchronize: false,
-  logging: ['error'],
+  logging: false,
   entities: ['./src/**/*.entity.{js,ts}'],
   migrations: [pathFromSrc('config/database/migrations/**/*.{js,ts}')],
   seeds: [pathFromSrc('config/database/seeds/**/*.{js,ts}')],
@@ -40,7 +40,7 @@ const defaultDataSourceOptions: TypeOrmDataSourceOptions = {
   metadataTableName: 'typeorm_metadata',
   maxQueryExecutionTime: 15000, //Ideal should be 10000 (10s)
   installExtensions: true,
-  logNotifications: true,
+  logNotifications: false,
   ssl: {
     rejectUnauthorized: false,
   },
