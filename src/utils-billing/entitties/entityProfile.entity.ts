@@ -17,6 +17,7 @@ import EntityProfileBankAccountDetails from './entityProfileBankAcountDetails.en
 import PaymentTransfer from './paymentTransfer.entity';
 import VirtualAccountReceivedPayment from './virtualAccountReceivedPayment.entity';
 import { Notification } from './notification.entity';
+import { Role } from './role.entity';
 
 @Entity()
 export class EntityProfile {
@@ -92,4 +93,7 @@ export class EntityProfile {
 
   @OneToMany(() => Notification, (notification) => notification.entityProfile)
   notifications: Notification[];
+
+  @OneToMany(() => Role, (role) => role.entityProfile)
+  roles: Role[];
 }

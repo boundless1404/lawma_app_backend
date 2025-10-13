@@ -18,6 +18,11 @@ import { AuthTokenPayload } from '../lib/types';
 import { GetAuthPayload } from '../shared/getAuthenticatedUserPayload.decorator';
 import { Response } from 'express';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
+import { PermissionGuard } from '../shared/guards/permission.guard';
+import {
+  RequirePermissions,
+  PERMISSIONS,
+} from '../shared/decorators/auth.decorators';
 
 @Controller('service-client')
 @UseGuards(IsAuthenticated)
@@ -98,6 +103,8 @@ export class ServiceClientController {
   */
 
   @Get('billing/:id/download-pdf')
+  @UseGuards(PermissionGuard)
+  @RequirePermissions(PERMISSIONS.BILLING_READ)
   async downloadBillPDF(
     @Param('id') billId: string,
     @GetAuthPayload() user: AuthTokenPayload,

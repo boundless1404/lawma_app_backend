@@ -24,6 +24,7 @@ import { SharedService } from '../shared/shared.service';
 import { ProfileService } from '../shared/profile/profile.service';
 import { ProfileTypes } from '../lib/enums';
 import { PropertySubscription } from '../utils-billing/entitties/propertySubscription.entity';
+import { RbacService } from '../shared/rbac.service';
 
 @Injectable()
 export class AuthService {
@@ -33,6 +34,7 @@ export class AuthService {
     private requestService: RequestService,
     private sharedService: SharedService,
     private profileService: ProfileService,
+    private rbacService: RbacService,
   ) {
     //
     this.dbManager = this.dbSource.manager;
@@ -143,6 +145,28 @@ export class AuthService {
           profile,
           entityProfile.id,
         );
+
+        // Initialize RBAC system for the new entity
+        try {
+          await this.rbacService.initializeSystemRbac(entityProfile.id);
+
+          // Assign super admin role to the creating user
+          const roles = await this.rbacService.getRoles(entityProfile.id);
+          const superAdminRole = roles.find(
+            (role) => role.name === 'super_admin',
+          );
+
+          if (superAdminRole) {
+            await this.rbacService.assignRole({
+              roleId: superAdminRole.id,
+              entityUserProfileId: entityUserProfile.id,
+              assignedByUserId: userData.id,
+            });
+          }
+        } catch (error) {
+          console.warn('Failed to initialize RBAC system:', error);
+          // Don't fail the signup process if RBAC initialization fails
+        }
       }
 
       // TODO: implement else branch

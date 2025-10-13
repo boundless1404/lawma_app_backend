@@ -14,6 +14,11 @@ import {
 import { IsEntityUserAdmin } from '../shared/isEntityUserAdmin.guard';
 import { GetAuthPayload } from '../shared/getAuthenticatedUserPayload.decorator';
 import { AuthTokenPayload, PaystackWebhookEventObject } from '../lib/types';
+import { PermissionGuard } from '../shared/guards/permission.guard';
+import {
+  RequirePermissions,
+  PERMISSIONS,
+} from '../shared/decorators/auth.decorators';
 import {
   CreateLgaDto,
   CreateLgaWardDto,
@@ -50,7 +55,8 @@ export class UtilsBillingController {
   // would create both entity user and subscriber user
   // differentiate with a flag
   @Post('user')
-  @UseGuards(new IsEntityUserAdmin())
+  @UseGuards(PermissionGuard)
+  @RequirePermissions(PERMISSIONS.USERS_CREATE)
   async createUser(
     @Body() createUserDto: CreateUserDto,
     @GetAuthPayload() authPayload: AuthTokenPayload,
@@ -79,7 +85,8 @@ export class UtilsBillingController {
   }
 
   @Post('subscription')
-  @UseGuards(new IsEntityUserAdmin())
+  @UseGuards(PermissionGuard)
+  @RequirePermissions(PERMISSIONS.PROPERTIES_CREATE)
   async createSubscription(
     @Body() createSubscriptionDto: CreateSubscriptionDto,
     @GetAuthPayload() authPayload: AuthTokenPayload,
@@ -92,7 +99,8 @@ export class UtilsBillingController {
   }
 
   @Get('subscription')
-  @UseGuards(IsAuthenticated)
+  @UseGuards(PermissionGuard)
+  @RequirePermissions(PERMISSIONS.PROPERTIES_READ)
   async getSubscriptions(
     @Query() getSubscriptionQuery: GetSubscriptionQuery,
     @GetAuthPayload() authPayload: AuthTokenPayload,
@@ -112,7 +120,8 @@ export class UtilsBillingController {
   }
 
   @Get('subscription/details')
-  @UseGuards(IsAuthenticated)
+  @UseGuards(PermissionGuard)
+  @RequirePermissions(PERMISSIONS.PROPERTIES_READ)
   async getSubscriptionDetails(
     @Query() query: Record<string, string>,
     @GetAuthPayload() authPayload: AuthTokenPayload,

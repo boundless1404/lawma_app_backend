@@ -12,6 +12,7 @@ import { EntityProfile } from './entityProfile.entity';
 import { PhoneCode } from './phoneCode.entity';
 import { EntitySubscriberProfile } from './entitySubscriberProfile.entity';
 import ArrearsUpdate from './arrearsUpdates.entity';
+import { UserRole } from './userRole.entity';
 
 @Entity()
 export class EntityUserProfile {
@@ -69,4 +70,7 @@ export class EntityUserProfile {
 
   @OneToMany(() => ArrearsUpdate, (arrearsUpdate) => arrearsUpdate.entityUser)
   arrearsUpdates: ArrearsUpdate[];
+
+  @OneToMany(() => UserRole, (userRole) => userRole.entityUserProfile)
+  userRoles: UserRole[];
 }
