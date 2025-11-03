@@ -1,0 +1,101 @@
+S/N,CustomerCode,HouseNo,Street,Name,Outstanding,Property1,Unit,Rate,Property2,Unit,Rate,Property3,Unit,Rate,Property4,Unit,Rate,CUSTOMER TYPE
+1,LAW/TEST/101,8B,Akin Adesola Street,Mrs. Ngozi Eze,"22,500",FLAT,3,"2,500",SHOP,2,"4,000",,,,,,,,RESIDENTIAL
+2,LAW/TEST/102,15,Adeola Odeku Street,Mr. Emeka Okonkwo,"18,000",FLAT,2,"3,000",,,,,,,,,,,RESIDENTIAL
+3,LAW/TEST/103,42,Banana Island Road,Chief Olusegun Bakare,"95,000",FLAT,5,"5,000",OFFICE,3,"6,000",SHOP,1,"3,500",,,,COMMERCIAL
+4,LAW/TEST/104,7,Bourdillon Road,Mrs. Funke Adeyemi,"12,500",FLAT,1,"2,500",,,,,,,,,,,,RESIDENTIAL
+5,LAW/TEST/105,23A,Cameron Road,Mr. Tunde Ogunleye,"31,000",OFFICE,2,"7,000",WAREHOUSE,1,"8,000",,,,,,,,COMMERCIAL
+6,LAW/TEST/106,19,Chevron Drive,Miss Blessing Akpan,"9,500",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+7,LAW/TEST/107,55,Elegushi Beach Road,Alhaji Musa Ibrahim,"67,000",SHOP,4,"4,500",OFFICE,2,"6,500",WAREHOUSE,1,"9,000",,,,COMMERCIAL
+8,LAW/TEST/108,31,Falomo Shopping Complex,Mrs. Chidinma Nwosu,"14,000",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+9,LAW/TEST/109,12,Gbagada Expressway,Mr. Kunle Adebayo,"28,500",OFFICE,3,"5,500",SHOP,1,"3,000",,,,,,,,COMMERCIAL
+10,LAW/TEST/110,48,Glover Road,Mrs. Aisha Mohammed,"11,000",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+11,LAW/TEST/111,5C,Herbert Macaulay Way,Mr. Chukwudi Okafor,"45,000",FLAT,4,"3,500",OFFICE,2,"6,000",SHOP,2,"4,000",,,,RESIDENTIAL
+12,LAW/TEST/112,27,Idowu Taylor Street,Mrs. Kemi Olowu,"16,500",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+13,LAW/TEST/113,63,Ikorodu Road,Mr. Segun Afolabi,"53,000",WAREHOUSE,2,"9,000",OFFICE,2,"6,500",,,,,,,,COMMERCIAL
+14,LAW/TEST/114,9,Ikoyi Crescent,Mrs. Amaka Nnadi,"19,500",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+15,LAW/TEST/115,44,Isaac John Street,Mr. Babatunde Ojo,"38,000",SHOP,3,"4,500",OFFICE,3,"5,500",,,,,,,,COMMERCIAL
+16,LAW/TEST/116,18,Keffi Street,Miss Patience Obiora,"7,800",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+17,LAW/TEST/117,72,Kofo Abayomi Street,Chief Adebola Williams,"82,000",FLAT,6,"4,000",OFFICE,4,"7,000",SHOP,2,"3,500",,,,COMMERCIAL
+18,LAW/TEST/118,25,Kudirat Abiola Way,Mrs. Nneka Chukwu,"13,500",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+19,LAW/TEST/119,51,Lekki-Epe Expressway,Mr. Femi Adeleke,"71,500",WAREHOUSE,3,"8,500",OFFICE,3,"6,000",,,,,,,,COMMERCIAL
+20,LAW/TEST/120,11,MacPherson Avenue,Mrs. Grace Adamu,"10,500",FLAT,1,"2,500",,,,,,,,,,,,RESIDENTIAL
+21,LAW/TEST/121,36,Marina Street,Mr. Yusuf Abdullahi,"49,000",OFFICE,4,"6,500",SHOP,3,"3,500",,,,,,,,COMMERCIAL
+22,LAW/TEST/122,14,Milverton Road,Mrs. Ifeoma Okeke,"15,000",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+23,LAW/TEST/123,68,Mobolaji Bank Anthony Way,Mr. Olumide Balogun,"59,500",SHOP,5,"4,000",OFFICE,2,"7,000",FLAT,2,"3,000",,,,COMMERCIAL
+24,LAW/TEST/124,22,Norman Williams Street,Mrs. Hauwa Hassan,"12,000",FLAT,2,"2,000",,,,,,,,,,,,RESIDENTIAL
+25,LAW/TEST/125,49,Obalende Road,Mr. Chinedu Obi,"34,500",OFFICE,2,"6,500",SHOP,2,"4,000",,,,,,,,COMMERCIAL
+26,LAW/TEST/126,7D,Ogunlana Drive,Mrs. Folake Akinwale,"8,500",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+27,LAW/TEST/127,85,Opebi Road,Chief Ifeanyi Eze,"88,000",FLAT,7,"3,500",OFFICE,5,"6,500",WAREHOUSE,1,"9,500",,,,COMMERCIAL
+28,LAW/TEST/128,33,Oregun Road,Mrs. Titilayo Ogunbiyi,"17,500",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+29,LAW/TEST/129,59,Ozumba Mbadiwe Avenue,Mr. Ahmed Bello,"76,000",WAREHOUSE,4,"8,000",OFFICE,3,"6,000",,,,,,,,COMMERCIAL
+30,LAW/TEST/130,16,Ribadu Road,Mrs. Jennifer Nnamdi,"11,500",FLAT,1,"2,500",,,,,,,,,,,,RESIDENTIAL
+31,LAW/TEST/131,41,Sanusi Fafunwa Street,Mr. Ikechukwu Okafor,"42,000",SHOP,4,"4,500",OFFICE,2,"5,500",FLAT,1,"3,000",,,,COMMERCIAL
+32,LAW/TEST/132,28,Saro Wiwa Road,Mrs. Zainab Lawal,"14,500",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+33,LAW/TEST/133,74,Third Mainland Bridge,Mr. Godwin Eze,"62,000",WAREHOUSE,2,"9,500",OFFICE,4,"6,000",SHOP,1,"3,500",,,,COMMERCIAL
+34,LAW/TEST/134,20,Toyin Street,Mrs. Adaobi Okoli,"9,000",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+35,LAW/TEST/135,53,Udi Street,Mr. Rotimi Odusanya,"47,500",OFFICE,3,"7,000",SHOP,3,"4,000",FLAT,2,"2,500",,,,COMMERCIAL
+36,LAW/TEST/136,10,Waziri Ibrahim Crescent,Mrs. Rukayat Ibrahim,"13,000",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+37,LAW/TEST/137,67,Yaba Road,Chief Obinna Nwachukwu,"73,500",FLAT,5,"4,500",OFFICE,4,"6,500",SHOP,3,"3,500",,,,COMMERCIAL
+38,LAW/TEST/138,24,Alfred Rewane Road,Mrs. Fatima Usman,"16,000",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+39,LAW/TEST/139,81,Awolowo Way,Mr. Nnamdi Azikiwe,"55,000",WAREHOUSE,2,"8,500",OFFICE,3,"6,500",,,,,,,,COMMERCIAL
+40,LAW/TEST/140,13,Bode Thomas Street,Mrs. Blessing Okonkwo,"10,000",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+41,LAW/TEST/141,46,Chief Collins Street,Mr. Uche Nnaji,"39,500",SHOP,3,"4,500",OFFICE,3,"6,000",FLAT,1,"2,500",,,,COMMERCIAL
+42,LAW/TEST/142,29,Davies Street,Mrs. Oluchi Nwankwo,"18,500",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+43,LAW/TEST/143,70,Ebute Metta Road,Mr. Yakubu Danjuma,"66,000",WAREHOUSE,3,"8,000",OFFICE,2,"7,000",SHOP,2,"4,000",,,,COMMERCIAL
+44,LAW/TEST/144,17,Force Road,Mrs. Chinwe Eze,"12,500",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+45,LAW/TEST/145,52,Gerrard Road,Chief Emeka Okoli,"51,000",OFFICE,4,"6,500",SHOP,2,"4,500",FLAT,2,"3,000",,,,COMMERCIAL
+46,LAW/TEST/146,8,Hakeem Dickson Street,Mrs. Chioma Ajayi,"9,500",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+47,LAW/TEST/147,88,Ilupeju Bypass,Mr. Adekunle Adisa,"79,500",FLAT,6,"4,000",OFFICE,5,"6,000",WAREHOUSE,1,"9,000",,,,COMMERCIAL
+48,LAW/TEST/148,35,Jimoh Odutola Street,Mrs. Amina Suleiman,"17,000",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+49,LAW/TEST/149,61,Kings Way,Mr. Chijioke Ononiwu,"58,000",WAREHOUSE,2,"9,000",OFFICE,4,"6,500",,,,,,,,COMMERCIAL
+50,LAW/TEST/150,19,Ligali Ayorinde Street,Mrs. Temitope Owolabi,"11,000",FLAT,1,"2,500",,,,,,,,,,,,RESIDENTIAL
+51,LAW/TEST/151,43,Moloney Street,Mr. Ifeanyi Okoro,"44,500",SHOP,4,"4,500",OFFICE,2,"6,500",FLAT,3,"2,500",,,,COMMERCIAL
+52,LAW/TEST/152,26,Nnobi Street,Mrs. Chiamaka Obinna,"15,500",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+53,LAW/TEST/153,76,Ogudu Road,Chief Joseph Eze,"69,000",FLAT,5,"4,500",OFFICE,3,"7,000",SHOP,2,"3,500",WAREHOUSE,1,"8,000",COMMERCIAL
+54,LAW/TEST/154,21,Park Lane,Mrs. Omotola Adebisi,"13,500",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+55,LAW/TEST/155,57,Queens Drive,Mr. Obinna Chukwuma,"52,500",OFFICE,3,"7,000",SHOP,4,"4,000",FLAT,1,"3,000",,,,COMMERCIAL
+56,LAW/TEST/156,12,Raymond Njoku Street,Mrs. Halima Bala,"10,500",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+57,LAW/TEST/157,69,Shasha Road,Mr. Chukwuma Nweke,"64,500",WAREHOUSE,3,"8,000",OFFICE,3,"6,500",SHOP,1,"3,500",,,,COMMERCIAL
+58,LAW/TEST/158,30,Temple Road,Mrs. Adanna Okoye,"16,500",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+59,LAW/TEST/159,83,Unity Road,Chief Ikenna Obi,"77,000",FLAT,6,"4,000",OFFICE,4,"6,500",SHOP,3,"4,000",,,,COMMERCIAL
+60,LAW/TEST/160,14,Victoria Island Link Road,Mrs. Mariam Yusuf,"11,500",FLAT,1,"2,500",,,,,,,,,,,,RESIDENTIAL
+61,LAW/TEST/161,47,Walter Carrington Crescent,Mr. Chibueze Eze,"41,000",SHOP,3,"4,500",OFFICE,3,"6,000",FLAT,2,"3,000",,,,COMMERCIAL
+62,LAW/TEST/162,32,X-Close Road,Mrs. Ebere Nnamdi,"18,000",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+63,LAW/TEST/163,78,Yaba College Road,Mr. Usman Garba,"70,500",WAREHOUSE,2,"9,500",OFFICE,4,"6,500",SHOP,2,"4,000",,,,COMMERCIAL
+64,LAW/TEST/164,23,Zenith Bank Road,Mrs. Chinonso Okorie,"14,000",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+65,LAW/TEST/165,54,Adelabu Street,Chief Chukwuemeka Okafor,"50,000",OFFICE,4,"6,500",SHOP,2,"4,500",FLAT,2,"3,000",,,,COMMERCIAL
+66,LAW/TEST/166,11,Balogun Street,Mrs. Asabe Mohammed,"9,000",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+67,LAW/TEST/167,90,Campbell Street,Mr. Emeka Nwachukwu,"84,000",FLAT,7,"3,500",OFFICE,5,"6,500",WAREHOUSE,2,"8,500",,,,COMMERCIAL
+68,LAW/TEST/168,37,Daleko Market Road,Mrs. Ogechi Nwosu,"19,500",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+69,LAW/TEST/169,65,Eric Moore Road,Mr. Tunde Adeyinka,"61,500",WAREHOUSE,3,"8,000",OFFICE,2,"7,000",SHOP,3,"3,500",,,,COMMERCIAL
+70,LAW/TEST/170,18,Festac Link Bridge,Mrs. Ndidi Eze,"12,000",FLAT,2,"2,000",,,,,,,,,,,,RESIDENTIAL
+71,LAW/TEST/171,50,Gaskiya Road,Chief Nnamdi Okeke,"48,000",SHOP,4,"4,500",OFFICE,3,"6,000",FLAT,1,"3,000",,,,COMMERCIAL
+72,LAW/TEST/172,27,Haruna Street,Mrs. Salamatu Bello,"15,000",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+73,LAW/TEST/173,73,Iyana-Ipaja Road,Mr. Onyekachi Nwankwo,"68,500",FLAT,5,"4,500",OFFICE,4,"6,500",SHOP,2,"4,000",,,,COMMERCIAL
+74,LAW/TEST/174,20,Jibowu Road,Mrs. Kehinde Akinola,"13,000",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+75,LAW/TEST/175,56,Ketu Market Road,Mr. Ifeanyi Udeh,"54,000",OFFICE,3,"7,000",SHOP,3,"4,500",WAREHOUSE,1,"8,000",,,,COMMERCIAL
+76,LAW/TEST/176,9,Lagos Island Road,Mrs. Nkechi Okoro,"8,500",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+77,LAW/TEST/177,86,Maryland Mall Way,Chief Emeka Eze,"80,500",FLAT,6,"4,500",OFFICE,5,"6,000",SHOP,3,"3,500",WAREHOUSE,1,"9,000",COMMERCIAL
+78,LAW/TEST/178,34,Nnamdi Azikiwe Street,Mrs. Fatima Aliyu,"17,500",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+79,LAW/TEST/179,62,Okota Road,Mr. Chukwudi Nnaji,"60,000",WAREHOUSE,2,"9,000",OFFICE,4,"6,500",SHOP,1,"4,000",,,,COMMERCIAL
+80,LAW/TEST/180,15,Palm Avenue,Mrs. Adaeze Okafor,"10,000",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+81,LAW/TEST/181,45,Quaker Road,Mr. Ikechukwu Nweke,"43,500",SHOP,3,"4,500",OFFICE,3,"6,500",FLAT,2,"2,500",,,,COMMERCIAL
+82,LAW/TEST/182,31,Railway Crossing,Mrs. Chidinma Obi,"18,500",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+83,LAW/TEST/183,79,Surulere Way,Chief Nnamdi Eze,"75,000",FLAT,6,"4,000",OFFICE,4,"7,000",SHOP,2,"3,500",WAREHOUSE,1,"8,500",COMMERCIAL
+84,LAW/TEST/184,22,Town Planning Way,Mrs. Abiola Oyewole,"14,500",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+85,LAW/TEST/185,58,Uba Street,Mr. Chinedu Okoro,"56,500",OFFICE,4,"6,500",SHOP,2,"4,500",WAREHOUSE,1,"8,500",,,,COMMERCIAL
+86,LAW/TEST/186,13,Victoria Arobieke Street,Mrs. Ngozi Nnamani,"11,500",FLAT,1,"2,500",,,,,,,,,,,,RESIDENTIAL
+87,LAW/TEST/187,91,Wilmer Road,Chief Obinna Okeke,"87,500",FLAT,7,"4,000",OFFICE,5,"6,500",SHOP,4,"3,500",WAREHOUSE,1,"9,000",COMMERCIAL
+88,LAW/TEST/188,38,Xavier Avenue,Mrs. Precious Eze,"19,000",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+89,LAW/TEST/189,66,Yellow Sun Street,Mr. Tochukwu Nwosu,"63,000",WAREHOUSE,3,"8,000",OFFICE,3,"6,500",SHOP,2,"3,500",,,,COMMERCIAL
+90,LAW/TEST/190,16,Zango Road,Mrs. Khadija Musa,"12,500",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+91,LAW/TEST/191,48,Ajao Estate Road,Mr. Emeka Nwachukwu,"46,000",SHOP,4,"4,500",OFFICE,2,"6,500",FLAT,3,"2,500",,,,COMMERCIAL
+92,LAW/TEST/192,25,Babs Animashaun Street,Mrs. Uju Okafor,"16,000",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+93,LAW/TEST/193,75,Computer Village Way,Chief Ikenna Nwankwo,"72,000",FLAT,5,"4,500",OFFICE,4,"6,500",SHOP,3,"3,500",WAREHOUSE,1,"8,500",COMMERCIAL
+94,LAW/TEST/194,21,Dopemu Road,Mrs. Hadiza Abubakar,"13,500",FLAT,2,"2,500",,,,,,,,,,,,RESIDENTIAL
+95,LAW/TEST/195,60,Ejigbo Link Road,Mr. Chijioke Obi,"57,500",OFFICE,3,"7,000",SHOP,4,"4,000",WAREHOUSE,1,"8,500",,,,COMMERCIAL
+96,LAW/TEST/196,10,Fadeyi Street,Mrs. Chinenye Eze,"9,500",FLAT,1,"2,000",,,,,,,,,,,,RESIDENTIAL
+97,LAW/TEST/197,89,Grammar School Road,Chief Chukwuemeka Nweke,"83,000",FLAT,6,"4,500",OFFICE,5,"6,500",SHOP,3,"4,000",WAREHOUSE,2,"8,000",COMMERCIAL
+98,LAW/TEST/198,36,Harmony Estate Road,Mrs. Amara Okoro,"18,500",FLAT,3,"2,500",,,,,,,,,,,,RESIDENTIAL
+99,LAW/TEST/199,64,Igando Road,Mr. Ifeanyi Nnamdi,"62,500",WAREHOUSE,2,"9,500",OFFICE,4,"6,500",SHOP,1,"3,500",,,,COMMERCIAL
+100,LAW/TEST/200,17,Jankara Market Street,Mrs. Zainab Hassan,"11,000",FLAT,1,"2,500",,,,,,,,,,,,RESIDENTIAL

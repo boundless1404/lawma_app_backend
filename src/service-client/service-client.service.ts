@@ -799,46 +799,62 @@ export class ServiceClientService {
       const pageHeight = doc.internal.pageSize.getHeight();
       let yPosition = 20;
 
-      // Header Section
-      doc.setFontSize(16);
+      // Add logos to upper corners (if you have logo URLs)
+      try {
+        // Left corner logo - Lagos State Government logo
+        const leftLogoUrl =
+          'https://boundlessobs.s3.eu-north-1.amazonaws.com/lagos-state-logo.jpg';
+        doc.addImage(leftLogoUrl, 'JPEG', 10, 10, 25, 25); // x, y, width, height
+
+        // Right corner logo - LAWMA logo
+        const rightLogoUrl =
+          'https://boundlessobs.s3.eu-north-1.amazonaws.com/lawma-logo.jpg';
+        doc.addImage(rightLogoUrl, 'JPEG', pageWidth - 35, 10, 25, 25); // x, y, width, height
+      } catch (error) {
+        console.warn('Could not load logo images:', error);
+        // Continue without logos if images fail to load
+      }
+
+      // Header Section - more compact
+      doc.setFontSize(10);
       doc.setFont(undefined, 'bold');
       doc.text('LAGOS STATE GOVERNMENT', pageWidth / 2, yPosition, {
         align: 'center',
       });
-      yPosition += 8;
+      yPosition += 4;
 
-      doc.setFontSize(14);
+      doc.setFontSize(9);
       doc.text(
         'Lagos Waste Management Authority (LAWMA)',
         pageWidth / 2,
         yPosition,
         { align: 'center' },
       );
-      yPosition += 15;
+      yPosition += 8;
 
-      // Title
-      doc.setFontSize(18);
+      // Title - prominent and larger
+      doc.setFontSize(22);
       doc.setFont(undefined, 'bold');
       doc.text('WASTE MANAGEMENT BILL', pageWidth / 2, yPosition, {
         align: 'center',
       });
-      yPosition += 5;
+      yPosition += 3;
 
-      doc.setFontSize(10);
+      doc.setFontSize(7);
       doc.setFont(undefined, 'normal');
       doc.text('Issued by: Golden Rising Sun', pageWidth / 2, yPosition, {
         align: 'center',
       });
-      yPosition += 20;
+      yPosition += 12;
 
-      // Bill Details Section
-      doc.setFontSize(12);
+      // Bill Details Section - more compact
+      doc.setFontSize(9);
       doc.setFont(undefined, 'bold');
       doc.text('BILL DETAILS', 20, yPosition);
-      yPosition += 8;
+      yPosition += 4;
 
       doc.setFont(undefined, 'normal');
-      doc.setFontSize(10);
+      doc.setFontSize(7);
 
       // Left column
       const leftCol = 20;
@@ -850,7 +866,7 @@ export class ServiceClientService {
         yPosition,
       );
       doc.text(`Bill Date: ${billData.billDate}`, rightCol, yPosition);
-      yPosition += 6;
+      yPosition += 4;
 
       doc.text(
         `Billing Reference: Billing-${billData.billId}`,
@@ -862,25 +878,23 @@ export class ServiceClientService {
         rightCol,
         yPosition,
       );
-      yPosition += 15;
-
-      // Customer Details Section with Virtual Account beside it
+      yPosition += 10; // Customer Details Section with Virtual Account beside it - more compact
       const billToStartY = yPosition;
 
-      doc.setFontSize(12);
+      doc.setFontSize(9);
       doc.setFont(undefined, 'bold');
       doc.text('BILL TO', leftCol, yPosition);
-      yPosition += 8;
+      yPosition += 4;
 
       doc.setFont(undefined, 'normal');
-      doc.setFontSize(10);
+      doc.setFontSize(7);
       doc.text(billData.accountName, leftCol, yPosition);
-      yPosition += 6;
+      yPosition += 3;
       doc.text(billData.propertyAddress, leftCol, yPosition);
-      yPosition += 6;
+      yPosition += 3;
       if (billData.phone && billData.phone !== 'N/A') {
         doc.text(billData.phone, leftCol, yPosition);
-        yPosition += 6;
+        yPosition += 3;
       }
 
       // Virtual Account Details Section (positioned to the right of BILL TO)
@@ -888,7 +902,7 @@ export class ServiceClientService {
         const virtualAccountStartY = billToStartY;
         const virtualAccountLeftCol = rightCol;
 
-        doc.setFontSize(12);
+        doc.setFontSize(9);
         doc.setFont(undefined, 'bold');
         doc.text(
           'PAYMENT ACCOUNT',
@@ -896,29 +910,28 @@ export class ServiceClientService {
           virtualAccountStartY,
         );
 
-        // Virtual account box - increased height for two-line account name
-        const boxHeight = 28;
+        // Virtual account box - more compact
+        const boxHeight = 24;
         const boxWidth = pageWidth - virtualAccountLeftCol - 20;
         doc.rect(
           virtualAccountLeftCol,
-          virtualAccountStartY + 5,
+          virtualAccountStartY + 3,
           boxWidth,
           boxHeight,
         );
 
-        let virtualAccountY = virtualAccountStartY + 13;
+        let virtualAccountY = virtualAccountStartY + 10;
         doc.setFont(undefined, 'normal');
-        doc.setFontSize(8);
+        doc.setFontSize(7);
         doc.text(
           `Account: ${billData.virtualAccount.accountNumber}`,
-          virtualAccountLeftCol + 3,
+          virtualAccountLeftCol + 2,
           virtualAccountY,
         );
-        virtualAccountY += 4;
+        virtualAccountY += 3;
 
         // Split account name into two lines for better formatting
         const accountName = billData.virtualAccount.accountName;
-        const maxWidth = boxWidth - 6; // Leave some padding
         const words = accountName.split(' ');
 
         if (words.length > 2) {
@@ -929,52 +942,52 @@ export class ServiceClientService {
 
           doc.text(
             `Name: ${firstLine}`,
-            virtualAccountLeftCol + 3,
+            virtualAccountLeftCol + 2,
             virtualAccountY,
           );
-          virtualAccountY += 4;
-          doc.text(`${secondLine}`, virtualAccountLeftCol + 9, virtualAccountY);
-          virtualAccountY += 4;
+          virtualAccountY += 3;
+          doc.text(`${secondLine}`, virtualAccountLeftCol + 8, virtualAccountY);
+          virtualAccountY += 3;
         } else {
           // Keep on one line if short
           doc.text(
             `Name: ${accountName}`,
-            virtualAccountLeftCol + 3,
+            virtualAccountLeftCol + 2,
             virtualAccountY,
           );
-          virtualAccountY += 4;
+          virtualAccountY += 3;
         }
 
         doc.text(
           `Bank: ${billData.virtualAccount.bankName}`,
-          virtualAccountLeftCol + 3,
+          virtualAccountLeftCol + 2,
           virtualAccountY,
         );
       }
 
-      yPosition += 10;
+      yPosition += 13;
 
-      // Property Units Details Section
+      // Property Units Details Section - more compact
       if (billData.propertyUnits && billData.propertyUnits.length > 0) {
-        doc.setFontSize(12);
+        doc.setFontSize(9);
         doc.setFont(undefined, 'bold');
         doc.text('PROPERTY UNITS BREAKDOWN', leftCol, yPosition);
-        yPosition += 10;
+        yPosition += 5;
 
-        // Table headers
-        doc.setFontSize(9);
+        // Table headers - smaller fonts
+        doc.setFontSize(7);
         doc.setFont(undefined, 'bold');
         doc.text('Property Type', leftCol, yPosition);
         doc.text('Units', leftCol + 60, yPosition);
         doc.text('Rate (N)', leftCol + 90, yPosition);
         doc.text('Amount (N)', leftCol + 130, yPosition);
-        yPosition += 3;
+        yPosition += 2;
 
         // Draw line under headers
         doc.line(leftCol, yPosition, pageWidth - 20, yPosition);
-        yPosition += 6;
+        yPosition += 3;
 
-        // Property units details
+        // Property units details - more compact
         doc.setFont(undefined, 'normal');
         billData.propertyUnits.forEach((unit: any) => {
           const unitAmount = unit.count * unit.rate;
@@ -982,19 +995,19 @@ export class ServiceClientService {
           doc.text(unit.count.toString(), leftCol + 60, yPosition);
           doc.text(unit.rate.toLocaleString(), leftCol + 90, yPosition);
           doc.text(unitAmount.toLocaleString(), leftCol + 130, yPosition);
-          yPosition += 6;
+          yPosition += 3;
         });
-        yPosition += 5;
+        yPosition += 3;
       }
 
-      // Billing Summary Table
-      doc.setFontSize(12);
+      // Billing Summary Table - more compact
+      doc.setFontSize(9);
       doc.setFont(undefined, 'bold');
       doc.text('BILLING SUMMARY', leftCol, yPosition);
-      yPosition += 10;
+      yPosition += 5;
 
-      // Table headers - Use simple text to avoid encoding issues
-      doc.setFontSize(10);
+      // Table headers - smaller font
+      doc.setFontSize(7);
       doc.setFont(undefined, 'bold');
       doc.text('Description', leftCol, yPosition);
       doc.text('Amount (N)', rightCol + 40, yPosition);
@@ -1002,9 +1015,9 @@ export class ServiceClientService {
 
       // Draw line under headers
       doc.line(leftCol, yPosition, pageWidth - 20, yPosition);
-      yPosition += 8;
+      yPosition += 3;
 
-      // Table content
+      // Table content - more compact
       doc.setFont(undefined, 'normal');
       doc.text('Current Month Charges', leftCol, yPosition);
       doc.text(
@@ -1012,7 +1025,7 @@ export class ServiceClientService {
         rightCol + 40,
         yPosition,
       );
-      yPosition += 6;
+      yPosition += 3;
 
       doc.text('Previous Balance', leftCol, yPosition);
       doc.text(
@@ -1020,32 +1033,32 @@ export class ServiceClientService {
         rightCol + 40,
         yPosition,
       );
-      yPosition += 8;
+      yPosition += 4;
 
       // Draw line before total
       doc.line(leftCol, yPosition, pageWidth - 20, yPosition);
-      yPosition += 8;
+      yPosition += 3;
 
-      // Total - Use simple formatting to avoid encoding issues
+      // Total - slightly larger but still compact
       doc.setFont(undefined, 'bold');
-      doc.setFontSize(12);
+      doc.setFontSize(9);
       doc.text('TOTAL AMOUNT DUE', leftCol, yPosition);
       doc.text(
         `N${parseFloat(billData.totalAmount).toLocaleString()}`,
         rightCol + 40,
         yPosition,
       );
-      yPosition += 20;
+      yPosition += 10;
 
       // Last Payment Section
       if (billData.lastPayment) {
-        doc.setFontSize(12);
+        doc.setFontSize(10);
         doc.setFont(undefined, 'bold');
         doc.text('LAST PAYMENT', leftCol, yPosition);
-        yPosition += 8;
+        yPosition += 6;
 
         doc.setFont(undefined, 'normal');
-        doc.setFontSize(10);
+        doc.setFontSize(8);
         doc.text(
           `Amount: N${parseFloat(
             billData.lastPayment.amount,

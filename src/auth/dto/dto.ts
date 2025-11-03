@@ -31,6 +31,14 @@ export class EntityProfileSignUpDto {
   @IsEmail()
   email: string;
 
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  phoneCode?: string;
+
   @IsNotEmpty()
   @IsString()
   password: string;

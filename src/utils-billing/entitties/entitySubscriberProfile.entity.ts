@@ -14,7 +14,7 @@ import { PhoneCode } from './phoneCode.entity';
 import { EntitySubscriberProperty } from './entitySubscriberProperty.entity';
 import { EntityProfile } from './entityProfile.entity';
 import { EntityUserProfile } from './entityUserProfile.entity';
-import VirtualAccountDetail from './virtualAccountDetail.entity';
+import { UserRole } from './userRole.entity';
 
 @Entity()
 export class EntitySubscriberProfile {
@@ -86,4 +86,7 @@ export class EntitySubscriberProfile {
   )
   @JoinColumn({ name: 'createdByEntityUserProfileId' })
   entityUserProfile: EntityUserProfile;
+
+  @OneToMany(() => UserRole, (userRole) => userRole.entitySubscriberProfile)
+  userRoles: UserRole[];
 }

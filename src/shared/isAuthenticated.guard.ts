@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { AuthenticatedUserData, PlatformRequest } from 'src/lib/types';
+import { PlatformRequest } from 'src/lib/types';
 
 export class IsAuthenticated implements CanActivate {
   constructor() {
@@ -46,7 +46,13 @@ export class IsAuthenticated implements CanActivate {
   ) {
     const req = context.switchToHttp().getRequest() as PlatformRequest;
     const authPayload = req.authPayload;
-    let data = authPayload ? authPayload[dataProp] : undefined;
+
+    // Return undefined if authPayload doesn't exist
+    if (!authPayload) {
+      return undefined;
+    }
+
+    let data = authPayload[dataProp];
     if (dataProp === 'type' && authPayload['type'] === 'serviced-client') {
       data = authPayload;
     }
