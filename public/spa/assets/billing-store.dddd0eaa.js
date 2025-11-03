@@ -1,0 +1,1 @@
+import{dd as s,de as a,df as n}from"./index.bd0c16f4.js";const o=await s(a.LGA_WARD_STREET)||{},r=n("billingStore",{state:()=>({billingDetails:o.billingDetails}),getters:{},actions:{async updateBilling({type:e,data:l}){var t;const i={billingDetail:()=>{this.billingDetails=l}};(t=i[e])==null||t.call(i)}}});export{r as u};
