@@ -32,17 +32,17 @@ export class RequestService {
     } = {},
   ) {
     //
-    // const authToken = this.configService.getOrThrow(
-    //   'AUTH_SERVER_API_ACCESS_TOKEN',
-    // );
-    // baseURL = baseURL || this.configService.getOrThrow('AUTH_SERVER_URL');
-    // const Authorization = headers.Authorization || `Bearer ${authToken}`;
+    const authToken = this.configService.getOrThrow(
+      'AUTH_SERVER_API_ACCESS_TOKEN',
+    );
+    baseURL = baseURL || this.configService.getOrThrow('AUTH_SERVER_URL');
+    const Authorization = headers.Authorization || `Bearer ${authToken}`;
 
     if (!baseURL) {
-      this.setOrUseDefaultBaseUrl(this.baseURL);
+      this.setOrUseDefaultBaseUrl(baseURL);
     }
 
-    this.setOrUseDefaultHeaders(headers || this.headers);
+    this.setOrUseDefaultHeaders({ ...headers, Authorization });
 
     const response = await this.requestApi.axiosRef(path, {
       headers: {

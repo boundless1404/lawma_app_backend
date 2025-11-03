@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, EntityManager } from 'typeorm';
+import { DataSource, EntityManager, In } from 'typeorm';
 import { Role } from '../utils-billing/entitties/role.entity';
 import {
   Permission,
@@ -52,6 +52,28 @@ export class RbacService {
     transactionManager: EntityManager,
   ): Promise<void> {
     const permissionDefinitions = [
+      // Dashboard
+      {
+        name: PERMISSIONS.DASHBOARD_VIEW,
+        displayName: 'View Dashboard',
+        category: PermissionCategory.DASHBOARD,
+        action: PermissionAction.READ,
+      },
+
+      // System Administration
+      {
+        name: PERMISSIONS.SYSTEM_ADMIN,
+        displayName: 'System Administration',
+        category: PermissionCategory.SYSTEM_SETTINGS,
+        action: PermissionAction.UPDATE,
+      },
+      {
+        name: PERMISSIONS.RBAC_ADMIN,
+        displayName: 'RBAC System Administration',
+        category: PermissionCategory.SYSTEM_SETTINGS,
+        action: PermissionAction.UPDATE,
+      },
+
       // User Management
       {
         name: PERMISSIONS.USERS_CREATE,
@@ -333,7 +355,7 @@ export class RbacService {
       if (!existingRole) {
         // Get permissions
         const permissions = await transactionManager.find(Permission, {
-          where: roleDef.permissions.map((permName) => ({ name: permName })),
+          where: { name: In(roleDef.permissions) },
         });
 
         const role = transactionManager.create(Role, {
@@ -356,7 +378,7 @@ export class RbacService {
   async createRole(createRoleDto: CreateRoleDto): Promise<Role> {
     return this.dbManager.transaction(async (transactionManager) => {
       const permissions = await transactionManager.find(Permission, {
-        where: createRoleDto.permissionIds.map((id) => ({ id })),
+        where: { id: In(createRoleDto.permissionIds) },
       });
 
       const role = transactionManager.create(Role, {
@@ -584,6 +606,175 @@ export class RbacService {
     } catch (error) {
       console.error('Error auto-assigning role to user:', error);
       return { roleAssigned: false };
+    }
+  }
+
+  /**
+   * Remove a specific role from a user
+   */
+  async removeUserRole(
+    profileId: string,
+    roleId: string,
+    profileType: 'entity_user_profile' | 'entity_subscriber_profile',
+  ): Promise<void> {
+    const whereClause = {
+      roleId,
+      ...(profileType === 'entity_user_profile'
+        ? { entityUserProfileId: profileId }
+        : { entitySubscriberProfileId: profileId }),
+      isActive: true,
+    };
+
+    await this.dbManager.update(UserRole, whereClause, {
+      isActive: false,
+    });
+  }
+
+  /**
+   * Get RBAC system status for an entity
+   */
+  async getRbacSystemStatus(entityProfileId: string): Promise<{
+    initialized: boolean;
+    rolesCount: number;
+    permissionsCount: number;
+    entityProfileId: string;
+  }> {
+    const [roles, permissions] = await Promise.all([
+      this.getRoles(entityProfileId),
+      this.getPermissions(),
+    ]);
+
+    return {
+      initialized: roles.length > 0 && permissions.length > 0,
+      rolesCount: roles.length,
+      permissionsCount: permissions.length,
+      entityProfileId,
+    };
+  }
+
+  /**
+   * Bulk update user roles - replaces all existing roles with new ones
+   */
+  async bulkUpdateUserRoles(
+    profileId: string,
+    profileType: 'entity_user_profile' | 'entity_subscriber_profile',
+    roleIds: string[],
+    assignedByUserId: string,
+  ): Promise<void> {
+    await this.dbManager.transaction(async (transactionManager) => {
+      // Deactivate all existing roles for this user
+      const whereClause =
+        profileType === 'entity_user_profile'
+          ? { entityUserProfileId: profileId }
+          : { entitySubscriberProfileId: profileId };
+
+      await transactionManager.update(UserRole, whereClause, {
+        isActive: false,
+      });
+
+      // Add new roles
+      for (const roleId of roleIds) {
+        const userRole = transactionManager.create(UserRole, {
+          roleId,
+          ...(profileType === 'entity_user_profile'
+            ? { entityUserProfileId: profileId }
+            : { entitySubscriberProfileId: profileId }),
+          assignedByUserId,
+          isActive: true,
+        });
+        await transactionManager.save(userRole);
+      }
+    });
+  }
+
+  /**
+   * Get total number of roles across all entities (for system status)
+   */
+  async getTotalRoles(): Promise<number> {
+    try {
+      return await this.dbManager.count(Role);
+    } catch (error) {
+      console.error('Error getting total roles count:', error);
+      return 0;
+    }
+  }
+
+  /**
+   * Get total number of permissions (for system status)
+   */
+  async getTotalPermissions(): Promise<number> {
+    try {
+      return await this.dbManager.count(Permission);
+    } catch (error) {
+      console.error('Error getting total permissions count:', error);
+      return 0;
+    }
+  }
+
+  /**
+   * Set RBAC enabled/disabled state - for system-wide toggle
+   * This is stored in a simple way for modularity and extensibility
+   */
+  async setRbacEnabled(enabled: boolean): Promise<void> {
+    try {
+      // For simplicity, we'll use a simple in-memory cache or environment variable approach
+      // In a production system, this could be stored in a dedicated settings table
+      process.env.RBAC_ENABLED = enabled.toString();
+    } catch (error) {
+      console.error('Error setting RBAC enabled state:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Check if RBAC is enabled system-wide
+   */
+  async isRbacEnabled(): Promise<boolean> {
+    try {
+      const envValue = process.env.RBAC_ENABLED;
+      if (envValue !== undefined) {
+        return envValue === 'true';
+      }
+
+      // Default to false (disabled) for backward compatibility
+      return false;
+    } catch (error) {
+      console.error('Error checking RBAC enabled state:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Check if RBAC system is initialized
+   */
+  async isSystemInitialized(): Promise<boolean> {
+    try {
+      const roleCount = await this.getTotalRoles();
+      const permissionCount = await this.getTotalPermissions();
+      return roleCount > 0 && permissionCount > 0;
+    } catch (error) {
+      console.error('Error checking system initialization:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get the first available entity profile ID for initialization
+   * This makes the system more modular by not requiring hardcoded IDs
+   */
+  async getFirstEntityProfileId(): Promise<string | null> {
+    try {
+      const entityProfile = await this.dbManager
+        .getRepository('EntityProfile')
+        .createQueryBuilder('entity')
+        .select('entity.id')
+        .orderBy('entity.id', 'ASC')
+        .getOne();
+
+      return entityProfile ? entityProfile.id : null;
+    } catch (error) {
+      console.error('Error getting first entity profile ID:', error);
+      return null;
     }
   }
 }

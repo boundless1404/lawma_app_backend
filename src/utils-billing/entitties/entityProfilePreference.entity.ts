@@ -6,8 +6,14 @@ export class EntityProfilePreference {
   @PrimaryColumn({ type: 'bigint' })
   entityProfileId: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'boolean', default: false })
   autoGenerateBills: boolean;
+
+  @Column({ type: 'boolean', default: true })
+  enableSmsNotifications: boolean;
+
+  @Column({ type: 'boolean', default: true })
+  enableEmailNotifications: boolean;
 
   // relationss
   @OneToOne(

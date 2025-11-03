@@ -49,15 +49,33 @@ export class AuthService {
       signinDto,
     }: { signupDto?: EntityProfileSignUpDto; signinDto?: SignInDto },
   ) {
+    // Extract phone code from phone number if present
+    let phoneCode = '';
+    let phone = signupDto?.phone || '';
+
+    if (phone && phone.startsWith('+')) {
+      // Extract country code from phone number
+      const match = phone.match(/^\+(\d{1,4})/);
+      if (match) {
+        phoneCode = match[1];
+        // Remove the + and country code from the phone number
+        phone = phone.substring(match[0].length);
+      }
+    }
+
     const authServerRequestBody: {
       firstName: string;
       middleName: string;
       lastName: string;
       email: string;
+      phone?: string;
+      phoneCode?: string;
       password: string;
       initiateVerificationRequest: boolean;
     } = {
       ...signupDto,
+      phone: phone || signupDto?.phone,
+      phoneCode,
       initiateVerificationRequest: false,
     };
 
@@ -116,13 +134,15 @@ export class AuthService {
 
         entityProfile = await transactionManager.save(entityProfile);
 
-        // remove stale fields
-        delete signupDto.entityProfile;
-        delete signupDto.password;
-
+        // Create EntityUserProfile with only the allowed fields
         let entityUserProfile = transactionManager.create(EntityUserProfile, {
-          ...signupDto,
+          firstName: signupDto.firstName,
+          middleName: signupDto.middleName,
+          lastName: signupDto.lastName,
+          email: signupDto.email,
+          phone: signupDto.phone,
           entityProfileId: entityProfile.id,
+          phoneCodeId: null, // Will be set later if phoneCode processing is implemented
         });
 
         entityUserProfile = await transactionManager.save(entityUserProfile);

@@ -1,0 +1,3 @@
+S/N,CustomerCode,HouseNo,Street,Name,Outstanding,Property1,Unit,Rate,Property2,Unit,Rate,Property3,Unit,Rate,Property4,Unit,Rate,CUSTOMER TYPE
+1,TEST/001,10,TEST STREET,MR TEST CUSTOMER,"5,000",FLAT,2,"2,000",,,,,,,,,,RESIDENTIAL
+2,TEST/002,12,TEST STREET,MRS ANOTHER CUSTOMER,"3,500",ROOM,3,600,SHOP,1,"1,000",,,,,,,RESIDENTIAL

@@ -50,9 +50,14 @@ export const PERMISSIONS = {
   REPORTS_VIEW: 'reports:read',
   REPORTS_EXPORT: 'reports:export',
 
+  // Dashboard
+  DASHBOARD_VIEW: 'dashboard:view',
+
   // System Settings
   SETTINGS_READ: 'settings:read',
   SETTINGS_UPDATE: 'settings:update',
+  SYSTEM_ADMIN: 'system:admin',
+  RBAC_ADMIN: 'rbac:admin',
 
   // Notifications
   NOTIFICATIONS_READ: 'notifications:read',

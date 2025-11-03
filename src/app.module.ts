@@ -23,6 +23,7 @@ import { SharedModule } from './shared/shared.module';
 import { UtilsBillingModule } from './utils-billing/utils-billing.module';
 import { AppController } from './app.controller';
 import { ServiceClientModule } from './service-client/service-client.module';
+import { OnboardingModule } from './onboarding/onboarding.module';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cors = require('cors');
@@ -110,6 +111,7 @@ const validator = new ValidationPipe({
     SharedModule,
     UtilsBillingModule,
     ServiceClientModule,
+    OnboardingModule,
   ],
   controllers: [AppController],
   providers: [

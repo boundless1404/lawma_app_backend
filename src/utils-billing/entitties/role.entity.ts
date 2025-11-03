@@ -9,17 +9,19 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  Unique,
 } from 'typeorm';
 import { EntityProfile } from './entityProfile.entity';
 import { Permission } from './permission.entity';
 import { UserRole } from './userRole.entity';
 
 @Entity()
+@Unique('UQ_role_name_entity', ['name', 'entityProfileId'])
 export class Role {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: string;
 
-  @Column({ type: 'varchar', unique: true })
+  @Column({ type: 'varchar' })
   name: string;
 
   @Column({ type: 'varchar', nullable: true })

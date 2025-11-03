@@ -15,10 +15,7 @@ import { AuthTokenPayload } from '../lib/types';
 import { GetAuthPayload } from './getAuthenticatedUserPayload.decorator';
 import { IsAuthenticated } from './isAuthenticated.guard';
 import { PermissionGuard } from './guards/permission.guard';
-import {
-  RequirePermissions,
-  PERMISSIONS,
-} from './decorators/auth.decorators';
+import { RequirePermissions, PERMISSIONS } from './decorators/auth.decorators';
 
 export class CreateCustomRoleDto {
   name: string;
@@ -35,7 +32,6 @@ export class AssignUserRoleDto {
 }
 
 @Controller('rbac')
-@UseGuards(IsAuthenticated)
 export class RbacController {
   constructor(private readonly rbacService: RbacService) {}
 
@@ -43,41 +39,115 @@ export class RbacController {
    * Get current user profile with roles and permissions - SIMPLIFIED FOR EXISTING USERS
    */
   @Get('profile')
+  @UseGuards(IsAuthenticated)
   async getCurrentUserProfile(@GetAuthPayload() authPayload: AuthTokenPayload) {
     if (!authPayload.userData) {
-      throw new BadRequestException('User data not found in authentication token');
+      throw new BadRequestException(
+        'User data not found in authentication token',
+      );
     }
 
-    const profileType = authPayload.profile?.profileType || 'entity_user_profile';
+    const profileType =
+      authPayload.profile?.profileType || 'entity_user_profile';
 
     // Provide generous default permissions for existing users during RBAC transition
     const defaultRoles = [
       {
         id: 'default-role',
-        name: profileType === 'entity_subscriber_profile' ? 'customer' : 'staff',
-        displayName: profileType === 'entity_subscriber_profile' ? 'Customer' : 'Staff Member',
+        name:
+          profileType === 'entity_subscriber_profile' ? 'customer' : 'staff',
+        displayName:
+          profileType === 'entity_subscriber_profile'
+            ? 'Customer'
+            : 'Staff Member',
         description: 'Default role for existing users during RBAC transition',
         isSystemRole: false,
       },
     ];
 
     const defaultPermissions = [
-      { id: '1', name: 'dashboard:view', displayName: 'View Dashboard', category: 'dashboard', action: 'view' },
-      { id: '2', name: 'billing:read', displayName: 'View Bills', category: 'billing', action: 'read' },
-      { id: '3', name: 'payments:read', displayName: 'View Payments', category: 'payments', action: 'read' },
-      { id: '4', name: 'properties:read', displayName: 'View Properties', category: 'properties', action: 'read' },
+      {
+        id: '1',
+        name: 'dashboard:view',
+        displayName: 'View Dashboard',
+        category: 'dashboard',
+        action: 'view',
+      },
+      {
+        id: '2',
+        name: 'billing:read',
+        displayName: 'View Bills',
+        category: 'billing',
+        action: 'read',
+      },
+      {
+        id: '3',
+        name: 'payments:read',
+        displayName: 'View Payments',
+        category: 'payments',
+        action: 'read',
+      },
+      {
+        id: '4',
+        name: 'properties:read',
+        displayName: 'View Properties',
+        category: 'properties',
+        action: 'read',
+      },
     ];
 
     // Add additional permissions for entity users (non-customers)
     if (profileType !== 'entity_subscriber_profile') {
       defaultPermissions.push(
-        { id: '5', name: 'billing:create', displayName: 'Create Bills', category: 'billing', action: 'create' },
-        { id: '6', name: 'billing:update', displayName: 'Update Bills', category: 'billing', action: 'update' },
-        { id: '7', name: 'payments:create', displayName: 'Create Payments', category: 'payments', action: 'create' },
-        { id: '8', name: 'properties:create', displayName: 'Create Properties', category: 'properties', action: 'create' },
-        { id: '9', name: 'properties:update', displayName: 'Update Properties', category: 'properties', action: 'update' },
-        { id: '10', name: 'users:read', displayName: 'View Users', category: 'users', action: 'read' },
-        { id: '11', name: 'reports:view', displayName: 'View Reports', category: 'reports', action: 'view' },
+        {
+          id: '5',
+          name: 'billing:create',
+          displayName: 'Create Bills',
+          category: 'billing',
+          action: 'create',
+        },
+        {
+          id: '6',
+          name: 'billing:update',
+          displayName: 'Update Bills',
+          category: 'billing',
+          action: 'update',
+        },
+        {
+          id: '7',
+          name: 'payments:create',
+          displayName: 'Create Payments',
+          category: 'payments',
+          action: 'create',
+        },
+        {
+          id: '8',
+          name: 'properties:create',
+          displayName: 'Create Properties',
+          category: 'properties',
+          action: 'create',
+        },
+        {
+          id: '9',
+          name: 'properties:update',
+          displayName: 'Update Properties',
+          category: 'properties',
+          action: 'update',
+        },
+        {
+          id: '10',
+          name: 'users:read',
+          displayName: 'View Users',
+          category: 'users',
+          action: 'read',
+        },
+        {
+          id: '11',
+          name: 'reports:view',
+          displayName: 'View Reports',
+          category: 'reports',
+          action: 'view',
+        },
       );
     }
 
@@ -88,7 +158,8 @@ export class RbacController {
         lastName: authPayload.userData.lastName,
         email: authPayload.userData.email,
         profileType: profileType,
-        profileId: authPayload.profile?.profileTypeId || authPayload.userData.id,
+        profileId:
+          authPayload.profile?.profileTypeId || authPayload.userData.id,
       },
       roles: defaultRoles,
       permissions: defaultPermissions,
@@ -96,37 +167,97 @@ export class RbacController {
   }
 
   /**
-   * Initialize RBAC system for the current entity
+   * Initialize RBAC system with default permissions and roles
+   * Allows public access only if system is not yet initialized
    */
   @Post('initialize')
-  @UseGuards(PermissionGuard)
-  @RequirePermissions(PERMISSIONS.USERS_CREATE)
-  async initializeRbac(@GetAuthPayload() authPayload: AuthTokenPayload) {
-    if (!authPayload.profile) {
-      throw new BadRequestException('Profile data not found in authentication token');
-    }
+  async initializeRbac() {
+    try {
+      // Check if system is already initialized
+      const isInitialized = await this.rbacService.isSystemInitialized();
 
-    const entityProfileId = authPayload.profile.entityProfileId;
-    if (!entityProfileId) {
-      throw new BadRequestException('Entity profile ID is required but not found in token');
-    }
+      if (isInitialized) {
+        throw new BadRequestException(
+          'RBAC system is already initialized. Only Super Admins can re-initialize.',
+        );
+      }
 
-    await this.rbacService.initializeSystemRbac(entityProfileId);
-    return { message: 'RBAC system initialized successfully' };
+      // Get the first available entity profile ID from the database
+      // This makes the system more flexible and avoids hardcoded IDs
+      const entityId = await this.rbacService.getFirstEntityProfileId();
+
+      if (!entityId) {
+        return {
+          message:
+            'No entity profiles found. Please create an entity profile first.',
+          success: false,
+        };
+      }
+
+      await this.rbacService.initializeSystemRbac(entityId);
+
+      return {
+        message:
+          'RBAC system initialized successfully - First time setup completed',
+        entityId: entityId,
+        success: true,
+      };
+    } catch (error) {
+      console.error('Error initializing RBAC:', error);
+      throw new BadRequestException(
+        `Failed to initialize RBAC system: ${error.message}`,
+      );
+    }
+  }
+
+  /**
+   * Initialize RBAC for a specific entity profile
+   * Useful for adding roles to newly created entities
+   */
+  @Post('initialize/:entityProfileId')
+  async initializeRbacForEntity(
+    @Param('entityProfileId') entityProfileId: string,
+  ) {
+    try {
+      await this.rbacService.initializeSystemRbac(entityProfileId);
+
+      return {
+        message: `RBAC roles initialized successfully for entity ${entityProfileId}`,
+        entityProfileId: entityProfileId,
+        success: true,
+      };
+    } catch (error) {
+      console.error(
+        `Error initializing RBAC for entity ${entityProfileId}:`,
+        error,
+      );
+      throw new BadRequestException(
+        `Failed to initialize RBAC for entity: ${error.message}`,
+      );
+    }
   }
 
   /**
    * Get all roles for the current entity
+   * If no entity profile ID is found in token, defaults to the first entity
    */
   @Get('roles')
   async getRoles(@GetAuthPayload() authPayload: AuthTokenPayload) {
-    if (!authPayload.profile) {
-      throw new BadRequestException('Profile data not found in authentication token');
-    }
+    let entityProfileId: string;
 
-    const entityProfileId = authPayload.profile.entityProfileId;
-    if (!entityProfileId) {
-      throw new BadRequestException('Entity profile ID is required but not found in token');
+    // Try to get entityProfileId from token
+    if (authPayload?.profile?.entityProfileId) {
+      entityProfileId = authPayload.profile.entityProfileId;
+    } else {
+      // If not found in token, use the first available entity profile
+      // This is useful for super admins or when managing system-wide roles
+      const firstEntityId = await this.rbacService.getFirstEntityProfileId();
+
+      if (!firstEntityId) {
+        throw new BadRequestException('No entity profiles found in the system');
+      }
+
+      entityProfileId = firstEntityId;
     }
 
     return await this.rbacService.getRoles(entityProfileId);
@@ -138,5 +269,177 @@ export class RbacController {
   @Get('permissions')
   async getPermissions() {
     return await this.rbacService.getPermissions();
+  }
+
+  /**
+   * Get RBAC system status and configuration - PUBLIC ENDPOINT
+   * This endpoint provides basic system status without requiring authentication
+   * for better modularity and extensibility
+   */
+  @Get('status')
+  async getRbacStatus() {
+    try {
+      // Return basic system status that doesn't require entity-specific data
+      const totalRoles = await this.rbacService.getTotalRoles();
+      const totalPermissions = await this.rbacService.getTotalPermissions();
+
+      return {
+        initialized: totalRoles > 0,
+        rolesCount: totalRoles,
+        permissionsCount: totalPermissions,
+        systemReady: true,
+      };
+    } catch (error) {
+      console.error('Error getting RBAC status:', error);
+      return {
+        initialized: false,
+        rolesCount: 0,
+        permissionsCount: 0,
+        systemReady: false,
+        error: 'Could not retrieve system status',
+      };
+    }
+  }
+
+  /**
+   * Enable RBAC system-wide - Requires authentication only
+   * Note: PermissionGuard is not used here to avoid chicken-and-egg problem
+   */
+  @Post('enable')
+  @UseGuards(IsAuthenticated)
+  async enableRbac(@GetAuthPayload() authPayload: AuthTokenPayload) {
+    try {
+      await this.rbacService.setRbacEnabled(true);
+      return {
+        success: true,
+        message: 'RBAC system enabled successfully',
+        enabled: true,
+      };
+    } catch (error) {
+      console.error('Error enabling RBAC:', error);
+      return {
+        success: false,
+        message: 'Failed to enable RBAC system',
+        enabled: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Disable RBAC system-wide - Requires authentication only
+   * Note: PermissionGuard is not used here to avoid chicken-and-egg problem
+   */
+  @Post('disable')
+  @UseGuards(IsAuthenticated)
+  async disableRbac(@GetAuthPayload() authPayload: AuthTokenPayload) {
+    try {
+      await this.rbacService.setRbacEnabled(false);
+      return {
+        success: true,
+        message: 'RBAC system disabled successfully',
+        enabled: false,
+      };
+    } catch (error) {
+      console.error('Error disabling RBAC:', error);
+      return {
+        success: false,
+        message: 'Failed to disable RBAC system',
+        enabled: true,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Get RBAC enabled status - PUBLIC ENDPOINT
+   */
+  @Get('enabled')
+  async getRbacEnabled() {
+    try {
+      const enabled = await this.rbacService.isRbacEnabled();
+      return {
+        enabled,
+        success: true,
+      };
+    } catch (error) {
+      console.error('Error getting RBAC enabled status:', error);
+      return {
+        enabled: false,
+        success: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
+   * Get all users with their roles for management
+   */
+  @Get('users/management')
+  @UseGuards(IsAuthenticated)
+  async getUsersForManagement(@GetAuthPayload() authPayload: AuthTokenPayload) {
+    if (!authPayload.profile) {
+      throw new BadRequestException(
+        'Profile data not found in authentication token',
+      );
+    }
+
+    const entityProfileId = authPayload.profile.entityProfileId;
+    if (!entityProfileId) {
+      throw new BadRequestException(
+        'Entity profile ID is required but not found in token',
+      );
+    }
+
+    return await this.rbacService.getEntityUsers(entityProfileId);
+  }
+
+  /**
+   * Create a new user role assignment
+   */
+  @Post('users/assign-role')
+  @UseGuards(IsAuthenticated)
+  async assignUserRole(
+    @Body() assignRoleDto: AssignUserRoleDto,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    if (!authPayload.userData) {
+      throw new BadRequestException(
+        'User data not found in authentication token',
+      );
+    }
+
+    const assignData: AssignRoleDto = {
+      ...assignRoleDto,
+      assignedByUserId: authPayload.userData.id,
+    };
+
+    return await this.rbacService.assignRole(assignData);
+  }
+
+  /**
+   * Remove user role assignment
+   */
+  @Delete('users/:profileId/roles/:roleId')
+  @UseGuards(IsAuthenticated)
+  async removeUserRole(
+    @Param('profileId') profileId: string,
+    @Param('roleId') roleId: string,
+    @Query('profileType')
+    profileType: 'entity_user_profile' | 'entity_subscriber_profile',
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    if (!authPayload.userData) {
+      throw new BadRequestException(
+        'User data not found in authentication token',
+      );
+    }
+
+    await this.rbacService.removeUserRole(profileId, roleId, profileType);
+
+    return {
+      message: `Role removed successfully`,
+      success: true,
+    };
   }
 }

@@ -27,6 +27,9 @@ export class EntityProfile {
   @Column({ type: 'varchar', nullable: false })
   name: string;
 
+  @Column({ type: 'int', default: 0 })
+  smsUnits: number;
+
   // TODO: add lga / ward id
 
   // relations

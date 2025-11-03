@@ -10,10 +10,15 @@ import { PaystackServiceService } from './paystack_service/paystack_service.serv
 import { WalletServiceService } from './wallet-service/wallet-service.service';
 import { RbacService } from './rbac.service';
 import { RbacController } from './rbac.controller';
+import { TermiiService } from './termii/termii.service';
+import { ResendService } from './resend/resend.service';
+import { NotificationService } from './notification.service';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     ConfigModule,
+    ScheduleModule.forRoot(),
     JwtModule.registerAsync({
       async useFactory(configService: ConfigService) {
         await ConfigModule.envVariablesLoaded;
@@ -39,6 +44,9 @@ import { RbacController } from './rbac.controller';
     PaystackServiceService,
     WalletServiceService,
     RbacService,
+    TermiiService,
+    ResendService,
+    NotificationService,
   ],
   exports: [
     SharedService,
@@ -49,6 +57,9 @@ import { RbacController } from './rbac.controller';
     PaystackServiceService,
     WalletServiceService,
     RbacService,
+    TermiiService,
+    ResendService,
+    NotificationService,
   ],
 })
 export class SharedModule {}

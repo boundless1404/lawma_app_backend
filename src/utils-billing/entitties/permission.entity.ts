@@ -16,6 +16,7 @@ export enum PermissionCategory {
   REPORTS = 'reports',
   SYSTEM_SETTINGS = 'system_settings',
   NOTIFICATIONS = 'notifications',
+  DASHBOARD = 'dashboard',
 }
 
 export enum PermissionAction {

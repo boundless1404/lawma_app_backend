@@ -26,7 +26,7 @@ export class Billing {
   @Column({ type: 'bigint' })
   propertySubscriptionId: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
   // @Column({ type: 'bigint' })

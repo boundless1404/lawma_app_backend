@@ -10,6 +10,14 @@ export class PermissionGuard implements CanActivate {
   constructor(private reflector: Reflector, private dataSource: DataSource) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Check if RBAC is enabled first
+    const rbacEnabled = process.env.RBAC_ENABLED === 'true';
+
+    // If RBAC is disabled, allow all requests
+    if (!rbacEnabled) {
+      return true;
+    }
+
     const requiredPermissions = this.reflector.getAllAndOverride<string[]>(
       'permissions',
       [context.getHandler(), context.getClass()],
