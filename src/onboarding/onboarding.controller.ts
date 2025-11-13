@@ -170,7 +170,7 @@ export class OnboardingController {
       if (file.mimetype === 'text/csv') {
         records = this.excelParserService.parseCSVFile(file.buffer);
       } else {
-        records = this.excelParserService.parseExcelFile(file.buffer);
+        records = this.excelParserService.parseExcelFile();
       }
 
       // Validate records

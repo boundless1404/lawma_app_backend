@@ -59,14 +59,7 @@ export class WasteOperatorService {
     };
 
     try {
-      console.log(
-        'Attempting to create waste operator with data:',
-        entityProfileSignUpDto,
-      );
-      const signupResult = await this.authService.signup(
-        entityProfileSignUpDto,
-      );
-      console.log('Signup result:', signupResult);
+      await this.authService.signup(entityProfileSignUpDto);
 
       // Find and return the created EntityProfile
       const createdOperator = await this.entityProfileRepository.findOne({
@@ -82,11 +75,7 @@ export class WasteOperatorService {
       // Initialize RBAC roles for the new entity
       try {
         await this.rbacService.initializeSystemRbac(createdOperator.id);
-        console.log(
-          `RBAC roles initialized for entity ${createdOperator.id} (${createdOperator.name})`,
-        );
       } catch (rbacError) {
-        console.error('Error initializing RBAC for new entity:', rbacError);
         // Don't fail the whole operation if RBAC initialization fails
         // The entity is created, RBAC can be initialized later
       }

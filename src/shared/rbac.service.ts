@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DataSource, EntityManager, In } from 'typeorm';
 import { Role } from '../utils-billing/entitties/role.entity';
 import {
@@ -601,10 +601,9 @@ export class RbacService {
 
       await this.dbManager.save(userRole);
 
-      console.log(`Auto-assigned role ${defaultRoleName} to user ${profileId}`);
       return { roleAssigned: true, roleName: defaultRoleName };
     } catch (error) {
-      console.error('Error auto-assigning role to user:', error);
+      Logger.error('Error auto-assigning role to user:', error);
       return { roleAssigned: false };
     }
   }

@@ -852,7 +852,7 @@ export class UtilsBillingService {
 
       await dbManager.save(newSubscriberVirtualAccount);
     } catch (error) {
-      console.log(error);
+      Logger.error('Error creating virtual account', error.message);
     }
   }
 
@@ -2783,7 +2783,6 @@ export class UtilsBillingService {
       });
 
       // TODO: send sms to company
-      console.log('transfer webhook received');
     }
   }
 
@@ -2906,7 +2905,6 @@ export class UtilsBillingService {
           }),
         );
 
-        Logger.log('SMS notifications sent successfully.');
       } catch (error) {
         Logger.error('Error sending SMS notifications:', error);
       }
@@ -2917,8 +2915,6 @@ export class UtilsBillingService {
     const today = new Date();
     if (today.getDate() === 30) {
       try {
-        Logger.log('Starting automatic billing generation for all entities...');
-
         // Fetch all entity profiles with auto-generation enabled
         const entityProfiles = await this.dbManager.find(EntityProfile, {
           relations: ['entityProfilePreference'],
@@ -2929,17 +2925,9 @@ export class UtilsBillingService {
           (profile) => profile.entityProfilePreference?.autoGenerateBills,
         );
 
-        Logger.log(
-          `Found ${enabledEntityProfiles.length} entities with auto-generation enabled`,
-        );
-
         // Process each entity
         for (const entityProfile of enabledEntityProfiles) {
           try {
-            Logger.log(
-              `Generating bills for entity: ${entityProfile.name} (${entityProfile.id})`,
-            );
-
             // Get all property subscriptions for this entity
             const propertySubscriptions = await this.dbManager.find(
               PropertySubscription,
@@ -2952,10 +2940,6 @@ export class UtilsBillingService {
                   street: true,
                 },
               },
-            );
-
-            Logger.log(
-              `Found ${propertySubscriptions.length} properties for entity ${entityProfile.name}`,
             );
 
             // Generate billings in a transaction
@@ -3011,7 +2995,6 @@ export class UtilsBillingService {
           }
         }
 
-        Logger.log('Billing generation completed successfully.');
       } catch (error) {
         Logger.error('Error generating billings:', error);
       }
@@ -3025,10 +3008,6 @@ export class UtilsBillingService {
     }>,
     entityProfile: EntityProfile,
   ) {
-    Logger.log(
-      `[Billing Notification] Queuing ${generatedBillings.length} notifications for ${entityProfile.name}`,
-    );
-
     for (const { billing, subscription } of generatedBillings) {
       try {
         // Get subscriber details
