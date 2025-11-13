@@ -241,10 +241,9 @@ export class SharedService {
     };
 
     try {
-      const data = await apiInstance.sendTransacEmail(batchSend);
-      console.log('API call successful. Returned data: ', JSON.stringify(data));
+      await apiInstance.sendTransacEmail(batchSend);
     } catch (error) {
-      console.error(error);
+      Logger.error('Error sending transactional email', error);
     }
   }
 
@@ -265,7 +264,7 @@ export class SharedService {
     };
 
     const url = `${this.config.get('TERMII_API_URL')}/sms/send`;
-    const termiiServerResponse = await axios.post(
+    await axios.post(
       url,
       { ...termiiSms, ...termiiSmsConfig },
       {
@@ -274,7 +273,5 @@ export class SharedService {
         },
       },
     );
-
-    Logger.log(termiiServerResponse);
   }
 }

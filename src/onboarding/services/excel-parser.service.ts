@@ -43,8 +43,6 @@ export class ExcelParserService {
         throw new Error('CSV file must have at least one data row');
       }
 
-      console.log('Parsed structured rows:', rows.slice(0, 3));
-
       return this.transformStructuredData(rows);
     } catch (error) {
       throw new BadRequestException(
@@ -53,9 +51,8 @@ export class ExcelParserService {
     }
   }
 
-  parseExcelFile(buffer: Buffer): PropertyRecordDto[] {
+  parseExcelFile(): PropertyRecordDto[] {
     // For now, treat Excel files as CSV (user should convert to CSV first)
-    console.log('Excel buffer size:', buffer.length);
     throw new BadRequestException(
       'Excel files not supported yet. Please convert to CSV format.',
     );

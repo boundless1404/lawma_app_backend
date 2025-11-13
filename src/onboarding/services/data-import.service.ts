@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, EntityManager } from 'typeorm';
+import { Repository, DataSource, EntityManager, ILike } from 'typeorm';
 import { EntityProfile } from '../../utils-billing/entitties/entityProfile.entity';
 import { BulkImportDto, PropertyRecordDto } from '../dto/bulk-import.dto';
 import { EntitySubscriberProfile } from '../../utils-billing/entitties/entitySubscriberProfile.entity';
@@ -128,14 +128,12 @@ export class DataImportService {
       const results = await Promise.allSettled(
         batch.map(async (record) => {
           try {
-            this.logger.log(`Processing record: ${record.customerCode}`);
             await this.processRecord(
               record,
               wasteOperator,
               createdByEntityUserProfileId,
             );
             result.importedRecords++;
-            this.logger.log(`Successfully imported: ${record.customerCode}`);
           } catch (error) {
             result.failedRecords++;
             const errorMsg = `Record ${record.customerCode}: ${error.message}`;
@@ -202,18 +200,13 @@ export class DataImportService {
     // Use transaction to ensure data consistency
     try {
       await this.dataSource.transaction(async (manager: EntityManager) => {
-        this.logger.log(`Step 1: Finding or creating street: ${record.street}`);
         // 1. Find or create street (with LGA and Ward) - need this first for grouping
         const street = await this.findOrCreateStreet(
           record.street,
           wasteOperator,
           manager,
         );
-        this.logger.log(`Street ID: ${street.id}`);
 
-        this.logger.log(
-          `Step 2: Finding or creating subscriber profile for ${record.name} on street ${street.name}`,
-        );
         // 2. Find or create EntitySubscriberProfile (grouped by name + street)
         const subscriberProfile = await this.findOrCreateSubscriberProfile(
           record,
@@ -230,19 +223,9 @@ export class DataImportService {
 
         // 3. Create user on auth server only for new profiles
         if (!subscriberProfile.existingProfile) {
-          // this.logger.log(
-          //   `Step 3: Creating user on auth server for ${record.customerCode}`,
-          // );
           await this.createUserOnAuthServer(record, subscriberProfile.profile);
-        } else {
-          // this.logger.log(
-          //   `Step 3: Skipping auth server creation - using existing profile`,
-          // );
         }
 
-        this.logger.log(
-          `Step 4: Creating property subscription for ${record.customerCode}`,
-        );
         // 4. Create PropertySubscription
         const propertySubscription = await this.createPropertySubscription(
           record,
@@ -251,7 +234,6 @@ export class DataImportService {
           wasteOperator,
           manager,
         );
-        this.logger.log(`Property subscription ID: ${propertySubscription.id}`);
 
         // 5. Create PropertySubscriptionUnits for each property type
         if (record.properties && record.properties.length > 0) {
@@ -265,17 +247,11 @@ export class DataImportService {
             wasteOperator,
             manager,
           );
-          this.logger.log(`Property units created successfully`);
         }
 
         // 6. Create BillingAccount with outstanding balance
-        this.logger.log(`Step 6: Creating billing account`);
         await this.createBillingAccount(record, propertySubscription, manager);
-        this.logger.log(`Billing account created successfully`);
       });
-      this.logger.log(
-        `Transaction completed successfully for ${record.customerCode}`,
-      );
     } catch (error) {
       this.logger.error(
         `Transaction failed for ${record.customerCode}: ${error.message}`,
@@ -331,7 +307,6 @@ export class DataImportService {
       );
 
       if ([200, 201].includes(response.status)) {
-        this.logger.log(`User created on auth server: ${email}`);
         return response.data;
       } else {
         this.logger.warn(`Failed to create user: ${response.status}`);
@@ -420,7 +395,6 @@ export class DataImportService {
       EntitySubscriberProfile,
       subscriberProfile,
     );
-    this.logger.log(`Created new subscriber profile for ${record.name}`);
 
     return { profile: subscriberProfile, existingProfile: false };
   }
@@ -453,10 +427,14 @@ export class DataImportService {
     wasteOperator: EntityProfile,
     manager: EntityManager,
   ): Promise<Street> {
-    // Try to find existing street for this waste operator
+    // Normalize street name: trim whitespace and convert to uppercase
+    const normalizedStreetName = streetName.trim().toUpperCase();
+
+    // Try to find existing street for this waste operator using case-insensitive search
+    // Use ILike for case-insensitive matching
     let street = await manager.findOne(Street, {
       where: {
-        name: streetName,
+        name: ILike(normalizedStreetName),
         entityProfileId: wasteOperator.id,
       },
     });
@@ -469,14 +447,19 @@ export class DataImportService {
     const defaultLga = await this.findOrCreateDefaultLga(manager);
     const defaultWard = await this.findOrCreateDefaultWard(defaultLga, manager);
 
-    // Create new street
+    // Create new street with normalized name
     street = manager.create(Street, {
-      name: streetName,
+      name: normalizedStreetName, // Store in uppercase
       lgaWardId: defaultWard.id,
       entityProfileId: wasteOperator.id,
     });
 
-    return await manager.save(Street, street);
+    const savedStreet = await manager.save(Street, street);
+    this.logger.log(
+      `Created new street: ${normalizedStreetName} (ID: ${savedStreet.id})`,
+    );
+
+    return savedStreet;
   }
 
   private async findOrCreateDefaultLga(manager: EntityManager): Promise<Lga> {
