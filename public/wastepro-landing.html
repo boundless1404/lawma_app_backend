@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WastePro - Professional Waste Management Platform</title>
+    <meta
+      name="description"
+      content="WastePro by BoundlessEdge - Complete waste management solution for operators, managers, and service clients. Streamline billing, tracking, and operations."
+    />
+    <meta
+      name="keywords"
+      content="waste management, billing system, LAWMA, waste operators, property management, Lagos waste"
+    />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://wasteproutils.com/" />
+    <meta
+      property="og:title"
+      content="WastePro - Professional Waste Management Platform"
+    />
+    <meta
+      property="og:description"
+      content="Complete waste management solution for operators, managers, and service clients."
+    />
+    <meta property="og:image" content="/assets/WastePro_Payment_Ui_2.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://wasteproutils.com/" />
+    <meta
+      property="twitter:title"
+      content="WastePro - Professional Waste Management Platform"
+    />
+    <meta
+      property="twitter:description"
+      content="Complete waste management solution for operators, managers, and service clients."
+    />
+    <meta
+      property="twitter:image"
+      content="/assets/WastePro_Payment_Ui_2.png"
+    />
+
+    <!-- Favicons -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="128x128"
+      href="/icons/favicon-128x128.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="96x96"
+      href="/icons/favicon-96x96.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/favicon-16x16.png"
+    />
+    <link rel="icon" type="image/ico" href="/favicon.ico" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        overflow-x: hidden;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(135deg, #2c5530 0%, #4a7c59 100%);
+        color: white;
+        padding: 1rem 0;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+      }
+
+      .logo img {
+        height: 40px;
+        margin-right: 10px;
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        transition: opacity 0.3s;
+      }
+
+      .nav-links a:hover {
+        opacity: 0.8;
+      }
+
+      .app-access {
+        background: #ff6b35;
+        padding: 8px 16px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+
+      .app-access:hover {
+        background: #e55a30;
+      }
+
+      /* Hero Section */
+      .hero {
+        background: linear-gradient(
+            rgba(44, 85, 48, 0.8),
+            rgba(74, 124, 89, 0.8)
+          ),
+          url('/assets/nathan-cima-TQuq2OtLBNU-unsplash.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: white;
+        margin-top: 70px;
+      }
+
+      .hero-content h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        animation: fadeInUp 1s ease-out;
+      }
+
+      .hero-content p {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        animation: fadeInUp 1s ease-out 0.2s both;
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeInUp 1s ease-out 0.4s both;
+      }
+
+      .cta-button {
+        display: inline-block;
+        padding: 15px 30px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .cta-primary {
+        background: #ff6b35;
+        color: white;
+      }
+
+      .cta-secondary {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+      }
+
+      .cta-primary:hover {
+        box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+      }
+
+      .cta-secondary:hover {
+        background: white;
+        color: #2c5530;
+      }
+
+      /* Features Section */
+      .features {
+        padding: 5rem 0;
+        background: #f8f9fa;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        color: #2c5530;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .feature-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .feature-card h3 {
+        color: #2c5530;
+        margin-bottom: 1rem;
+      }
+
+      /* Screenshots Section */
+      .screenshots {
+        padding: 5rem 0;
+        background: white;
+      }
+
+      .screenshot-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 3rem;
+        margin-top: 3rem;
+      }
+
+      .screenshot-item {
+        text-align: center;
+      }
+
+      .screenshot-item img {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin-bottom: 1rem;
+      }
+
+      .screenshot-item h3 {
+        color: #2c5530;
+        margin-bottom: 0.5rem;
+      }
+
+      /* User Types Section */
+      .user-types {
+        padding: 5rem 0;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      }
+
+      .user-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .user-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        border-top: 5px solid #2c5530;
+      }
+
+      .user-card h3 {
+        color: #2c5530;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+      }
+
+      .user-card ul {
+        list-style: none;
+        margin: 1.5rem 0;
+      }
+
+      .user-card li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .user-card li:last-child {
+        border-bottom: none;
+      }
+
+      .contact-button {
+        background: #2c5530;
+        color: white;
+        padding: 12px 25px;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+        margin-top: 1rem;
+        transition: background 0.3s;
+      }
+
+      .contact-button:hover {
+        background: #4a7c59;
+      }
+
+      .contact-button.client {
+        background: #ff6b35;
+      }
+
+      .contact-button.client:hover {
+        background: #e55a30;
+      }
+
+      /* About Section */
+      .about {
+        padding: 5rem 0;
+        background: white;
+      }
+
+      .about-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+      }
+
+      .about-text h2 {
+        color: #2c5530;
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .about-text p {
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        line-height: 1.8;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .stat-item {
+        text-align: center;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 5px;
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #2c5530;
+      }
+
+      .about-logos {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .about-logos img {
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+        display: block;
+      }
+
+      /* Footer */
+      footer {
+        background: #2c5530;
+        color: white;
+        padding: 3rem 0 1rem;
+      }
+
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .footer-section h3 {
+        margin-bottom: 1rem;
+        color: #90c695;
+      }
+
+      .footer-section p,
+      .footer-section a {
+        color: #ccc;
+        text-decoration: none;
+        line-height: 1.8;
+      }
+
+      .footer-section a:hover {
+        color: white;
+      }
+
+      .footer-bottom {
+        border-top: 1px solid #4a7c59;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        text-align: center;
+        color: #999;
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+
+        .hero-content h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero-content p {
+          font-size: 1.1rem;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .about-content {
+          grid-template-columns: 1fr;
+        }
+
+        .screenshot-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <nav class="container">
+        <div class="logo">
+          <img src="/assets/lawma-logo.jpeg" alt="WastePro Logo" />
+          <span>WastePro</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#screenshots">Screenshots</a></li>
+          <li><a href="#onboard">Get Started</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="/" class="app-access">Access App</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>WastePro Platform</h1>
+          <p>
+            Professional Waste Management Solution for Lagos State and Beyond
+          </p>
+          <div class="cta-buttons">
+            <a href="#onboard" class="cta-button cta-primary"
+              >Get Started Today</a
+            >
+            <a href="#features" class="cta-button cta-secondary">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="section-title">Comprehensive Waste Management Features</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🏢</div>
+            <h3>Property Management</h3>
+            <p>
+              Complete property database with LGA, ward, and street
+              organization. Track all properties and their waste management
+              status efficiently.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💳</div>
+            <h3>Billing & Payments</h3>
+            <p>
+              Automated billing system with CSV export capabilities. Generate
+              daily reports, track payments, and manage billing accounts
+              seamlessly.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">👥</div>
+            <h3>User Management</h3>
+            <p>
+              Multi-role system supporting waste operators, managers, and
+              service clients with appropriate access controls and dashboards.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Analytics & Reporting</h3>
+            <p>
+              Comprehensive reporting tools including payment tracking,
+              defaulter identification, and operational performance metrics.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Secure Authentication</h3>
+            <p>
+              JWT-based authentication system with role-based access control
+              ensuring data security and appropriate user permissions.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>Mobile Responsive</h3>
+            <p>
+              Fully responsive web application built with Quasar Framework,
+              accessible on desktop, tablet, and mobile devices.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="screenshots">
+      <div class="container">
+        <h2 class="section-title">Platform Screenshots</h2>
+        <div class="screenshot-grid">
+          <div class="screenshot-item">
+            <img
+              src="/assets/WastePro_Payment_Ui_2.png"
+              alt="Payment Interface"
+            />
+            <h3>Payment Management Interface</h3>
+            <p>Streamlined payment processing and tracking system</p>
+          </div>
+          <div class="screenshot-item">
+            <img
+              src="/assets/Wastepro_Defaulters_Ui.png"
+              alt="Defaulters Management"
+            />
+            <h3>Defaulters Management</h3>
+            <p>Identify and manage payment defaulters efficiently</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Types & Onboarding -->
+    <section id="onboard" class="user-types">
+      <div class="container">
+        <h2 class="section-title">Who Can Use WastePro?</h2>
+        <div class="user-cards">
+          <div class="user-card">
+            <h3>🏛️ Waste Operators & Managers</h3>
+            <p>
+              Perfect for organizations managing waste collection and disposal
+              operations
+            </p>
+            <ul>
+              <li>✅ Complete property database management</li>
+              <li>✅ Automated billing and payment tracking</li>
+              <li>✅ Staff and subscriber management</li>
+              <li>✅ Comprehensive reporting tools</li>
+              <li>✅ CSV export capabilities</li>
+              <li>✅ Multi-location support</li>
+            </ul>
+            <a
+              href="mailto:dev@boundlesedge.com?subject=WastePro Onboarding Request - Waste Operator"
+              class="contact-button"
+            >
+              Contact for Onboarding
+            </a>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #666">
+              Email: dev@boundlesedge.com
+            </p>
+          </div>
+
+          <div class="user-card">
+            <h3>🏠 Service Clients</h3>
+            <p>
+              Property owners and residents requiring waste management services
+            </p>
+            <ul>
+              <li>✅ View payment history and status</li>
+              <li>✅ Track waste collection schedules</li>
+              <li>✅ Access billing information</li>
+              <li>✅ Service request management</li>
+              <li>✅ Mobile-friendly interface</li>
+              <li>✅ Real-time notifications</li>
+            </ul>
+            <a href="#contact-manager" class="contact-button client">
+              Contact Your Waste Manager
+            </a>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #666">
+              Reach out to your assigned Waste Manager for account access
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+      <div class="container">
+        <div class="about-content">
+          <div class="about-text">
+            <h2>About WastePro</h2>
+            <p>
+              WastePro is a comprehensive waste management platform developed by
+              <strong>BoundlessEdge</strong> to streamline waste collection,
+              billing, and management operations across Lagos State and beyond.
+            </p>
+
+            <p>
+              Built with modern technologies including
+              <strong>NestJS</strong> backend and
+              <strong>Quasar Framework</strong> frontend, WastePro offers a
+              robust, scalable solution for waste management organizations of
+              all sizes.
+            </p>
+
+            <p>
+              The platform integrates seamlessly with existing operations while
+              providing advanced features like automated billing, comprehensive
+              reporting, and multi-role user management.
+            </p>
+
+            <div class="stats">
+              <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div>Web-Based</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div>Support</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">SSL</div>
+                <div>Secured</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">Cloud</div>
+                <div>Hosted</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-logos">
+            <img
+              src="/assets/lawma-logo.jpeg"
+              alt="LAWMA Partnership"
+              style="border-radius: 10px"
+            />
+            <img
+              src="/assets/lagos-state-logo.jpeg"
+              alt="Lagos State"
+              style="border-radius: 10px"
+            />
+            <img
+              src="/assets/boundless_logo.png"
+              alt="BoundlessEdge"
+              style="background: white; padding: 20px; border-radius: 10px"
+            />
+            <img
+              src="/assets/grs-logo-name-1.png"
+              alt="GRS Integration"
+              style="background: white; padding: 10px; border-radius: 10px"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>WastePro Platform</h3>
+            <p>
+              Professional waste management solution for modern organizations.
+              Streamline your operations with our comprehensive platform.
+            </p>
+          </div>
+
+          <div class="footer-section">
+            <h3>For Waste Operators</h3>
+            <p>Ready to transform your waste management operations?</p>
+            <p>
+              <strong>Email:</strong>
+              <a href="mailto:dev@boundlesedge.com">dev@boundlesedge.com</a>
+            </p>
+            <p><strong>Subject:</strong> WastePro Onboarding Request</p>
+          </div>
+
+          <div class="footer-section">
+            <h3>For Service Clients</h3>
+            <p>Need access to your waste management account?</p>
+            <p>Contact your assigned Waste Manager for:</p>
+            <p>• Account setup and access</p>
+            <p>• Payment inquiries</p>
+            <p>• Service requests</p>
+          </div>
+
+          <div class="footer-section">
+            <h3>Powered By</h3>
+            <p><strong>BoundlessEdge</strong></p>
+            <p><a href="https://boundlesedge.com">boundlesedge.com</a></p>
+            <p>Building innovative solutions for modern challenges</p>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 WastePro by BoundlessEdge. All rights reserved. |
+            Platform hosted at wasteproutils.com
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            });
+          }
+        });
+      });
+
+      // Header background on scroll
+      window.addEventListener('scroll', function () {
+        const header = document.querySelector('header');
+        if (window.scrollY > 100) {
+          header.style.background = 'rgba(44, 85, 48, 0.95)';
+        } else {
+          header.style.background =
+            'linear-gradient(135deg, #2c5530 0%, #4a7c59 100%)';
+        }
+      });
+    </script>
+  </body>
+</html>

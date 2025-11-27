@@ -48,3 +48,9 @@ lerna-debug.log*
 # vscode
 .vscode/
 .qodo
+generate-comprehensive-debtors-report.ts
+generate-debtors-shasha-road.ts
+analyze-debtors.js
+run-debtors-query.ts
+shasha-road-debtors-query.sql
+shasha-road-comprehensive-analysis.sql

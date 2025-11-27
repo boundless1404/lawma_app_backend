@@ -8,11 +8,20 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
+import { DataSource } from 'typeorm';
 import { IsEntityUserAdmin } from '../shared/isEntityUserAdmin.guard';
 import { GetAuthPayload } from '../shared/getAuthenticatedUserPayload.decorator';
 import { AuthTokenPayload, PaystackWebhookEventObject } from '../lib/types';
+import { PermissionGuard } from '../shared/guards/permission.guard';
+import {
+  RequirePermissions,
+  PERMISSIONS,
+} from '../shared/decorators/auth.decorators';
+import { EntityUserProfile } from './entitties/entityUserProfile.entity';
 import {
   CreateLgaDto,
   CreateLgaWardDto,
@@ -41,15 +50,18 @@ import { UpdatePropertySubscriptionValidationPipe } from './dtos/custom-pipes';
 
 @Controller('utils-billing')
 export class UtilsBillingController {
-  constructor(private utilService: UtilsBillingService) {
-    //
+  private dbManager: DataSource;
+
+  constructor(private utilService: UtilsBillingService, dbManager: DataSource) {
+    this.dbManager = dbManager;
   }
 
   // create user
   // would create both entity user and subscriber user
   // differentiate with a flag
   @Post('user')
-  @UseGuards(new IsEntityUserAdmin())
+  @UseGuards(PermissionGuard)
+  @RequirePermissions(PERMISSIONS.USERS_CREATE)
   async createUser(
     @Body() createUserDto: CreateUserDto,
     @GetAuthPayload() authPayload: AuthTokenPayload,
@@ -71,14 +83,38 @@ export class UtilsBillingController {
   @Get('subscriber-user')
   @UseGuards(IsAuthenticated)
   async getSubscriberUser(@GetAuthPayload() authPayload: AuthTokenPayload) {
-    //
-    return await this.utilService.getEntityUserSubscriber(
-      authPayload.profile.entityProfileId,
+    // Try to get entityProfileId from token first
+    let entityProfileId = authPayload.profile?.entityProfileId;
+
+    // If not in token, fetch from database using the user's profile info
+    if (!entityProfileId && authPayload.profile?.profileTypeId) {
+      const userProfile = await this.dbManager.manager.findOne(
+        EntityUserProfile,
+        {
+          where: { id: authPayload.profile.profileTypeId },
+          select: ['entityProfileId'],
+        },
+      );
+
+      if (userProfile) {
+        entityProfileId = userProfile.entityProfileId;
+      }
+    }
+
+    if (!entityProfileId) {
+      throw new BadRequestException(
+        'Entity profile ID not found for the current user',
+      );
+    }
+
+    return await this.utilService.getEntityUserSubscriberByEntityProfileId(
+      entityProfileId,
     );
   }
 
   @Post('subscription')
-  @UseGuards(new IsEntityUserAdmin())
+  @UseGuards(PermissionGuard)
+  @RequirePermissions(PERMISSIONS.PROPERTIES_CREATE)
   async createSubscription(
     @Body() createSubscriptionDto: CreateSubscriptionDto,
     @GetAuthPayload() authPayload: AuthTokenPayload,
@@ -91,7 +127,8 @@ export class UtilsBillingController {
   }
 
   @Get('subscription')
-  @UseGuards(IsAuthenticated)
+  @UseGuards(PermissionGuard)
+  @RequirePermissions(PERMISSIONS.PROPERTIES_READ)
   async getSubscriptions(
     @Query() getSubscriptionQuery: GetSubscriptionQuery,
     @GetAuthPayload() authPayload: AuthTokenPayload,
@@ -111,7 +148,8 @@ export class UtilsBillingController {
   }
 
   @Get('subscription/details')
-  @UseGuards(IsAuthenticated)
+  @UseGuards(PermissionGuard)
+  @RequirePermissions(PERMISSIONS.PROPERTIES_READ)
   async getSubscriptionDetails(
     @Query() query: Record<string, string>,
     @GetAuthPayload() authPayload: AuthTokenPayload,
@@ -270,6 +308,60 @@ export class UtilsBillingController {
       ...query,
       entityProfileId: authPayload.profile.entityProfileId,
     });
+  }
+
+  @Delete('payment/:id')
+  @UseGuards(IsAuthenticated)
+  async deletePayment(
+    @Param('id') paymentId: string,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    await this.utilService.deletePayment(
+      paymentId,
+      authPayload.profile.entityProfileId,
+    );
+  }
+
+  @Get('payment/daily-csv')
+  @UseGuards(IsAuthenticated)
+  async getDailyPaymentsCSV(
+    @Query('date') date: string,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+    @Res() res: any,
+  ) {
+    const csvContent = await this.utilService.getDailyPaymentsCSV(
+      date,
+      authPayload.profile.entityProfileId,
+    );
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="daily-payments-${date}.csv"`,
+    );
+    res.send(csvContent);
+  }
+
+  @Get('payment/range-csv')
+  @UseGuards(IsAuthenticated)
+  async getDateRangePaymentsCSV(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+    @Res() res: any,
+  ) {
+    const csvContent = await this.utilService.getDateRangePaymentsCSV(
+      startDate,
+      endDate,
+      authPayload.profile.entityProfileId,
+    );
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="payments-range-${startDate}-to-${endDate}.csv"`,
+    );
+    res.send(csvContent);
   }
 
   @Post('lga')

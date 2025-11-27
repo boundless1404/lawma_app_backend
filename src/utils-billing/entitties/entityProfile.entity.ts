@@ -16,6 +16,8 @@ import VirtualAccountDetail from './virtualAccountDetail.entity';
 import EntityProfileBankAccountDetails from './entityProfileBankAcountDetails.entity';
 import PaymentTransfer from './paymentTransfer.entity';
 import VirtualAccountReceivedPayment from './virtualAccountReceivedPayment.entity';
+import { Notification } from './notification.entity';
+import { Role } from './role.entity';
 
 @Entity()
 export class EntityProfile {
@@ -24,6 +26,9 @@ export class EntityProfile {
 
   @Column({ type: 'varchar', nullable: false })
   name: string;
+
+  @Column({ type: 'int', default: 0 })
+  smsUnits: number;
 
   // TODO: add lga / ward id
 
@@ -88,4 +93,10 @@ export class EntityProfile {
       virtualAccountReceivedPayment.entityProfile,
   )
   virtualAccountReceivedPayments: VirtualAccountReceivedPayment[];
+
+  @OneToMany(() => Notification, (notification) => notification.entityProfile)
+  notifications: Notification[];
+
+  @OneToMany(() => Role, (role) => role.entityProfile)
+  roles: Role[];
 }

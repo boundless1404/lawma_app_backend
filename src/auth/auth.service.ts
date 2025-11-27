@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager } from 'typeorm';
-import { EntityProfileSignUpDto, SignInDto } from './dto/dto';
+import {
+  EntityProfileSignUpDto,
+  ServiceClientSignInDto,
+  SignInDto,
+} from './dto/dto';
 import { EntityUserProfile } from '../utils-billing/entitties/entityUserProfile.entity';
 import { HelpersService } from '../shared/helpers/helpers.service';
 import {
@@ -19,6 +23,8 @@ import { omit } from 'lodash';
 import { SharedService } from '../shared/shared.service';
 import { ProfileService } from '../shared/profile/profile.service';
 import { ProfileTypes } from '../lib/enums';
+import { PropertySubscription } from '../utils-billing/entitties/propertySubscription.entity';
+import { RbacService } from '../shared/rbac.service';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +34,7 @@ export class AuthService {
     private requestService: RequestService,
     private sharedService: SharedService,
     private profileService: ProfileService,
+    private rbacService: RbacService,
   ) {
     //
     this.dbManager = this.dbSource.manager;
@@ -42,15 +49,33 @@ export class AuthService {
       signinDto,
     }: { signupDto?: EntityProfileSignUpDto; signinDto?: SignInDto },
   ) {
+    // Extract phone code from phone number if present
+    let phoneCode = '';
+    let phone = signupDto?.phone || '';
+
+    if (phone && phone.startsWith('+')) {
+      // Extract country code from phone number
+      const match = phone.match(/^\+(\d{1,4})/);
+      if (match) {
+        phoneCode = match[1];
+        // Remove the + and country code from the phone number
+        phone = phone.substring(match[0].length);
+      }
+    }
+
     const authServerRequestBody: {
       firstName: string;
       middleName: string;
       lastName: string;
       email: string;
+      phone?: string;
+      phoneCode?: string;
       password: string;
       initiateVerificationRequest: boolean;
     } = {
       ...signupDto,
+      phone: phone || signupDto?.phone,
+      phoneCode,
       initiateVerificationRequest: false,
     };
 
@@ -109,13 +134,15 @@ export class AuthService {
 
         entityProfile = await transactionManager.save(entityProfile);
 
-        // remove stale fields
-        delete signupDto.entityProfile;
-        delete signupDto.password;
-
+        // Create EntityUserProfile with only the allowed fields
         let entityUserProfile = transactionManager.create(EntityUserProfile, {
-          ...signupDto,
+          firstName: signupDto.firstName,
+          middleName: signupDto.middleName,
+          lastName: signupDto.lastName,
+          email: signupDto.email,
+          phone: signupDto.phone,
           entityProfileId: entityProfile.id,
+          phoneCodeId: null, // Will be set later if phoneCode processing is implemented
         });
 
         entityUserProfile = await transactionManager.save(entityUserProfile);
@@ -138,6 +165,28 @@ export class AuthService {
           profile,
           entityProfile.id,
         );
+
+        // Initialize RBAC system for the new entity
+        try {
+          await this.rbacService.initializeSystemRbac(entityProfile.id);
+
+          // Assign super admin role to the creating user
+          const roles = await this.rbacService.getRoles(entityProfile.id);
+          const superAdminRole = roles.find(
+            (role) => role.name === 'super_admin',
+          );
+
+          if (superAdminRole) {
+            await this.rbacService.assignRole({
+              roleId: superAdminRole.id,
+              entityUserProfileId: entityUserProfile.id,
+              assignedByUserId: userData.id,
+            });
+          }
+        } catch (error) {
+          console.warn('Failed to initialize RBAC system:', error);
+          // Don't fail the signup process if RBAC initialization fails
+        }
       }
 
       // TODO: implement else branch
@@ -172,6 +221,35 @@ export class AuthService {
     );
 
     return authTokenPayload;
+  }
+
+  async serviceClientSignin(dto: ServiceClientSignInDto) {
+    const property = await this.dbManager.findOne(PropertySubscription, {
+      where: { id: dto.propertyCode },
+      relations: ['entitySubscriberProfile'],
+    });
+
+    if (
+      !property ||
+      !property.entitySubscriberProfile ||
+      property.entitySubscriberProfile.phone !== dto.phone
+    ) {
+      throwUnathorized('Invalid property code or phone number.');
+    }
+
+    // If validation passes, generate a token for the client
+    const clientAuthPayload = {
+      propertySubscriptionId: property.id,
+      entitySubscriberProfileId: property.entitySubscriberProfile.id,
+      type: 'serviced-client', // Custom type for client tokens
+    } as AuthTokenPayload;
+
+    const token = this.sharedService.signPayload(clientAuthPayload);
+
+    return {
+      token,
+      message: 'OTP sent successfully. Please verify to complete login.', // Mock message
+    };
   }
 
   async generateAuthToken(

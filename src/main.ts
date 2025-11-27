@@ -21,10 +21,21 @@ async function bootstrap() {
     origin: '*',
   });
 
-  // update this to serve fronted files in /public/spa
-  // Serve static files from /public/spa
-  const spaPath = join(__dirname, '..', '/public', 'spa');
-  app.use(express.static(spaPath));
+  // Serve static files from /public/spa with proper MIME types
+  const spaPath = join(__dirname, '..', 'public', 'spa');
+  app.use(
+    express.static(spaPath, {
+      setHeaders: (res, path) => {
+        if (path.endsWith('.js')) {
+          res.setHeader('Content-Type', 'application/javascript');
+        } else if (path.endsWith('.css')) {
+          res.setHeader('Content-Type', 'text/css');
+        } else if (path.endsWith('.html')) {
+          res.setHeader('Content-Type', 'text/html');
+        }
+      },
+    }),
+  );
 
   // Serve index.html for SPA routes not handled by the backend
   app.use('*', (req, res, next) => {

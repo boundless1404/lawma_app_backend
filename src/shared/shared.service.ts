@@ -87,17 +87,14 @@ export class SharedService {
 
   async isTokenExpired(
     createdAt: Date,
-    options: { expiresInHHours?: number; expiresInSeconds?: number },
+    options: { expiresInHours?: number; expiresInSeconds?: number },
   ) {
-    const expiry = options.expiresInSeconds || options.expiresInHHours;
-    const tokenExpirtyFactor = 1000 * 60 * options.expiresInHHours ? 60 : 1;
+    const expiry = options.expiresInSeconds ?? options.expiresInHours;
+    const tokenExpiryFactor = options.expiresInHours ? 1000 * 60 * 60 : 1000;
     const currentTime = Date.now();
     const timeDifferenceInMilliseconds = currentTime - createdAt.getTime();
-    const expiryTime = expiry * tokenExpirtyFactor; // convert hours to milliseconds
-    if (timeDifferenceInMilliseconds > expiryTime) {
-      return true;
-    }
-    return false;
+    const expiryTime = (expiry ?? 0) * tokenExpiryFactor; // convert to milliseconds
+    return timeDifferenceInMilliseconds > expiryTime;
   }
 
   // * Implement sending sms with twilio
@@ -244,10 +241,9 @@ export class SharedService {
     };
 
     try {
-      const data = await apiInstance.sendTransacEmail(batchSend);
-      console.log('API call successful. Returned data: ', JSON.stringify(data));
+      await apiInstance.sendTransacEmail(batchSend);
     } catch (error) {
-      console.error(error);
+      Logger.error('Error sending transactional email', error);
     }
   }
 
@@ -268,7 +264,7 @@ export class SharedService {
     };
 
     const url = `${this.config.get('TERMII_API_URL')}/sms/send`;
-    const termiiServerResponse = await axios.post(
+    await axios.post(
       url,
       { ...termiiSms, ...termiiSmsConfig },
       {
@@ -277,7 +273,5 @@ export class SharedService {
         },
       },
     );
-
-    Logger.log(termiiServerResponse);
   }
 }

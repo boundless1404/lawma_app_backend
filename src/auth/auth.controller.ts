@@ -1,5 +1,9 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { EntityProfileSignUpDto, SignInDto } from './dto/dto';
+import {
+  EntityProfileSignUpDto,
+  ServiceClientSignInDto,
+  SignInDto,
+} from './dto/dto';
 import { AuthService } from './auth.service';
 import { ProfileService } from '../shared/profile/profile.service';
 import { SharedService } from '../shared/shared.service';
@@ -30,5 +34,10 @@ export class AuthController {
     //
     const authTokenPayload = this.authService.signin(signinDto);
     return authTokenPayload;
+  }
+
+  @Post('client-signin')
+  async clientSignin(@Body() dto: ServiceClientSignInDto) {
+    return this.authService.serviceClientSignin(dto);
   }
 }

@@ -31,6 +31,14 @@ export class EntityProfileSignUpDto {
   @IsEmail()
   email: string;
 
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  phoneCode?: string;
+
   @IsNotEmpty()
   @IsString()
   password: string;
@@ -50,4 +58,14 @@ export class SignInDto {
   @IsNotEmpty()
   @IsString()
   password: string;
+}
+
+export class ServiceClientSignInDto {
+  @IsNotEmpty()
+  @IsString()
+  propertyCode: string;
+
+  @IsNotEmpty()
+  @IsString()
+  phone: string;
 }

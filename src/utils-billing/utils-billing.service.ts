@@ -44,6 +44,7 @@ import { bignumber } from 'mathjs';
 import { LgaWard } from './entitties/lgaWard.entity';
 import { Lga } from './entitties/lga.entity';
 import { Payment } from './entitties/payments.entity';
+import { EntityProfile } from './entitties/entityProfile.entity';
 import { RequestService } from '../shared/request/request.service';
 import { ProfileCollection } from './entitties/profileCollection.entity';
 import { PhoneCode } from './entitties/phoneCode.entity';
@@ -66,6 +67,7 @@ import {
 } from '../utils/functions/billing.function';
 import { formatAmount, generateBillingSmsMessage, paymentReceivedOperator, paymentReceivedSubscriber, transferSuccessfulOperator } from '../utils/functions/smsLayout.function';
 import { SharedService } from '../shared/shared.service';
+import { NotificationService } from '../shared/notification.service';
 
 @Injectable()
 export class UtilsBillingService {
@@ -76,6 +78,7 @@ export class UtilsBillingService {
     public walletService: WalletServiceService,
     private configService: ConfigService,
     private readonly sharedService: SharedService,
+    private readonly notificationService: NotificationService,
     private dataSource?: DataSource,
   ) {
     //
@@ -220,6 +223,40 @@ export class UtilsBillingService {
     return entitySubscriberProfiles;
   }
 
+  async getEntityUserSubscriberByEntityProfileId(
+    entityProfileId: string,
+    {
+      query,
+      page,
+      count = 10,
+    }: { query?: string; page?: number; count?: number } = {},
+  ) {
+    // Find all users belonging to this entity profile
+    const entityUsers = await this.dbManager.find(EntityUserProfile, {
+      where: { entityProfileId },
+      select: ['id'],
+    });
+
+    if (entityUsers.length === 0) {
+      return [];
+    }
+
+    const entityUserIds = entityUsers.map((user) => user.id);
+
+    // Find all subscribers created by any user in this entity
+    const entitySubscriberProfiles = await this.dbManager
+      .createQueryBuilder(EntitySubscriberProfile, 'subscriber')
+      .where('subscriber.createdByEntityUserProfileId IN (:...userIds)', {
+        userIds: entityUserIds,
+      })
+      .orWhere('subscriber.createdByEntityProfileId = :entityProfileId', {
+        entityProfileId,
+      })
+      .getMany();
+
+    return entitySubscriberProfiles;
+  }
+
   async createPropertySubscription(
     createSubscriptionDto: CreateSubscriptionDto,
     authPayload: AuthTokenPayload,
@@ -333,42 +370,61 @@ export class UtilsBillingService {
   ) {
     //
     // let filterBy = filter ? JSON.parse(filter) : null;
-    const [propertySubscriptions, rowsNumber] =
-      await this.dbManager.findAndCount(PropertySubscription, {
-        where: filter
-          ? isNumberString(filter)
-            ? [
-                // {
-                //   entityProfileId,
-                //   // billingAccount: {
-                //   //   totalBillings: Raw(
-                //   //     ($alias) => `${$alias} >= "totalPayments" + ${filter}`,
-                //   //   ),
-                //   // },
-                // },
-                {
-                  entityProfileId,
-                  oldCode: filter,
-                },
-                {
-                  entityProfileId,
-                  id: filter,
-                },
-              ]
-            : [
-                {
-                  entityProfileId,
-                  street: { name: ILike(`%${filter}%`) },
-                },
-                {
-                  entityProfileId,
-                  propertySubscriptionName: ILike(`%${filter}%`),
-                },
-              ]
-          : {
-              entityProfileId,
-              ...(streetId ? { streetId } : {}),
-            },
+
+    // Build where conditions based on filter type
+    let whereConditions: any[] | any;
+
+    if (filter) {
+      if (isNumberString(filter)) {
+        // Numeric search
+        whereConditions = [
+          // Search by numeric ID (convert to string for LIKE comparison)
+          {
+            entityProfileId,
+            id: Raw((alias) => `CAST(${alias} AS TEXT) LIKE :filter`, {
+              filter: `%${filter}%`,
+            }),
+          },
+          // Search by oldCode (partial match)
+          {
+            entityProfileId,
+            oldCode: ILike(`%${filter}%`),
+          },
+          // Search by street number (partial match)
+          {
+            entityProfileId,
+            streetNumber: ILike(`%${filter}%`),
+          },
+        ];
+      } else {
+        // Text search
+        whereConditions = [
+          {
+            entityProfileId,
+            street: { name: ILike(`%${filter}%`) },
+          },
+          {
+            entityProfileId,
+            propertySubscriptionName: ILike(`%${filter}%`),
+          },
+          // Also search oldCode for non-numeric strings
+          {
+            entityProfileId,
+            oldCode: ILike(`%${filter}%`),
+          },
+        ];
+      }
+    } else {
+      whereConditions = {
+        entityProfileId,
+        ...(streetId ? { streetId } : {}),
+      };
+    }
+
+    const [propertySubscriptions] = await this.dbManager.findAndCount(
+      PropertySubscription,
+      {
+        where: whereConditions,
         ...(!streetId
           ? { take: rowsPerPage, skip: (page - 1) * rowsPerPage }
           : {}),
@@ -385,7 +441,8 @@ export class UtilsBillingService {
           street: true,
         },
         ...(sortBy ? { order: { [sortBy]: descending ? 'DESC' : 'ASC' } } : {}),
-      });
+      },
+    );
 
     const mappedResponse = propertySubscriptions.map((sub) => {
       return {
@@ -426,9 +483,24 @@ export class UtilsBillingService {
       };
     });
 
+    // Filter by arrears if numeric filter is provided
+    let filteredResponse = mappedResponse;
+    if (filter && isNumberString(filter)) {
+      const arrearsThreshold = parseFloat(filter);
+      filteredResponse = mappedResponse.filter(
+        (item) => item.arrears <= arrearsThreshold,
+      );
+    }
+
     return {
-      data: mappedResponse,
-      pagination: { rowsNumber, rowsPerPage, page, sortBy, descending },
+      data: filteredResponse,
+      pagination: {
+        rowsNumber: filteredResponse.length,
+        rowsPerPage,
+        page,
+        sortBy,
+        descending,
+      },
       filter,
     };
   }
@@ -438,21 +510,26 @@ export class UtilsBillingService {
     entityProfileId: string,
   ) {
     //
-    let propertyType = await this.dbManager.findOne(PropertyType, {
-      where: {
-        id: createPropertyTypesDto.id,
-      },
-    });
-
-    if (propertyType) {
-      propertyType.name = createPropertyTypesDto.name;
-      propertyType.unitPrice = createPropertyTypesDto.unitPrice;
-    } else {
+    let propertyType: PropertyType;
+    if (createPropertyTypesDto.id === undefined) {
       propertyType = this.dbManager.create(PropertyType, {
-        unitPrice: createPropertyTypesDto.unitPrice,
         name: createPropertyTypesDto.name,
+        unitPrice: createPropertyTypesDto.unitPrice,
         entityProfileId,
       });
+    } else {
+      propertyType = await this.dbManager.findOne(PropertyType, {
+        where: {
+          id: createPropertyTypesDto.id,
+          // ensures the property type belongs to the entity profile
+          entityProfileId,
+        },
+      });
+      if (!propertyType) {
+        throwBadRequest('Property type not found.');
+      }
+      propertyType.name = createPropertyTypesDto.name;
+      propertyType.unitPrice = createPropertyTypesDto.unitPrice;
     }
 
     await this.dbManager.save(propertyType);
@@ -775,7 +852,7 @@ export class UtilsBillingService {
 
       await dbManager.save(newSubscriberVirtualAccount);
     } catch (error) {
-      console.log(error);
+      Logger.error('Error creating virtual account', error.message);
     }
   }
 
@@ -1661,7 +1738,7 @@ export class UtilsBillingService {
     year = new Date().getFullYear().toString(),
     month,
   }: {
-    propertySubscriptionId: string;
+    propertySubscriptionId?: string;
     entityProfileId: string;
     year?: string;
     month?: string;
@@ -1679,6 +1756,9 @@ export class UtilsBillingService {
               month: this.getMonthNumber(month),
             },
           ),
+          createdAt: Raw(($alias) => `extract(year from ${$alias}) = :year`, {
+            year: parseInt(year),
+          }),
           propertySubscription: {
             entityProfileId: entityProfileId,
           },
@@ -1694,11 +1774,20 @@ export class UtilsBillingService {
     } else {
       payments = await this.dbManager.find(Payment, {
         where: {
-          propertySubscriptionId: propertySubscriptionId,
+          ...(propertySubscriptionId ? { propertySubscriptionId } : {}),
           propertySubscription: {
             entityProfileId: entityProfileId,
           },
-          ...(year ? { year } : {}),
+          ...(year
+            ? {
+                createdAt: Raw(
+                  ($alias) => `extract(year from ${$alias}) = :year`,
+                  {
+                    year: parseInt(year),
+                  },
+                ),
+              }
+            : {}),
         },
         relations: {
           propertySubscription: true,
@@ -1719,7 +1808,214 @@ export class UtilsBillingService {
       month: MonthNames[new Date(payment.paymentDate).getMonth() + 1],
       propertySubscriptionName:
         payment.propertySubscription.propertySubscriptionName,
+      createdAt: payment.createdAt,
+      comments: payment.comments,
     }));
+  }
+
+  async deletePayment(paymentId: string, entityProfileId: string) {
+    // First, find the payment and verify it belongs to the entity
+    const payment = await this.dbManager.findOne(Payment, {
+      where: {
+        id: paymentId,
+        propertySubscription: {
+          entityProfileId: entityProfileId,
+        },
+      },
+      relations: {
+        propertySubscription: {
+          billingAccount: true,
+        },
+      },
+    });
+
+    if (!payment) {
+      throw new Error('Payment not found or unauthorized');
+    }
+
+    await this.dbManager.transaction(async (transactionManager) => {
+      // Update billing account - subtract the deleted payment amount from totalPayments
+      const billingAccount = payment.propertySubscription.billingAccount;
+      const updatedTotalPayments = bignumber(billingAccount.totalPayments)
+        .minus(payment.amount)
+        .toNumber();
+
+      // Ensure totalPayments doesn't go below 0
+      billingAccount.totalPayments = String(Math.max(0, updatedTotalPayments));
+
+      // Save the updated billing account
+      await transactionManager.save(billingAccount);
+
+      // Perform soft delete of the payment
+      await transactionManager.delete(Payment, paymentId);
+    });
+  }
+
+  private escapeCSVField(field: any): string {
+    const stringField = String(field || '');
+    // Escape commas and quotes in CSV fields
+    if (
+      stringField.includes(',') ||
+      stringField.includes('"') ||
+      stringField.includes('\n')
+    ) {
+      return `"${stringField.replace(/"/g, '""')}"`;
+    }
+    return stringField;
+  }
+
+  private generatePaymentsCSV(
+    payments: Payment[],
+    options?: {
+      includeSummary?: boolean;
+      summaryPeriod?: string;
+    },
+  ): string {
+    const csvHeaders = [
+      'Payment ID',
+      'Payer Name',
+      'Payment Date',
+      'Amount (₦)',
+      'Property Name',
+      'Street Name',
+      'Subscriber Name',
+      'Subscriber Phone',
+      'Comments',
+      'Created At',
+    ];
+
+    const csvRows = payments.map((payment) => [
+      payment.id,
+      payment.payerName || '',
+      new Date(payment.paymentDate).toLocaleDateString('en-US'),
+      payment.amount,
+      payment.propertySubscription?.propertySubscriptionName || '',
+      payment.propertySubscription?.street?.name || '',
+      `${
+        payment.propertySubscription?.entitySubscriberProfile?.firstName || ''
+      } ${
+        payment.propertySubscription?.entitySubscriberProfile?.lastName || ''
+      }`.trim(),
+      payment.propertySubscription?.entitySubscriberProfile?.phone || '',
+      payment.comments || '',
+      new Date(payment.createdAt).toLocaleString('en-US'),
+    ]);
+
+    const csvContent = [
+      csvHeaders.join(','),
+      ...csvRows.map((row) =>
+        row.map((field) => this.escapeCSVField(field)).join(','),
+      ),
+    ];
+
+    // Add summary if requested
+    if (options?.includeSummary) {
+      const totalAmount = payments.reduce(
+        (sum, payment) => sum + parseFloat(payment.amount),
+        0,
+      );
+      const summaryRow = [
+        '',
+        '',
+        '',
+        `TOTAL: ${totalAmount.toFixed(2)}`,
+        `Count: ${payments.length} payments`,
+        options.summaryPeriod || '',
+        '',
+        '',
+        '',
+        '',
+      ];
+
+      csvContent.push(''); // Empty row before summary
+      csvContent.push(
+        summaryRow.map((field) => this.escapeCSVField(field)).join(','),
+      );
+    }
+
+    return csvContent.join('\n');
+  }
+
+  async getDailyPaymentsCSV(date: string, entityProfileId: string) {
+    // Validate date format
+    if (!date || isNaN(Date.parse(date))) {
+      throw new Error(
+        'Invalid date format. Please provide a valid date (YYYY-MM-DD).',
+      );
+    }
+
+    // Parse the date and get all payments for that day
+    const payments = await this.dbManager.find(Payment, {
+      where: {
+        paymentDate: Raw(($alias) => `DATE(${$alias}) = :date`, { date }),
+        propertySubscription: {
+          entityProfileId: entityProfileId,
+        },
+      },
+      relations: {
+        propertySubscription: {
+          street: true,
+          entitySubscriberProfile: true,
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return this.generatePaymentsCSV(payments);
+  }
+
+  async getDateRangePaymentsCSV(
+    startDate: string,
+    endDate: string,
+    entityProfileId: string,
+  ) {
+    // Validate date format
+    if (!startDate || isNaN(Date.parse(startDate))) {
+      throw new Error(
+        'Invalid start date format. Please provide a valid date (YYYY-MM-DD).',
+      );
+    }
+
+    if (!endDate || isNaN(Date.parse(endDate))) {
+      throw new Error(
+        'Invalid end date format. Please provide a valid date (YYYY-MM-DD).',
+      );
+    }
+
+    // Validate date range
+    if (new Date(startDate) > new Date(endDate)) {
+      throw new Error('Start date cannot be after end date.');
+    }
+
+    // Get all payments within the date range
+    const payments = await this.dbManager.find(Payment, {
+      where: {
+        paymentDate: Raw(
+          ($alias) => `DATE(${$alias}) BETWEEN :startDate AND :endDate`,
+          { startDate, endDate },
+        ),
+        propertySubscription: {
+          entityProfileId: entityProfileId,
+        },
+      },
+      relations: {
+        propertySubscription: {
+          street: true,
+          entitySubscriberProfile: true,
+        },
+      },
+      order: {
+        paymentDate: 'DESC',
+        createdAt: 'DESC',
+      },
+    });
+
+    return this.generatePaymentsCSV(payments, {
+      includeSummary: true,
+      summaryPeriod: `Period: ${startDate} to ${endDate}`,
+    });
   }
 
   async createStreet(
@@ -2121,17 +2417,24 @@ export class UtilsBillingService {
             account_number: data.authorization.receiver_bank_account_number,
           },
           relations: {
-            propertySubscription: true,
+            propertySubscription: {
+              entitySubscriberProfile: {
+                phoneCode: true,
+              },
+              street: true,
+            },
           },
         },
       );
 
       const koboFactor = 100;
+      const paymentAmount = String(data.amount / koboFactor);
+
       await this.dbManager.transaction(async (transactionManager) => {
-        await this.createNewPayment({
+        const newPayment = await this.createNewPayment({
           dbManager: transactionManager,
           comments: 'Bank Transfer Automation',
-          amount: String(data.amount / koboFactor),
+          amount: paymentAmount,
           paymentDate: new Date(),
           propertySubscriptionId:
             payingSubscriberAccountDetail.propertySubscriptionId,
@@ -2179,16 +2482,21 @@ export class UtilsBillingService {
         const chargedAmount = data.amount;
 
         // deduct boundless fees
-        const boundelsssDeductionPercentage = 0.06; // 6%
+        const boundelsssDeductionPercentage = 0.05; // 5%
         const boundelsssDeductionPercentageAmount =
           boundelsssDeductionPercentage * chargedAmount;
 
         const boundlessDeductionMinimumAmount = 10000;
 
         const currencyDenominator = 100;
-        const boundelsssDeductionMax = 5000 * currencyDenominator;
+        const boundlessDeductionCap = 1000; // in Naira
+        const boundelsssDeductionMaxAmount =
+          boundlessDeductionCap * currencyDenominator;
         const boundlessDeduction = Math.max(
-          Math.min(boundelsssDeductionPercentageAmount, boundelsssDeductionMax),
+          Math.min(
+            boundelsssDeductionPercentageAmount,
+            boundelsssDeductionMaxAmount,
+          ),
           boundlessDeductionMinimumAmount,
         );
 
@@ -2266,6 +2574,7 @@ export class UtilsBillingService {
                   virtualAccountDetailId: payingSubscriberAccountDetail.id,
                 }),
               );
+
               // TODO: Send SMS to subscriber
             } else {
               throw new Error(
@@ -2290,40 +2599,24 @@ export class UtilsBillingService {
           // TODO: Handle case where entity operator's bank account details are missing
         }
       });
+
+      // Send notifications AFTER transaction completes successfully
+      // This is fire-and-forget to prevent notification failures from affecting payment processing
+      this.sendPaymentNotifications(
+        payingSubscriberAccountDetail,
+        paymentAmount,
+        data.reference,
+      ).catch((notificationError) => {
+        // Log error but don't throw - notifications are non-critical
+        Logger.error(
+          'Non-critical error sending payment notifications:',
+          notificationError,
+        );
+      });
     } else {
       // TODO: Handle case for non-virtual account payments
     }
   }
-  // private async transferSuccess(data: PaystackWebhookData) {
-  //   //
-  //   const transferReference = data.reference;
-  //   const associatedPendingWalletTransaction = await this.dbManager.findOne(
-  //     PendingWalletTransaction,
-  //     {
-  //       where: {
-  //         sourcePaymentReference: transferReference,
-  //       },
-  //     },
-  //   );
-
-  //   if (associatedPendingWalletTransaction) {
-  //     await this.walletService.transactOperatorWallet({
-  //       public_id: associatedPendingWalletTransaction.walletReference,
-  //       user_id: associatedPendingWalletTransaction.userId,
-  //       amount: associatedPendingWalletTransaction.amount,
-  //       credit_source_data: JSON.stringify({ PAYSTACK: data }),
-  //       type: Wallet_Service_Transaction_Type.DEBIT,
-  //     });
-
-  //     await this.dbManager.delete(PendingWalletTransaction, {
-  //       id: associatedPendingWalletTransaction.id,
-  //     });
-
-  //     // TODO: send sms to company
-  //     console.log('transfer webhook received');
-  //   }
-  // }
-
   private async transferSuccess(data: PaystackWebhookData) {
     const transferReference = data.reference;
     const pendingTransaction = await this.dbManager.findOne(
@@ -2352,42 +2645,11 @@ export class UtilsBillingService {
 
       // 3. Clean up pending transaction
       await this.dbManager.delete(PendingWalletTransaction, {
-        id: pendingTransaction.id,
+        id: associatedPendingWalletTransaction.id,
       });
 
-      // 4. Find the original virtual account payment record
-      const virtualAccountPayment = await this.dbManager.findOne(
-        VirtualAccountReceivedPayment,
-        {
-          where: { paymentReference: data.reference },
-          relations: {
-            virtualAccountDetail: {
-              propertySubscription: {
-                entitySubscriberProfile: true,
-              },
-              entityProfile: {
-                entityUserProfiles: true,
-              },
-            },
-          },
-        },
-      );
-
-      if (virtualAccountPayment?.virtualAccountDetail) {
-        await this.sendTransactionSuccessSMS(
-          virtualAccountPayment.virtualAccountDetail,
-          {
-            ...data,
-            amount: Number(pendingTransaction.amount) * 100,
-          },
-        );
-      }
-    } catch (error) {
-      Logger.error(
-        `Transfer success processing failed: ${transferReference}`,
-        error,
-      );
-      throw new Error('Transfer processing failed');
+      // TODO: send sms to company
+      console.log('transfer webhook received');
     }
   }
 
@@ -2456,7 +2718,7 @@ export class UtilsBillingService {
     }
     return operatorMetrics;
   }
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async sendBillingSmsNotifications() {
     const today = new Date();
     if (today.getDate() === 25) {
@@ -2510,7 +2772,6 @@ export class UtilsBillingService {
           }),
         );
 
-        Logger.log('SMS notifications sent successfully.');
       } catch (error) {
         Logger.error('Error sending SMS notifications:', error);
       }
@@ -2519,98 +2780,91 @@ export class UtilsBillingService {
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
-    if (today.getDate() === 25) {
+    if (today.getDate() === 30) {
       try {
-        const propertySubscriptions = await this.dbManager.find(
-          PropertySubscription,
-          {
-            relations: ['entityProfile'],
-          },
+        // Fetch all entity profiles with auto-generation enabled
+        const entityProfiles = await this.dbManager.find(EntityProfile, {
+          relations: ['entityProfilePreference'],
+        });
+
+        // Filter entities with auto-generation enabled
+        const enabledEntityProfiles = entityProfiles.filter(
+          (profile) => profile.entityProfilePreference?.autoGenerateBills,
         );
 
-        // Group property subscriptions by entityProfileId
-        const subscriptionsByEntityProfile = propertySubscriptions.reduce(
-          (acc, subscription) => {
-            const entityProfileId = subscription.entityProfileId;
-            if (!acc[entityProfileId]) {
-              acc[entityProfileId] = [];
-            }
-            acc[entityProfileId].push(subscription);
-            return acc;
-          },
-          {} as Record<string, PropertySubscription[]>,
-        );
-
-        // Generate billings for each entity profile
-        for (const [entityProfileId, subscriptions] of Object.entries<
-          PropertySubscription[]
-        >(subscriptionsByEntityProfile)) {
-          await this.dbManager.transaction(async (transactionManager) => {
-            await Promise.all(
-              subscriptions.map(async (subscription) => {
-                await this.generateMonthBilling(
-                  subscription.id,
-                  getCurrentMonth(),
-                  {
-                    year: getCurrentYear(),
-                    throwError: false,
-                    transactionManager,
+        // Process each entity
+        for (const entityProfile of enabledEntityProfiles) {
+          try {
+            // Get all property subscriptions for this entity
+            const propertySubscriptions = await this.dbManager.find(
+              PropertySubscription,
+              {
+                where: { entityProfileId: entityProfile.id },
+                relations: {
+                  entitySubscriberProfile: {
+                    phoneCode: true,
                   },
-                );
-              }),
+                  street: true,
+                },
+              },
             );
-          });
+
+            // Generate billings in a transaction
+            await this.dbManager.transaction(async (transactionManager) => {
+              const generatedBillings = [];
+
+              for (const subscription of propertySubscriptions) {
+                try {
+                  const billing = await this.generateMonthBilling(
+                    subscription.id,
+                    getCurrentMonth(),
+                    {
+                      year: getCurrentYear(),
+                      throwError: false,
+                      transactionManager,
+                    },
+                  );
+
+                  if (billing) {
+                    generatedBillings.push({
+                      billing,
+                      subscription,
+                    });
+                  }
+                } catch (error) {
+                  Logger.warn(
+                    `Failed to generate billing for subscription ${subscription.id}: ${error.message}`,
+                  );
+                }
+              }
+
+              // Queue SMS notifications for generated billings
+              if (generatedBillings.length > 0) {
+                Logger.log(
+                  `Successfully generated ${generatedBillings.length} billings for ${entityProfile.name}`,
+                );
+
+                // Send notifications asynchronously
+                this.queueBillingNotifications(
+                  generatedBillings,
+                  entityProfile,
+                ).catch((error) => {
+                  Logger.error(
+                    `Error queuing notifications for ${entityProfile.name}: ${error.message}`,
+                  );
+                });
+              }
+            });
+          } catch (error) {
+            Logger.error(
+              `Error processing entity ${entityProfile.name}: ${error.message}`,
+            );
+          }
         }
 
-        Logger.log('Billing generation completed successfully.');
       } catch (error) {
         Logger.error('Error generating billings:', error);
       }
-    }
-  }
-
-  private async sendTransactionSuccessSMS(
-    virtualAccountDetail: VirtualAccountDetail,
-    paymentData: PaystackWebhookData,
-  ) {
-    try {
-      const amountFormatted = formatAmount(paymentData.amount);
-
-      // Send SMS to subscriber
-      const subscriberPhone =
-        virtualAccountDetail.propertySubscription?.entitySubscriberProfile
-          ?.phone;
-      if (subscriberPhone) {
-        const subscriberMessage = paymentReceivedSubscriber(
-          virtualAccountDetail.account_name,
-          amountFormatted,
-        );
-
-        await this.sharedService.sendTermiiSms({
-          to: subscriberPhone,
-          sms: subscriberMessage,
-        });
-      }
-
-      // Send SMS to operator
-      const operatorPhone =
-        virtualAccountDetail.entityProfile?.entityUserProfiles?.[0]?.phone;
-      if (operatorPhone) {
-        const operatorMessage = transferSuccessfulOperator(
-          virtualAccountDetail.account_name,
-          amountFormatted,
-          virtualAccountDetail.account_number,
-          virtualAccountDetail.bank,
-          paymentData.reference,
-        );
-
-        await this.sharedService.sendTermiiSms({
-          to: operatorPhone,
-          sms: operatorMessage,
-        });
-      }
-    } catch (error) {
-      Logger.error('Failed to send SMS notifications', error);
     }
   }
 }
