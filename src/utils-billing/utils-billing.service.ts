@@ -421,7 +421,7 @@ export class UtilsBillingService {
       };
     }
 
-    const [propertySubscriptions] = await this.dbManager.findAndCount(
+    const [propertySubscriptions, totalCount] = await this.dbManager.findAndCount(
       PropertySubscription,
       {
         where: whereConditions,
@@ -484,18 +484,19 @@ export class UtilsBillingService {
     });
 
     // Filter by arrears if numeric filter is provided
-    let filteredResponse = mappedResponse;
-    if (filter && isNumberString(filter)) {
-      const arrearsThreshold = parseFloat(filter);
-      filteredResponse = mappedResponse.filter(
-        (item) => item.arrears <= arrearsThreshold,
-      );
-    }
+    // NOTE: Commented out as it was filtering out valid results
+    // let filteredResponse = mappedResponse;
+    // if (filter && isNumberString(filter)) {
+    //   const arrearsThreshold = parseFloat(filter);
+    //   filteredResponse = mappedResponse.filter(
+    //     (item) => item.arrears <= arrearsThreshold,
+    //   );
+    // }
 
     return {
-      data: filteredResponse,
+      data: mappedResponse,
       pagination: {
-        rowsNumber: filteredResponse.length,
+        rowsNumber: totalCount,
         rowsPerPage,
         page,
         sortBy,
@@ -2574,8 +2575,6 @@ export class UtilsBillingService {
                   virtualAccountDetailId: payingSubscriberAccountDetail.id,
                 }),
               );
-
-              // TODO: Send SMS to subscriber
             } else {
               throw new Error(
                 'Insufficient balance on Paystack to complete transfer',
@@ -2617,6 +2616,148 @@ export class UtilsBillingService {
       // TODO: Handle case for non-virtual account payments
     }
   }
+  /**
+   * Send payment notifications to customer and admin operators
+   * This is completely isolated from payment processing to prevent failures
+   */
+  private async sendPaymentNotifications(
+    payingSubscriberAccountDetail: VirtualAccountDetail & {
+      propertySubscription: PropertySubscription & {
+        entitySubscriberProfile?: EntitySubscriberProfile & {
+          phoneCode?: PhoneCode;
+        };
+        street?: Street;
+      };
+    },
+    paymentAmount: string,
+    paymentReference: string,
+  ): Promise<void> {
+    try {
+      const subscriber =
+        payingSubscriberAccountDetail.propertySubscription
+          ?.entitySubscriberProfile;
+      const street = payingSubscriberAccountDetail.propertySubscription?.street;
+      const entityProfileId =
+        payingSubscriberAccountDetail.propertySubscription?.entityProfileId;
+
+      if (!entityProfileId) {
+        Logger.warn('Cannot send notifications: entityProfileId is missing');
+        return;
+      }
+
+      const propertyAddress = `${
+        payingSubscriberAccountDetail.propertySubscription?.streetNumber || ''
+      } ${street?.name || 'Unknown Street'}`.trim();
+
+      // Step 1: Send notification to customer (if subscriber exists)
+      if (subscriber) {
+        try {
+          // Combine phone code and phone number
+          const fullPhoneNumber =
+            subscriber.phoneCode && subscriber.phone
+              ? `+${subscriber.phoneCode.name}${subscriber.phone}`
+              : subscriber.phone;
+
+          await this.notificationService.queuePaymentNotification({
+            recipientPhone: fullPhoneNumber,
+            recipientEmail: subscriber.email,
+            recipientName: `${subscriber.firstName} ${subscriber.lastName}`,
+            amount: parseFloat(paymentAmount),
+            reference: paymentReference,
+            propertyAddress,
+            entityProfileId,
+            isForOperator: false,
+          });
+
+          Logger.log(
+            `[Payment Notification] Queued for customer: ${subscriber.firstName} ${subscriber.lastName}`,
+          );
+        } catch (customerNotificationError) {
+          Logger.error(
+            '[Payment Notification] Failed to queue customer notification:',
+            customerNotificationError,
+          );
+          // Continue to admin notifications even if customer notification fails
+        }
+      }
+
+      // Step 2: Send notifications to admin operators
+      try {
+        // Fetch all admin users for this entity
+        const adminProfiles = await this.dbManager.find(ProfileCollection, {
+          where: {
+            profileType: ProfileTypes.ENTITY_USER_PROFILE,
+            isAdmin: true,
+            profileTypeId: entityProfileId,
+          },
+        });
+
+        if (!adminProfiles || adminProfiles.length === 0) {
+          Logger.warn(
+            `[Payment Notification] No admin users found for entity: ${entityProfileId}`,
+          );
+          return;
+        }
+
+        const customerName = subscriber
+          ? `${subscriber.firstName} ${subscriber.lastName}`
+          : payingSubscriberAccountDetail.account_name || 'Unknown Customer';
+
+        // Queue email notifications to all admin users
+        for (const adminProfile of adminProfiles) {
+          try {
+            // Fetch the entity user profile details
+            const entityUserProfile = await this.dbManager.findOne(
+              EntityUserProfile,
+              {
+                where: { id: adminProfile.profileTypeId },
+              },
+            );
+
+            if (entityUserProfile?.email) {
+              await this.notificationService.queuePaymentNotification({
+                recipientPhone: null, // Admin doesn't need SMS
+                recipientEmail: entityUserProfile.email,
+                recipientName: customerName,
+                amount: parseFloat(paymentAmount),
+                reference: paymentReference,
+                propertyAddress,
+                entityProfileId,
+                isForOperator: true,
+                operatorName: entityUserProfile.firstName
+                  ? `${entityUserProfile.firstName} ${
+                      entityUserProfile.lastName || ''
+                    }`
+                  : 'Admin',
+              });
+
+              Logger.log(
+                `[Payment Notification] Queued for admin: ${entityUserProfile.email}`,
+              );
+            }
+          } catch (singleAdminError) {
+            Logger.error(
+              `[Payment Notification] Failed to queue for admin ${adminProfile.id}:`,
+              singleAdminError,
+            );
+            // Continue with next admin even if one fails
+          }
+        }
+      } catch (adminNotificationError) {
+        Logger.error(
+          '[Payment Notification] Failed to queue admin notifications:',
+          adminNotificationError,
+        );
+      }
+    } catch (error) {
+      // Catch-all to ensure no error escapes
+      Logger.error(
+        '[Payment Notification] Unexpected error in notification process:',
+        error,
+      );
+    }
+  }
+
   private async transferSuccess(data: PaystackWebhookData) {
     const transferReference = data.reference;
     const pendingTransaction = await this.dbManager.findOne(
@@ -2645,11 +2786,16 @@ export class UtilsBillingService {
 
       // 3. Clean up pending transaction
       await this.dbManager.delete(PendingWalletTransaction, {
-        id: associatedPendingWalletTransaction.id,
+        id: pendingTransaction.id,
       });
 
       // TODO: send sms to company
-      console.log('transfer webhook received');
+    } catch (error) {
+      Logger.error(
+        `[Transfer Success] Failed to process transfer success: ${error.message}`,
+        error.stack,
+      );
+      throw error;
     }
   }
 
@@ -2780,7 +2926,7 @@ export class UtilsBillingService {
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
-    if (today.getDate() === 30) {
+    if (today.getDate() === 25) {
       try {
         // Fetch all entity profiles with auto-generation enabled
         const entityProfiles = await this.dbManager.find(EntityProfile, {
@@ -2866,5 +3012,81 @@ export class UtilsBillingService {
         Logger.error('Error generating billings:', error);
       }
     }
+  }
+
+  private async queueBillingNotifications(
+    generatedBillings: Array<{
+      billing: any;
+      subscription: PropertySubscription;
+    }>,
+    entityProfile: EntityProfile,
+  ) {
+    for (const { billing, subscription } of generatedBillings) {
+      try {
+        // Get subscriber details
+        const subscriber = subscription.entitySubscriberProfile;
+
+        if (!subscriber) {
+          Logger.warn(
+            `[Billing Notification] No subscriber found for subscription ${subscription.id}`,
+          );
+          continue;
+        }
+
+        // Get property address
+        const street =
+          subscription.street ||
+          (await this.dbManager.findOne(Street, {
+            where: { id: subscription.streetId },
+          }));
+        const propertyAddress = `${subscription.streetNumber || ''} ${
+          street?.name || 'Unknown Street'
+        }`.trim();
+
+        // Combine phone code and phone number for SMS
+        const fullPhoneNumber =
+          subscriber.phoneCode && subscriber.phone
+            ? `+${subscriber.phoneCode.name}${subscriber.phone}`
+            : subscriber.phone;
+
+        // Validate we have contact information
+        if (!fullPhoneNumber && !subscriber.email) {
+          Logger.warn(
+            `[Billing Notification] No contact information for subscriber ${subscriber.id} (${subscriber.firstName} ${subscriber.lastName})`,
+          );
+          continue;
+        }
+
+        // Queue notification
+        await this.notificationService.queueBillingNotification({
+          recipientPhone: fullPhoneNumber,
+          recipientEmail: subscriber.email,
+          recipientName: `${subscriber.firstName} ${subscriber.lastName}`,
+          amount: parseFloat(billing.amount) || 0,
+          month: billing.month,
+          year: billing.year,
+          propertyAddress,
+          entityProfileId: entityProfile.id,
+        });
+
+        Logger.log(
+          `[Billing Notification] Queued for ${subscriber.firstName} ${
+            subscriber.lastName
+          } - Amount: ₦${billing.amount}, Phone: ${
+            fullPhoneNumber || 'N/A'
+          }, Email: ${subscriber.email || 'N/A'}`,
+        );
+      } catch (error) {
+        Logger.error(
+          `[Billing Notification] Error queuing notification for subscription ${subscription.id}: ${error.message}`,
+          error.stack,
+        );
+        // Continue with next notification even if one fails
+      }
+    }
+
+    Logger.log(
+      `[Billing Notification] Completed queuing for ${entityProfile.name}`,
+    );
   }
 }
