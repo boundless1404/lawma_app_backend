@@ -65,7 +65,7 @@ import {
   getCurrentMonth,
   getCurrentYear,
 } from '../utils/functions/billing.function';
-import { generateBillingSmsMessage } from '../utils/functions/smsLayout.function';
+import { formatAmount, generateBillingSmsMessage, paymentReceivedOperator, paymentReceivedSubscriber, transferSuccessfulOperator } from '../utils/functions/smsLayout.function';
 import { SharedService } from '../shared/shared.service';
 import { NotificationService } from '../shared/notification.service';
 
@@ -421,7 +421,7 @@ export class UtilsBillingService {
       };
     }
 
-    const [propertySubscriptions] = await this.dbManager.findAndCount(
+    const [propertySubscriptions, totalCount] = await this.dbManager.findAndCount(
       PropertySubscription,
       {
         where: whereConditions,
@@ -484,18 +484,19 @@ export class UtilsBillingService {
     });
 
     // Filter by arrears if numeric filter is provided
-    let filteredResponse = mappedResponse;
-    if (filter && isNumberString(filter)) {
-      const arrearsThreshold = parseFloat(filter);
-      filteredResponse = mappedResponse.filter(
-        (item) => item.arrears <= arrearsThreshold,
-      );
-    }
+    // NOTE: Commented out as it was filtering out valid results
+    // let filteredResponse = mappedResponse;
+    // if (filter && isNumberString(filter)) {
+    //   const arrearsThreshold = parseFloat(filter);
+    //   filteredResponse = mappedResponse.filter(
+    //     (item) => item.arrears <= arrearsThreshold,
+    //   );
+    // }
 
     return {
-      data: filteredResponse,
+      data: mappedResponse,
       pagination: {
-        rowsNumber: filteredResponse.length,
+        rowsNumber: totalCount,
         rowsPerPage,
         page,
         sortBy,
@@ -2758,31 +2759,43 @@ export class UtilsBillingService {
   }
 
   private async transferSuccess(data: PaystackWebhookData) {
-    //
     const transferReference = data.reference;
-    const associatedPendingWalletTransaction = await this.dbManager.findOne(
+    const pendingTransaction = await this.dbManager.findOne(
       PendingWalletTransaction,
       {
-        where: {
-          sourcePaymentReference: transferReference,
-        },
+        where: { sourcePaymentReference: transferReference },
       },
     );
 
-    if (associatedPendingWalletTransaction) {
+    if (!pendingTransaction) {
+      Logger.warn(
+        `Pending transaction not found for reference: ${transferReference}`,
+      );
+      return;
+    }
+
+    try {
+      // 2. Process the wallet transaction
       await this.walletService.transactOperatorWallet({
-        public_id: associatedPendingWalletTransaction.walletReference,
-        user_id: associatedPendingWalletTransaction.userId,
-        amount: associatedPendingWalletTransaction.amount,
-        credit_source_data: JSON.stringify({ PAYSTACK: data }),
-        type: Wallet_Service_Transaction_Type.DEBIT,
+        public_id: pendingTransaction.walletReference,
+        user_id: pendingTransaction.userId,
+        amount: pendingTransaction.amount,
+        credit_source_data: pendingTransaction.creditSourceData,
+        type: pendingTransaction.type as Wallet_Service_Transaction_Type,
       });
 
+      // 3. Clean up pending transaction
       await this.dbManager.delete(PendingWalletTransaction, {
-        id: associatedPendingWalletTransaction.id,
+        id: pendingTransaction.id,
       });
 
       // TODO: send sms to company
+    } catch (error) {
+      Logger.error(
+        `[Transfer Success] Failed to process transfer success: ${error.message}`,
+        error.stack,
+      );
+      throw error;
     }
   }
 
@@ -2913,7 +2926,7 @@ export class UtilsBillingService {
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
-    if (today.getDate() === 30) {
+    if (today.getDate() === 25) {
       try {
         // Fetch all entity profiles with auto-generation enabled
         const entityProfiles = await this.dbManager.find(EntityProfile, {
