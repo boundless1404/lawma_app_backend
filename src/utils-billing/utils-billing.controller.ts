@@ -277,14 +277,18 @@ export class UtilsBillingController {
       billingMonth,
       propertySubscriptionId,
       billingYear,
-    }: { billingMonth: string; propertySubscriptionId: string; billingYear?: string },
+    }: {
+      billingMonth: string;
+      propertySubscriptionId: string;
+      billingYear?: string;
+    },
     @GetAuthPayload() authPayload: AuthTokenPayload,
   ) {
     return this.utilService.getBillingDetailsOrDefaulters(
       authPayload.profile.entityProfileId,
-      { 
-        streetId, 
-        billingMonth, 
+      {
+        streetId,
+        billingMonth,
         propertySubscriptionId,
         billingYear: billingYear ? parseInt(billingYear) : undefined,
       },

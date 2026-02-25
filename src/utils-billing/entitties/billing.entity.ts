@@ -26,6 +26,9 @@ export class Billing {
   @Column({ type: 'bigint' })
   propertySubscriptionId: string;
 
+  @Column({ type: 'boolean', default: false, nullable: true })
+  is_duplicate: boolean;
+
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 

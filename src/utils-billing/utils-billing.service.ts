@@ -65,7 +65,13 @@ import {
   getCurrentMonth,
   getCurrentYear,
 } from '../utils/functions/billing.function';
-import { formatAmount, generateBillingSmsMessage, paymentReceivedOperator, paymentReceivedSubscriber, transferSuccessfulOperator } from '../utils/functions/smsLayout.function';
+import {
+  formatAmount,
+  generateBillingSmsMessage,
+  paymentReceivedOperator,
+  paymentReceivedSubscriber,
+  transferSuccessfulOperator,
+} from '../utils/functions/smsLayout.function';
 import { SharedService } from '../shared/shared.service';
 import { NotificationService } from '../shared/notification.service';
 
@@ -421,9 +427,8 @@ export class UtilsBillingService {
       };
     }
 
-    const [propertySubscriptions, totalCount] = await this.dbManager.findAndCount(
-      PropertySubscription,
-      {
+    const [propertySubscriptions, totalCount] =
+      await this.dbManager.findAndCount(PropertySubscription, {
         where: whereConditions,
         ...(!streetId
           ? { take: rowsPerPage, skip: (page - 1) * rowsPerPage }
@@ -441,8 +446,7 @@ export class UtilsBillingService {
           street: true,
         },
         ...(sortBy ? { order: { [sortBy]: descending ? 'DESC' : 'ASC' } } : {}),
-      },
-    );
+      });
 
     const mappedResponse = propertySubscriptions.map((sub) => {
       return {
@@ -572,6 +576,7 @@ export class UtilsBillingService {
         propertySubscriptionId,
         month,
         year,
+        is_duplicate: false, // Only fetch non-duplicate billings
         ...(entityProfileId ? { entityProfileId } : {}),
       },
       relations: {
@@ -580,6 +585,10 @@ export class UtilsBillingService {
           billingAccount: true,
           payments: true,
         },
+      },
+      take: 1, // Ensure only one billing is returned
+      order: {
+        createdAt: 'ASC', // Get the oldest (original) billing
       },
     });
 
@@ -865,7 +874,7 @@ export class UtilsBillingService {
     if (generatePrintBIllingDto.forAllProperties) {
       throwBadRequest('This is currently not available.');
     } else if (generatePrintBIllingDto.forPropertiesOnStreet) {
-      // TODO: handle this
+      // Handle street-level billing generation - SEQUENTIAL to prevent race conditions
       const properties = await this.dbManager.find(PropertySubscription, {
         where: {
           streetId: generatePrintBIllingDto.streetId,
@@ -874,8 +883,9 @@ export class UtilsBillingService {
       });
 
       await this.dbManager.transaction(async (transactionManager) => {
-        await Promise.all(
-          properties.map(async (prop) => {
+        // Changed from Promise.all to sequential loop to prevent duplicate billing race conditions
+        for (const prop of properties) {
+          try {
             await this.generateMonthBilling(
               prop.id,
               generatePrintBIllingDto.month,
@@ -885,8 +895,12 @@ export class UtilsBillingService {
                 transactionManager,
               },
             );
-          }),
-        );
+          } catch (error) {
+            Logger.warn(
+              `Failed to generate billing for property ${prop.id}: ${error.message}`,
+            );
+          }
+        }
       });
     } else {
       //
@@ -983,6 +997,7 @@ export class UtilsBillingService {
         propertySubscriptionId: propertySubscription.id,
         month: month || this.getMonthName(),
         year: year || new Date().getFullYear().toString(),
+        is_duplicate: false, // Only check non-duplicate billings
       },
     });
 
@@ -1019,6 +1034,7 @@ export class UtilsBillingService {
       month: month || this.getMonthName(),
       year: year || new Date().getFullYear().toString(),
       amount: billingAmount.toString(),
+      is_duplicate: false, // Mark as non-duplicate
     });
     await dbManager.save(currentBilling);
 
@@ -1413,7 +1429,10 @@ export class UtilsBillingService {
                       .andWhere(
                         'billing.propertySubscriptionId = "propertySubscription"."id"',
                       )
-                      .orderBy('billing.id', 'ASC')
+                      .andWhere(
+                        '(billing.is_duplicate = false OR billing.is_duplicate IS NULL)',
+                      )
+                      .orderBy('billing.createdAt', 'ASC')
                       .limit(1)
                       .getQuery()}
                   ) :: numeric, 0) > 0
@@ -1428,7 +1447,10 @@ export class UtilsBillingService {
                       .andWhere(
                         'billing.propertySubscriptionId = "propertySubscription"."id"',
                       )
-                      .orderBy('billing.id', 'ASC')
+                      .andWhere(
+                        '(billing.is_duplicate = false OR billing.is_duplicate IS NULL)',
+                      )
+                      .orderBy('billing.createdAt', 'ASC')
                       .limit(1)
                       .getQuery()}
                   ) :: numeric, 0)
@@ -1452,7 +1474,10 @@ export class UtilsBillingService {
               .andWhere(
                 'billing.propertySubscriptionId = "propertySubscription"."id"',
               )
-              .orderBy('billing.id', 'ASC')
+              .andWhere(
+                '(billing.is_duplicate = false OR billing.is_duplicate IS NULL)',
+              )
+              .orderBy('billing.createdAt', 'ASC')
               .limit(1),
           'currentBilling',
         )
@@ -1466,7 +1491,10 @@ export class UtilsBillingService {
               .andWhere(
                 'billing.propertySubscriptionId = "propertySubscription"."id"',
               )
-              .orderBy('billing.id', 'ASC')
+              .andWhere(
+                '(billing.is_duplicate = false OR billing.is_duplicate IS NULL)',
+              )
+              .orderBy('billing.createdAt', 'ASC')
               .limit(1),
           'currentBillingId',
         )
@@ -2917,7 +2945,6 @@ export class UtilsBillingService {
             await this.sharedService.sendTermiiSms(termiiSms);
           }),
         );
-
       } catch (error) {
         Logger.error('Error sending SMS notifications:', error);
       }
@@ -3007,7 +3034,6 @@ export class UtilsBillingService {
             );
           }
         }
-
       } catch (error) {
         Logger.error('Error generating billings:', error);
       }
