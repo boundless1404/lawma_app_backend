@@ -5,6 +5,7 @@ import {
   Get,
   Headers,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -186,6 +187,20 @@ export class UtilsBillingController {
     await this.utilService.updatePropertySubscriptionName({
       name: body.propertySubscriptionName,
       propertySubscriptionId: body.propertySubscriptionId,
+      entityProfileId: authPayload.profile.entityProfileId,
+    });
+  }
+
+  @Patch('subscription/:id/toggle-billing')
+  @UseGuards(IsAuthenticated)
+  async toggleBillingStatus(
+    @Param('id') propertySubscriptionId: string,
+    @Body() body: { isBillingActive: boolean },
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.toggleBillingStatus({
+      propertySubscriptionId,
+      isBillingActive: body.isBillingActive,
       entityProfileId: authPayload.profile.entityProfileId,
     });
   }

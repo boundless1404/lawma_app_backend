@@ -120,6 +120,32 @@ export class UtilsBillingService {
     await this.dbManager.save(propertySubscription);
   }
 
+  async toggleBillingStatus({
+    propertySubscriptionId,
+    isBillingActive,
+    entityProfileId,
+  }: {
+    propertySubscriptionId: string;
+    isBillingActive: boolean;
+    entityProfileId: string;
+  }) {
+    const propertySubscription = await this.dbManager.findOne(
+      PropertySubscription,
+      { where: { id: propertySubscriptionId, entityProfileId } },
+    );
+    if (!propertySubscription) {
+      throwBadRequest('Property subscription not found');
+    }
+    propertySubscription.isBillingActive = isBillingActive;
+    await this.dbManager.save(propertySubscription);
+    
+    return {
+      success: true,
+      message: `Billing ${isBillingActive ? 'activated' : 'deactivated'} for ${propertySubscription.propertySubscriptionName}`,
+      isBillingActive,
+    };
+  }
+
   async createUser(
     createUserDto: CreateUserDto,
     authPayload: AuthTokenPayload,
@@ -457,6 +483,7 @@ export class UtilsBillingService {
         createdAt: sub.createdAt,
         streetId: sub.streetId,
         entitySubscriberProfileId: sub.entitySubscriberProfileId,
+        isBillingActive: sub.isBillingActive ?? true, // Include billing status
         propertySubscriptionUnits: sub.propertySubscriptionUnits?.map(
           (unit) => {
             return {
@@ -879,6 +906,7 @@ export class UtilsBillingService {
         where: {
           streetId: generatePrintBIllingDto.streetId,
           entityProfileId,
+          isBillingActive: true, // Only generate billing for active subscriptions
         },
       });
 
@@ -1029,11 +1057,17 @@ export class UtilsBillingService {
       propertySubscriptionUnits,
     );
 
+    // Calculate previous arrears (total billings - total payments before this billing)
+    const previousArrears = bignumber(billingAccount.totalBillings)
+      .minus(billingAccount.totalPayments)
+      .toString();
+
     const currentBilling = dbManager.create(Billing, {
       propertySubscriptionId: propertySubscription.id,
       month: month || this.getMonthName(),
       year: year || new Date().getFullYear().toString(),
       amount: billingAmount.toString(),
+      previousArrears: previousArrears, // Populate previousArrears for audit
       is_duplicate: false, // Mark as non-duplicate
     });
     await dbManager.save(currentBilling);
@@ -2972,7 +3006,10 @@ export class UtilsBillingService {
             const propertySubscriptions = await this.dbManager.find(
               PropertySubscription,
               {
-                where: { entityProfileId: entityProfile.id },
+                where: { 
+                  entityProfileId: entityProfile.id,
+                  isBillingActive: true, // Only generate for active subscriptions
+                },
                 relations: {
                   entitySubscriberProfile: {
                     phoneCode: true,
