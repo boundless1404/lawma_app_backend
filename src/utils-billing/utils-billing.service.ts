@@ -1,5 +1,5 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common';
-import { DataSource, EntityManager, FindOperator, ILike, Raw } from 'typeorm';
+import { DataSource, EntityManager, FindOperator, ILike, IsNull, Raw } from 'typeorm';
 import {
   CreateLgaDto,
   CreateLgaWardDto,
@@ -143,6 +143,31 @@ export class UtilsBillingService {
       success: true,
       message: `Billing ${isBillingActive ? 'activated' : 'deactivated'} for ${propertySubscription.propertySubscriptionName}`,
       isBillingActive,
+    };
+  }
+
+  async deletePropertySubscription({
+    propertySubscriptionId,
+    entityProfileId,
+  }: {
+    propertySubscriptionId: string;
+    entityProfileId: string;
+  }) {
+    const propertySubscription = await this.dbManager.findOne(
+      PropertySubscription,
+      { where: { id: propertySubscriptionId, entityProfileId } },
+    );
+    if (!propertySubscription) {
+      throwBadRequest('Property subscription not found');
+    }
+    
+    // Soft delete - sets deletedAt timestamp
+    await this.dbManager.softDelete(PropertySubscription, propertySubscriptionId);
+    
+    return {
+      success: true,
+      message: `Property subscription "${propertySubscription.propertySubscriptionName}" has been deleted successfully`,
+      propertySubscriptionId,
     };
   }
 
@@ -413,6 +438,7 @@ export class UtilsBillingService {
           // Search by numeric ID (convert to string for LIKE comparison)
           {
             entityProfileId,
+            deletedAt: IsNull(),
             id: Raw((alias) => `CAST(${alias} AS TEXT) LIKE :filter`, {
               filter: `%${filter}%`,
             }),
@@ -420,11 +446,13 @@ export class UtilsBillingService {
           // Search by oldCode (partial match)
           {
             entityProfileId,
+            deletedAt: IsNull(),
             oldCode: ILike(`%${filter}%`),
           },
           // Search by street number (partial match)
           {
             entityProfileId,
+            deletedAt: IsNull(),
             streetNumber: ILike(`%${filter}%`),
           },
         ];
@@ -433,15 +461,18 @@ export class UtilsBillingService {
         whereConditions = [
           {
             entityProfileId,
+            deletedAt: IsNull(),
             street: { name: ILike(`%${filter}%`) },
           },
           {
             entityProfileId,
+            deletedAt: IsNull(),
             propertySubscriptionName: ILike(`%${filter}%`),
           },
           // Also search oldCode for non-numeric strings
           {
             entityProfileId,
+            deletedAt: IsNull(),
             oldCode: ILike(`%${filter}%`),
           },
         ];
@@ -449,6 +480,7 @@ export class UtilsBillingService {
     } else {
       whereConditions = {
         entityProfileId,
+        deletedAt: IsNull(),
         ...(streetId ? { streetId } : {}),
       };
     }
@@ -3033,6 +3065,7 @@ export class UtilsBillingService {
                 where: { 
                   entityProfileId: entityProfile.id,
                   isBillingActive: true, // Only generate for active subscriptions
+                  deletedAt: IsNull(), // Exclude deleted subscriptions
                 },
                 relations: {
                   entitySubscriberProfile: {

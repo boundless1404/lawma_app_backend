@@ -205,6 +205,18 @@ export class UtilsBillingController {
     });
   }
 
+  @Delete('subscription/:id')
+  @UseGuards(IsAuthenticated)
+  async deletePropertySubscription(
+    @Param('id') propertySubscriptionId: string,
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.deletePropertySubscription({
+      propertySubscriptionId,
+      entityProfileId: authPayload.profile.entityProfileId,
+    });
+  }
+
   @Post('billing')
   @UseGuards(IsAuthenticated)
   async generateBilling(
