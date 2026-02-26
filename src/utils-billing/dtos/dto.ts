@@ -260,6 +260,11 @@ export class GetBillingQuery {
 
   @IsNotEmpty()
   @IsString()
+  propertySubscriptionId: string; // Fixed typo: was propertySuscriptionId
+
+  // Keep old property for backward compatibility
+  @IsOptional()
+  @IsString()
   propertySuscriptionId: string;
 
   @IsOptional()

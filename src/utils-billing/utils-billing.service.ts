@@ -974,8 +974,11 @@ export class UtilsBillingService {
 
       return billings;
     } else {
+      // Support both correct and legacy typo property names
+      const propertySubscriptionId = generatePrintBIllingDto.propertySubscriptionId || generatePrintBIllingDto.propertySuscriptionId;
+      
       const billings = await this.getBillingsByMonth(
-        generatePrintBIllingDto.propertySuscriptionId,
+        propertySubscriptionId,
         generatePrintBIllingDto.month,
         generatePrintBIllingDto.month,
         entityProfileId,
