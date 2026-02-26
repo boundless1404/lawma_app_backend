@@ -604,7 +604,6 @@ export class UtilsBillingService {
         month,
         year,
         is_duplicate: false, // Only fetch non-duplicate billings
-        ...(entityProfileId ? { entityProfileId } : {}),
       },
       relations: {
         propertySubscription: {
@@ -932,8 +931,9 @@ export class UtilsBillingService {
       });
     } else {
       //
+      const propertySubscriptionId = generatePrintBIllingDto.propertySubscriptionId || generatePrintBIllingDto.propertySuscriptionId;
       await this.generateMonthBilling(
-        generatePrintBIllingDto.propertySuscriptionId,
+        propertySubscriptionId,
         generatePrintBIllingDto.month,
         {
           year: generatePrintBIllingDto.year,
@@ -980,7 +980,7 @@ export class UtilsBillingService {
       const billings = await this.getBillingsByMonth(
         propertySubscriptionId,
         generatePrintBIllingDto.month,
-        generatePrintBIllingDto.month,
+        generatePrintBIllingDto.year,
         entityProfileId,
       );
 
