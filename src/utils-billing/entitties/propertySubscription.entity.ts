@@ -39,6 +39,9 @@ export class PropertySubscription {
   @Column({ type: 'varchar' })
   streetNumber: string;
 
+  @Column({ type: 'boolean', default: true })
+  isBillingActive: boolean;
+
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 

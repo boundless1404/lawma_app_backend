@@ -5,6 +5,7 @@ import {
   Get,
   Headers,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -190,6 +191,20 @@ export class UtilsBillingController {
     });
   }
 
+  @Patch('subscription/:id/toggle-billing')
+  @UseGuards(IsAuthenticated)
+  async toggleBillingStatus(
+    @Param('id') propertySubscriptionId: string,
+    @Body() body: { isBillingActive: boolean },
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.toggleBillingStatus({
+      propertySubscriptionId,
+      isBillingActive: body.isBillingActive,
+      entityProfileId: authPayload.profile.entityProfileId,
+    });
+  }
+
   @Post('billing')
   @UseGuards(IsAuthenticated)
   async generateBilling(
@@ -277,14 +292,18 @@ export class UtilsBillingController {
       billingMonth,
       propertySubscriptionId,
       billingYear,
-    }: { billingMonth: string; propertySubscriptionId: string; billingYear?: string },
+    }: {
+      billingMonth: string;
+      propertySubscriptionId: string;
+      billingYear?: string;
+    },
     @GetAuthPayload() authPayload: AuthTokenPayload,
   ) {
     return this.utilService.getBillingDetailsOrDefaulters(
       authPayload.profile.entityProfileId,
-      { 
-        streetId, 
-        billingMonth, 
+      {
+        streetId,
+        billingMonth,
         propertySubscriptionId,
         billingYear: billingYear ? parseInt(billingYear) : undefined,
       },

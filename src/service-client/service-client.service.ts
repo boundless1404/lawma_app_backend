@@ -195,6 +195,7 @@ export class ServiceClientService {
     // Build the where clause for billings
     const whereClause: any = {
       propertySubscriptionId: propertySubscriptionId.toString(),
+      is_duplicate: false, // Filter out duplicate billings
     };
 
     if (year) {
