@@ -607,7 +607,11 @@ export class UtilsBillingService {
       },
       relations: {
         propertySubscription: {
-          propertySubscriptionUnits: true,
+          propertySubscriptionUnits: {
+            entitySubscriberProperty: {
+              propertyType: true,
+            },
+          },
           billingAccount: true,
           payments: true,
         },
@@ -977,6 +981,23 @@ export class UtilsBillingService {
       // Support both correct and legacy typo property names
       const propertySubscriptionId = generatePrintBIllingDto.propertySubscriptionId || generatePrintBIllingDto.propertySuscriptionId;
       
+      // If no month/year specified, return all billings for the property (for billing history view)
+      if (!generatePrintBIllingDto.month && !generatePrintBIllingDto.year) {
+        const billings = await this.dbManager.find(Billing, {
+          where: {
+            propertySubscriptionId,
+            is_duplicate: false,
+          },
+          order: {
+            year: 'DESC',
+            month: 'DESC',
+            createdAt: 'DESC',
+          },
+        });
+        return billings;
+      }
+      
+      // For specific month/year (print billing use case)
       const billings = await this.getBillingsByMonth(
         propertySubscriptionId,
         generatePrintBIllingDto.month,
