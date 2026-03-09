@@ -223,20 +223,6 @@ export class UtilsBillingController {
     });
   }
 
-  @Post('test-sms/:subscriptionId')
-  @UseGuards(IsAuthenticated)
-  async testSmsNotification(
-    @Param('subscriptionId') subscriptionId: string,
-    @Body() body: { phoneNumber: string },
-    @GetAuthPayload() authPayload: AuthTokenPayload,
-  ) {
-    return await this.utilService.testSmsForSubscription({
-      subscriptionId,
-      phoneNumber: body.phoneNumber,
-      entityProfileId: authPayload.profile.entityProfileId,
-    });
-  }
-
   @Post('billing')
   @UseGuards(IsAuthenticated)
   async generateBilling(
