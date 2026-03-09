@@ -12,6 +12,7 @@ import awsConfig from './config/envs/aws.config';
 import dataSourceInstance from './config/database/connections/default';
 import { APP_PIPE } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import { ScheduleModule } from '@nestjs/schedule';
 import { first, has, values } from 'lodash';
 import { LoggerModule } from 'nestjs-pino';
 import helmet from 'helmet';
@@ -53,6 +54,7 @@ const validator = new ValidationPipe({
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     LoggerModule.forRootAsync({
       inject: [appConfig.KEY],
       async useFactory(applicationConfig: ConfigType<typeof appConfig>) {

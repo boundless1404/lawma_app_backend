@@ -48,12 +48,18 @@ import { UtilsBillingService } from './utils-billing.service';
 import { IsAuthenticated } from '../shared/isAuthenticated.guard';
 import { ProfileTypes } from '../lib/enums';
 import { UpdatePropertySubscriptionValidationPipe } from './dtos/custom-pipes';
+import { NotificationService } from '../shared/notification.service';
+import { NotificationQueue, NotificationStatus, NotificationChannel, NotificationType } from '../shared/notificationQueue.entity';
 
 @Controller('utils-billing')
 export class UtilsBillingController {
   private dbManager: DataSource;
 
-  constructor(private utilService: UtilsBillingService, dbManager: DataSource) {
+  constructor(
+    private utilService: UtilsBillingService,
+    dbManager: DataSource,
+    private notificationService: NotificationService,
+  ) {
     this.dbManager = dbManager;
   }
 
@@ -213,6 +219,20 @@ export class UtilsBillingController {
   ) {
     return await this.utilService.deletePropertySubscription({
       propertySubscriptionId,
+      entityProfileId: authPayload.profile.entityProfileId,
+    });
+  }
+
+  @Post('test-sms/:subscriptionId')
+  @UseGuards(IsAuthenticated)
+  async testSmsNotification(
+    @Param('subscriptionId') subscriptionId: string,
+    @Body() body: { phoneNumber: string },
+    @GetAuthPayload() authPayload: AuthTokenPayload,
+  ) {
+    return await this.utilService.testSmsForSubscription({
+      subscriptionId,
+      phoneNumber: body.phoneNumber,
       entityProfileId: authPayload.profile.entityProfileId,
     });
   }
@@ -494,6 +514,64 @@ export class UtilsBillingController {
     return await this.utilService.getOperatorMetrics(
       authPayload.entityProfileId,
     );
+  }
+
+  @Get('debug/notifications/:phone')
+  async checkNotificationStatus(@Param('phone') phone: string) {
+    const notifications = await this.dbManager.manager.query(
+      `SELECT id, status, recipient_phone, retry_count, error_message, created_at, sent_at 
+       FROM notification_queue 
+       WHERE recipient_phone = $1 
+       ORDER BY created_at DESC 
+       LIMIT 5`,
+      [phone],
+    );
+    return { phone, notifications };
+  }
+
+  @Patch('debug/notifications/:id/reset')
+  async resetNotification(@Param('id') id: string) {
+    await this.dbManager.manager.query(
+      `UPDATE notification_queue 
+       SET status = 'PENDING', retry_count = 0, error_message = NULL 
+       WHERE id = $1`,
+      [id],
+    );
+    return { message: 'Notification reset to PENDING', id };
+  }
+
+  @Post('debug/queue-sms')
+  async queueTestSMS(@Body() body: { phone: string; entityProfileId: string }) {
+    const notification = this.dbManager.manager.create(NotificationQueue, {
+      type: NotificationType.BILLING_GENERATED,
+      channel: NotificationChannel.SMS,
+      entityProfileId: body.entityProfileId,
+      recipientPhone: body.phone,
+      recipientName: 'Test User',
+      message: `Dear Test, your LAWMA bill for March 2026 is ₦5000. Property: Test Address. Thank you.`,
+      metadata: {
+        amount: 5000,
+        month: 'March',
+        year: '2026',
+        propertyAddress: 'Test Address',
+      },
+      status: NotificationStatus.PENDING,
+      smsUnitDeducted: false,
+      retryCount: 0,
+    });
+    
+    const saved = await this.dbManager.manager.save(notification) as NotificationQueue;
+    return { message: 'SMS queued', id: saved.id, phone: body.phone };
+  }
+
+  @Post('debug/process-notifications')
+  async manuallyProcessNotifications() {
+    try {
+      await this.notificationService.processPendingNotifications();
+      return { message: 'Notification processing triggered successfully' };
+    } catch (error) {
+      return { message: 'Error processing notifications', error: error.message };
+    }
   }
 
   // webhooks
