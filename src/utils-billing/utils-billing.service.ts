@@ -1,5 +1,12 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common';
-import { DataSource, EntityManager, FindOperator, ILike, IsNull, Raw } from 'typeorm';
+import {
+  DataSource,
+  EntityManager,
+  FindOperator,
+  ILike,
+  IsNull,
+  Raw,
+} from 'typeorm';
 import {
   CreateLgaDto,
   CreateLgaWardDto,
@@ -77,6 +84,8 @@ import { NotificationService } from '../shared/notification.service';
 
 @Injectable()
 export class UtilsBillingService {
+  private readonly logger = new Logger(UtilsBillingService.name);
+
   constructor(
     private requestService: RequestService,
     public dbManager: EntityManager,
@@ -138,10 +147,12 @@ export class UtilsBillingService {
     }
     propertySubscription.isBillingActive = isBillingActive;
     await this.dbManager.save(propertySubscription);
-    
+
     return {
       success: true,
-      message: `Billing ${isBillingActive ? 'activated' : 'deactivated'} for ${propertySubscription.propertySubscriptionName}`,
+      message: `Billing ${isBillingActive ? 'activated' : 'deactivated'} for ${
+        propertySubscription.propertySubscriptionName
+      }`,
       isBillingActive,
     };
   }
@@ -160,14 +171,78 @@ export class UtilsBillingService {
     if (!propertySubscription) {
       throwBadRequest('Property subscription not found');
     }
-    
+
     // Soft delete - sets deletedAt timestamp
-    await this.dbManager.softDelete(PropertySubscription, propertySubscriptionId);
-    
+    await this.dbManager.softDelete(
+      PropertySubscription,
+      propertySubscriptionId,
+    );
+
     return {
       success: true,
       message: `Property subscription "${propertySubscription.propertySubscriptionName}" has been deleted successfully`,
       propertySubscriptionId,
+    };
+  }
+
+  async testSmsForSubscription({
+    subscriptionId,
+    phoneNumber,
+    entityProfileId,
+  }: {
+    subscriptionId: string;
+    phoneNumber: string;
+    entityProfileId: string;
+  }) {
+    // Find the subscription with all relations
+    const subscription = await this.dbManager.findOne(PropertySubscription, {
+      where: { id: subscriptionId, entityProfileId },
+      relations: ['street', 'entitySubscriberProfile'],
+    });
+
+    if (!subscription) {
+      throwBadRequest('Property subscription not found');
+    }
+
+    // Get the latest billing for this subscription
+    const billing = await this.dbManager.findOne(Billing, {
+      where: { propertySubscriptionId: subscriptionId },
+      order: { createdAt: 'DESC' },
+    });
+
+    if (!billing) {
+      throwBadRequest('No billing found for this subscription');
+    }
+
+    // Get property address
+    const propertyAddress = `${subscription.streetNumber || ''} ${
+      subscription.street?.name || 'Unknown Street'
+    }`.trim();
+
+    // Queue the notification with test phone number
+    await this.notificationService.queueBillingNotification({
+      recipientPhone: phoneNumber,
+      recipientEmail: null,
+      recipientName:
+        subscription.entitySubscriberProfile?.firstName +
+          ' ' +
+          subscription.entitySubscriberProfile?.lastName || 'Test User',
+      amount: parseFloat(billing.amount) || 0,
+      month: billing.month,
+      year: billing.year,
+      propertyAddress,
+      entityProfileId,
+    });
+
+    return {
+      success: true,
+      message: `Test SMS notification queued for ${phoneNumber}`,
+      billing: {
+        amount: billing.amount,
+        month: billing.month,
+        year: billing.year,
+      },
+      propertyAddress,
     };
   }
 
@@ -727,6 +802,10 @@ export class UtilsBillingService {
     phoneCodeId?: string;
     phoneCode?: string;
   }) {
+    this.logger.log(
+      `[updateAccountRecord] Starting - propertySubscriptionId: ${propertySubscriptionId}, arrears: ${billingArrears}, phone: ${phone ? 'provided' : 'not provided'}`,
+    );
+
     if (phone) {
       if (!phoneCode && !phoneCodeId) {
         throwBadRequest('Phone code is required to update phone number.');
@@ -765,19 +844,28 @@ export class UtilsBillingService {
       await this.dbManager.transaction(async (transactionManager) => {
         await transactionManager.save(entitySubscriberProfile);
 
-        // update the user profile in the central user manager
+        // update the user profile in the central user manager (non-blocking)
         // make request to user manager
-        const serverResponse = await this.requestService.requestApiService(
-          '/project/app/user',
-          {
-            method: 'PUT',
-            body: {
-              phone,
-              phoneCodeId,
-              email: entitySubscriberProfile.email,
+        let serverResponse;
+        try {
+          serverResponse = await this.requestService.requestApiService(
+            '/project/app/user',
+            {
+              method: 'PUT',
+              body: {
+                phone,
+                phoneCodeId,
+                email: entitySubscriberProfile.email,
+              },
             },
-          },
-        );
+          );
+        } catch (error) {
+          this.logger.error(
+            `Failed to update user on central server: ${error.message}`,
+          );
+          // Don't fail the transaction - local update succeeded
+          return;
+        }
 
         if (sucessHttpCodes.includes(serverResponse.status)) {
           // create virtual account on fintech service (paystack)
@@ -899,6 +987,10 @@ export class UtilsBillingService {
 
       await transactionManager.save(arrearsUpdate);
     });
+
+    this.logger.log(
+      `[updateAccountRecord] Successfully updated arrears from ${currentArrears} to ${newArrears} for property ${propertySubscriptionId}`,
+    );
   }
 
   async createSubscriberVirtualAccountDetail({
@@ -967,7 +1059,9 @@ export class UtilsBillingService {
       });
     } else {
       //
-      const propertySubscriptionId = generatePrintBIllingDto.propertySubscriptionId || generatePrintBIllingDto.propertySuscriptionId;
+      const propertySubscriptionId =
+        generatePrintBIllingDto.propertySubscriptionId ||
+        generatePrintBIllingDto.propertySuscriptionId;
       await this.generateMonthBilling(
         propertySubscriptionId,
         generatePrintBIllingDto.month,
@@ -1011,8 +1105,10 @@ export class UtilsBillingService {
       return billings;
     } else {
       // Support both correct and legacy typo property names
-      const propertySubscriptionId = generatePrintBIllingDto.propertySubscriptionId || generatePrintBIllingDto.propertySuscriptionId;
-      
+      const propertySubscriptionId =
+        generatePrintBIllingDto.propertySubscriptionId ||
+        generatePrintBIllingDto.propertySuscriptionId;
+
       // If no month/year specified, return all billings for the property (for billing history view)
       if (!generatePrintBIllingDto.month && !generatePrintBIllingDto.year) {
         const billings = await this.dbManager.find(Billing, {
@@ -1028,7 +1124,7 @@ export class UtilsBillingService {
         });
         return billings;
       }
-      
+
       // For specific month/year (print billing use case)
       const billings = await this.getBillingsByMonth(
         propertySubscriptionId,
@@ -3062,7 +3158,7 @@ export class UtilsBillingService {
             const propertySubscriptions = await this.dbManager.find(
               PropertySubscription,
               {
-                where: { 
+                where: {
                   entityProfileId: entityProfile.id,
                   isBillingActive: true, // Only generate for active subscriptions
                   deletedAt: IsNull(), // Exclude deleted subscriptions

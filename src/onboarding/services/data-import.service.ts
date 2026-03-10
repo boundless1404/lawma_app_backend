@@ -221,9 +221,16 @@ export class DataImportService {
           }`,
         );
 
-        // 3. Create user on auth server only for new profiles
+        // 3. Create user on auth server only for new profiles (non-blocking)
         if (!subscriberProfile.existingProfile) {
-          await this.createUserOnAuthServer(record, subscriberProfile.profile);
+          // Fire-and-forget: don't block the import process
+          this.createUserOnAuthServer(record, subscriberProfile.profile).catch(
+            (error) => {
+              this.logger.warn(
+                `Failed to create auth user for ${record.customerCode}: ${error.message}`,
+              );
+            },
+          );
         }
 
         // 4. Create PropertySubscription
