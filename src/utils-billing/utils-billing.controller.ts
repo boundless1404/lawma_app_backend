@@ -265,7 +265,7 @@ export class UtilsBillingController {
     @Body() updateAccountRecordDto: UpdateAccontRecordDto,
     @GetAuthPayload() authTokenPayload: AuthTokenPayload,
   ) {
-    await this.utilService.updateAccountRecord({
+    return await this.utilService.updateAccountRecord({
       billingArrears: updateAccountRecordDto.arrears,
       propertySubscriptionId: updateAccountRecordDto.propertySubscriptionId,
       entityProfileId: authTokenPayload.profile.entityProfileId,
