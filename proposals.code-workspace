@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../propossals"
+		},
+		{
+			"path": "../services_apis"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}
