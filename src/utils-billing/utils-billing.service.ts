@@ -803,7 +803,9 @@ export class UtilsBillingService {
     phoneCode?: string;
   }) {
     this.logger.log(
-      `[updateAccountRecord] Starting - propertySubscriptionId: ${propertySubscriptionId}, arrears: ${billingArrears}, phone: ${phone ? 'provided' : 'not provided'}`,
+      `[updateAccountRecord] Starting - propertySubscriptionId: ${propertySubscriptionId}, arrears: ${billingArrears}, phone: ${
+        phone ? 'provided' : 'not provided'
+      }`,
     );
 
     if (phone) {
@@ -931,7 +933,15 @@ export class UtilsBillingService {
           throwServerError();
         }
       });
-      return;
+      
+      this.logger.log(
+        `[updateAccountRecord] Successfully updated phone for property ${propertySubscriptionId}`,
+      );
+      
+      return {
+        success: true,
+        message: 'Phone number updated successfully',
+      };
     }
     const associatedBillingAccount = await this.dbManager.findOne(
       BillingAccount,
@@ -973,6 +983,11 @@ export class UtilsBillingService {
       );
     }
 
+    // Check if the user exists in the local EntityUserProfile table
+    const localUser = await this.dbManager.findOne(EntityUserProfile, {
+      where: { id: entityUserProfileId },
+    });
+
     await this.dbManager.transaction(async (transactionManager) => {
       await transactionManager.save(associatedBillingAccount);
 
@@ -982,7 +997,8 @@ export class UtilsBillingService {
         amountBeforeUpdate: currentArrears.toString(),
         reasonToUpdate: reason,
         propertySubscriptionId: propertySubscriptionId,
-        updatedByUserId: entityUserProfileId,
+        // Only set updatedByUserId if the user exists locally
+        updatedByUserId: localUser ? entityUserProfileId : null,
       });
 
       await transactionManager.save(arrearsUpdate);
@@ -991,6 +1007,15 @@ export class UtilsBillingService {
     this.logger.log(
       `[updateAccountRecord] Successfully updated arrears from ${currentArrears} to ${newArrears} for property ${propertySubscriptionId}`,
     );
+
+    return {
+      success: true,
+      message: 'Outstanding balance updated successfully',
+      data: {
+        previousArrears: currentArrears,
+        newArrears: newArrears,
+      },
+    };
   }
 
   async createSubscriberVirtualAccountDetail({
