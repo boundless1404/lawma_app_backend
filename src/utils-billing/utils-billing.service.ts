@@ -984,25 +984,47 @@ export class UtilsBillingService {
     }
 
     // Check if the user exists in the local EntityUserProfile table
-    const localUser = await this.dbManager.findOne(EntityUserProfile, {
-      where: { id: entityUserProfileId },
-    });
-
-    await this.dbManager.transaction(async (transactionManager) => {
-      await transactionManager.save(associatedBillingAccount);
-
-      // track arrears update
-      const arrearsUpdate = transactionManager.create(ArrearsUpdate, {
-        amountAfterUpdate: newArrears.toString(),
-        amountBeforeUpdate: currentArrears.toString(),
-        reasonToUpdate: reason,
-        propertySubscriptionId: propertySubscriptionId,
-        // Only set updatedByUserId if the user exists locally
-        updatedByUserId: localUser ? entityUserProfileId : null,
+    let localUser = null;
+    try {
+      localUser = await this.dbManager.findOne(EntityUserProfile, {
+        where: { id: entityUserProfileId },
       });
+      this.logger.log(
+        `[updateAccountRecord] Local user check: ${localUser ? 'found' : 'not found'} for userId: ${entityUserProfileId}`,
+      );
+    } catch (error) {
+      this.logger.warn(
+        `[updateAccountRecord] Error checking local user: ${error.message}`,
+      );
+    }
 
-      await transactionManager.save(arrearsUpdate);
-    });
+    try {
+      await this.dbManager.transaction(async (transactionManager) => {
+        await transactionManager.save(associatedBillingAccount);
+
+        // track arrears update
+        const arrearsUpdate = transactionManager.create(ArrearsUpdate, {
+          amountAfterUpdate: newArrears.toString(),
+          amountBeforeUpdate: currentArrears.toString(),
+          reasonToUpdate: reason,
+          propertySubscriptionId: propertySubscriptionId,
+          // Only set updatedByUserId if the user exists locally
+          updatedByUserId: localUser ? entityUserProfileId : null,
+        });
+
+        this.logger.log(
+          `[updateAccountRecord] Saving arrears update - updatedByUserId: ${localUser ? entityUserProfileId : 'null'}`,
+        );
+
+        await transactionManager.save(arrearsUpdate);
+      });
+    } catch (error) {
+      this.logger.error(
+        `[updateAccountRecord] Transaction failed: ${error.message}`,
+        error.stack,
+      );
+      throwServerError('Failed to update arrears: ' + error.message);
+    }
 
     this.logger.log(
       `[updateAccountRecord] Successfully updated arrears from ${currentArrears} to ${newArrears} for property ${propertySubscriptionId}`,
