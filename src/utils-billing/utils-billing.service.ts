@@ -3128,7 +3128,7 @@ export class UtilsBillingService {
   // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async sendBillingSmsNotifications() {
     const today = new Date();
-    if (today.getDate() === 25) {
+    if (today.getDate() === 26) {
       try {
         // Fetch all property subscriptions with their related entities
         const propertySubscriptions = await this.dbManager.find(
@@ -3186,20 +3186,38 @@ export class UtilsBillingService {
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
-    if (today.getDate() === 25) {
+    this.logger.log(
+      `[Billing Cron] Starting daily billing check - Date: ${today.toISOString()}, Day: ${today.getDate()}`,
+    );
+
+    if (today.getDate() === 26) {
+      this.logger.log(
+        '[Billing Cron] Date is 26th - proceeding with billing generation',
+      );
       try {
         // Fetch all entity profiles with auto-generation enabled
         const entityProfiles = await this.dbManager.find(EntityProfile, {
           relations: ['entityProfilePreference'],
         });
 
+        this.logger.log(
+          `[Billing Cron] Found ${entityProfiles.length} entity profiles`,
+        );
+
         // Filter entities with auto-generation enabled
         const enabledEntityProfiles = entityProfiles.filter(
           (profile) => profile.entityProfilePreference?.autoGenerateBills,
         );
 
+        this.logger.log(
+          `[Billing Cron] ${enabledEntityProfiles.length} entities have auto-generation enabled`,
+        );
+
         // Process each entity
         for (const entityProfile of enabledEntityProfiles) {
+          this.logger.log(
+            `[Billing Cron] Processing entity: ${entityProfile.name} (ID: ${entityProfile.id})`,
+          );
           try {
             // Get all property subscriptions for this entity
             const propertySubscriptions = await this.dbManager.find(
@@ -3217,6 +3235,10 @@ export class UtilsBillingService {
                   street: true,
                 },
               },
+            );
+
+            this.logger.log(
+              `[Billing Cron] Found ${propertySubscriptions.length} active property subscriptions for ${entityProfile.name}`,
             );
 
             // Generate billings in a transaction
@@ -3251,7 +3273,7 @@ export class UtilsBillingService {
               // Queue SMS notifications for generated billings
               if (generatedBillings.length > 0) {
                 Logger.log(
-                  `Successfully generated ${generatedBillings.length} billings for ${entityProfile.name}`,
+                  `[Billing Cron] Successfully generated ${generatedBillings.length} billings for ${entityProfile.name}`,
                 );
 
                 // Send notifications asynchronously
@@ -3260,20 +3282,34 @@ export class UtilsBillingService {
                   entityProfile,
                 ).catch((error) => {
                   Logger.error(
-                    `Error queuing notifications for ${entityProfile.name}: ${error.message}`,
+                    `[Billing Cron] Error queuing notifications for ${entityProfile.name}: ${error.message}`,
                   );
                 });
+              } else {
+                this.logger.log(
+                  `[Billing Cron] No new billings generated for ${entityProfile.name}`,
+                );
               }
             });
           } catch (error) {
             Logger.error(
-              `Error processing entity ${entityProfile.name}: ${error.message}`,
+              `[Billing Cron] Error processing entity ${entityProfile.name}: ${error.message}`,
+              error.stack,
             );
           }
         }
+        this.logger.log('[Billing Cron] Completed billing generation process');
       } catch (error) {
-        Logger.error('Error generating billings:', error);
+        Logger.error(
+          '[Billing Cron] Error generating billings:',
+          error.message,
+          error.stack,
+        );
       }
+    } else {
+      this.logger.log(
+        `[Billing Cron] Skipping - not the 26th (current day: ${today.getDate()})`,
+      );
     }
   }
 
