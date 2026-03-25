@@ -3128,7 +3128,7 @@ export class UtilsBillingService {
   // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async sendBillingSmsNotifications() {
     const today = new Date();
-    if (today.getDate() === 25) {
+    if (today.getDate() === 26) {
       try {
         // Fetch all property subscriptions with their related entities
         const propertySubscriptions = await this.dbManager.find(
@@ -3190,9 +3190,9 @@ export class UtilsBillingService {
       `[Billing Cron] Starting daily billing check - Date: ${today.toISOString()}, Day: ${today.getDate()}`,
     );
 
-    if (today.getDate() === 25) {
+    if (today.getDate() === 26) {
       this.logger.log(
-        '[Billing Cron] Date is 25th - proceeding with billing generation',
+        '[Billing Cron] Date is 26th - proceeding with billing generation',
       );
       try {
         // Fetch all entity profiles with auto-generation enabled
@@ -3308,7 +3308,7 @@ export class UtilsBillingService {
       }
     } else {
       this.logger.log(
-        `[Billing Cron] Skipping - not the 25th (current day: ${today.getDate()})`,
+        `[Billing Cron] Skipping - not the 26th (current day: ${today.getDate()})`,
       );
     }
   }
