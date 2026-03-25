@@ -1,4 +1,10 @@
-import { Column, Entity, OneToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { EntityProfile } from './entityProfile.entity';
 
 @Entity()
@@ -15,10 +21,11 @@ export class EntityProfilePreference {
   @Column({ type: 'boolean', default: true })
   enableEmailNotifications: boolean;
 
-  // relationss
+  // relations
   @OneToOne(
     () => EntityProfile,
     (entityProfile) => entityProfile.entityProfilePreference,
   )
+  @JoinColumn({ name: 'entityProfileId' })
   entityProfile: EntityProfile;
 }
