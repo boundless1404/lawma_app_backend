@@ -933,11 +933,11 @@ export class UtilsBillingService {
           throwServerError();
         }
       });
-      
+
       this.logger.log(
         `[updateAccountRecord] Successfully updated phone for property ${propertySubscriptionId}`,
       );
-      
+
       return {
         success: true,
         message: 'Phone number updated successfully',
@@ -990,7 +990,9 @@ export class UtilsBillingService {
         where: { id: entityUserProfileId },
       });
       this.logger.log(
-        `[updateAccountRecord] Local user check: ${localUser ? 'found' : 'not found'} for userId: ${entityUserProfileId}`,
+        `[updateAccountRecord] Local user check: ${
+          localUser ? 'found' : 'not found'
+        } for userId: ${entityUserProfileId}`,
       );
     } catch (error) {
       this.logger.warn(
@@ -1013,7 +1015,9 @@ export class UtilsBillingService {
         });
 
         this.logger.log(
-          `[updateAccountRecord] Saving arrears update - updatedByUserId: ${localUser ? entityUserProfileId : 'null'}`,
+          `[updateAccountRecord] Saving arrears update - updatedByUserId: ${
+            localUser ? entityUserProfileId : 'null'
+          }`,
         );
 
         await transactionManager.save(arrearsUpdate);
@@ -3125,10 +3129,17 @@ export class UtilsBillingService {
     }
     return operatorMetrics;
   }
-  // @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron('0 11 * * *') // Run at 11:00 AM every day
   async sendBillingSmsNotifications() {
     const today = new Date();
+    this.logger.log(
+      `[SMS Notification Cron] Starting daily SMS check - Date: ${today.toISOString()}, Day: ${today.getDate()}`,
+    );
+
     if (today.getDate() === 26) {
+      this.logger.log(
+        '[SMS Notification Cron] Date is 26th - proceeding with SMS notifications',
+      );
       try {
         // Fetch all property subscriptions with their related entities
         const propertySubscriptions = await this.dbManager.find(
@@ -3178,12 +3189,23 @@ export class UtilsBillingService {
             await this.sharedService.sendTermiiSms(termiiSms);
           }),
         );
+        this.logger.log(
+          `[SMS Notification Cron] Completed sending SMS notifications`,
+        );
       } catch (error) {
-        Logger.error('Error sending SMS notifications:', error);
+        Logger.error(
+          '[SMS Notification Cron] Error sending SMS notifications:',
+          error.message,
+          error.stack,
+        );
       }
+    } else {
+      this.logger.log(
+        `[SMS Notification Cron] Skipping - not the 26th (current day: ${today.getDate()})`,
+      );
     }
   }
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron('0 11 * * *') // Run at 11:00 AM every day
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
     this.logger.log(
