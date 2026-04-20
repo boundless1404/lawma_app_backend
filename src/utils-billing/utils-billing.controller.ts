@@ -49,7 +49,12 @@ import { IsAuthenticated } from '../shared/isAuthenticated.guard';
 import { ProfileTypes } from '../lib/enums';
 import { UpdatePropertySubscriptionValidationPipe } from './dtos/custom-pipes';
 import { NotificationService } from '../shared/notification.service';
-import { NotificationQueue, NotificationStatus, NotificationChannel, NotificationType } from '../shared/notificationQueue.entity';
+import {
+  NotificationQueue,
+  NotificationStatus,
+  NotificationChannel,
+  NotificationType,
+} from '../shared/notificationQueue.entity';
 
 @Controller('utils-billing')
 export class UtilsBillingController {
@@ -545,8 +550,10 @@ export class UtilsBillingController {
       smsUnitDeducted: false,
       retryCount: 0,
     });
-    
-    const saved = await this.dbManager.manager.save(notification) as NotificationQueue;
+
+    const saved = (await this.dbManager.manager.save(
+      notification,
+    )) as NotificationQueue;
     return { message: 'SMS queued', id: saved.id, phone: body.phone };
   }
 
@@ -556,7 +563,10 @@ export class UtilsBillingController {
       await this.notificationService.processPendingNotifications();
       return { message: 'Notification processing triggered successfully' };
     } catch (error) {
-      return { message: 'Error processing notifications', error: error.message };
+      return {
+        message: 'Error processing notifications',
+        error: error.message,
+      };
     }
   }
 
