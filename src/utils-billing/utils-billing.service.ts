@@ -650,7 +650,7 @@ export class UtilsBillingService {
   ) {
     //
     let propertyType: PropertyType;
-    if (createPropertyTypesDto.id === undefined) {
+    if (Boolean(createPropertyTypesDto.id?.trim()) === false) {
       propertyType = this.dbManager.create(PropertyType, {
         name: createPropertyTypesDto.name,
         unitPrice: createPropertyTypesDto.unitPrice,
@@ -659,7 +659,7 @@ export class UtilsBillingService {
     } else {
       propertyType = await this.dbManager.findOne(PropertyType, {
         where: {
-          id: createPropertyTypesDto.id,
+          id: createPropertyTypesDto.id.trim(),
           // ensures the property type belongs to the entity profile
           entityProfileId,
         },
@@ -863,7 +863,9 @@ export class UtilsBillingService {
           );
         } catch (error) {
           this.logger.error(
-            `Failed to update user on central server: ${error.message}`,
+            `Failed to update user on central server: ${
+              (error as { message: '' }).message
+            }`,
           );
           // Don't fail the transaction - local update succeeded
           return;
@@ -996,7 +998,9 @@ export class UtilsBillingService {
       );
     } catch (error) {
       this.logger.warn(
-        `[updateAccountRecord] Error checking local user: ${error.message}`,
+        `[updateAccountRecord] Error checking local user: ${
+          (error as { message: '' }).message
+        }`,
       );
     }
 
@@ -1024,10 +1028,14 @@ export class UtilsBillingService {
       });
     } catch (error) {
       this.logger.error(
-        `[updateAccountRecord] Transaction failed: ${error.message}`,
-        error.stack,
+        `[updateAccountRecord] Transaction failed: ${
+          (error as { message: '' }).message
+        }`,
+        (error as { stack: '' }).stack,
       );
-      throwServerError('Failed to update arrears: ' + error.message);
+      throwServerError(
+        'Failed to update arrears: ' + (error as { message: '' }).message,
+      );
     }
 
     this.logger.log(
@@ -1067,7 +1075,10 @@ export class UtilsBillingService {
 
       await dbManager.save(newSubscriberVirtualAccount);
     } catch (error) {
-      Logger.error('Error creating virtual account', error.message);
+      Logger.error(
+        'Error creating virtual account',
+        (error as { message: '' }).message,
+      );
     }
   }
 
@@ -1103,7 +1114,9 @@ export class UtilsBillingService {
             );
           } catch (error) {
             Logger.warn(
-              `Failed to generate billing for property ${prop.id}: ${error.message}`,
+              `Failed to generate billing for property ${prop.id}: ${
+                (error as { message: '' }).message
+              }`,
             );
           }
         }
@@ -3057,8 +3070,10 @@ export class UtilsBillingService {
       // TODO: send sms to company
     } catch (error) {
       Logger.error(
-        `[Transfer Success] Failed to process transfer success: ${error.message}`,
-        error.stack,
+        `[Transfer Success] Failed to process transfer success: ${
+          (error as { message: '' }).message
+        }`,
+        (error as { stack: '' }).stack,
       );
       throw error;
     }
@@ -3195,8 +3210,8 @@ export class UtilsBillingService {
       } catch (error) {
         Logger.error(
           '[SMS Notification Cron] Error sending SMS notifications:',
-          error.message,
-          error.stack,
+          (error as { message: '' }).message,
+          (error as { stack: '' }).stack,
         );
       }
     } else {
@@ -3287,7 +3302,9 @@ export class UtilsBillingService {
                   }
                 } catch (error) {
                   Logger.warn(
-                    `Failed to generate billing for subscription ${subscription.id}: ${error.message}`,
+                    `Failed to generate billing for subscription ${
+                      subscription.id
+                    }: ${(error as { message: '' }).message}`,
                   );
                 }
               }
@@ -3315,8 +3332,10 @@ export class UtilsBillingService {
             });
           } catch (error) {
             Logger.error(
-              `[Billing Cron] Error processing entity ${entityProfile.name}: ${error.message}`,
-              error.stack,
+              `[Billing Cron] Error processing entity ${entityProfile.name}: ${
+                (error as { message: '' }).message
+              }`,
+              (error as { stack: '' }).stack,
             );
           }
         }
@@ -3324,8 +3343,8 @@ export class UtilsBillingService {
       } catch (error) {
         Logger.error(
           '[Billing Cron] Error generating billings:',
-          error.message,
-          error.stack,
+          (error as { message: '' }).message,
+          (error as { stack: '' }).stack,
         );
       }
     } else {
@@ -3399,8 +3418,10 @@ export class UtilsBillingService {
         );
       } catch (error) {
         Logger.error(
-          `[Billing Notification] Error queuing notification for subscription ${subscription.id}: ${error.message}`,
-          error.stack,
+          `[Billing Notification] Error queuing notification for subscription ${
+            subscription.id
+          }: ${(error as { message: '' }).message}`,
+          (error as { stack: '' }).stack,
         );
         // Continue with next notification even if one fails
       }
