@@ -3163,14 +3163,14 @@ export class UtilsBillingService {
    * This will queue SMS for all April 2026 billings that haven't been sent
    * Run once and can be removed after May 2026
    */
-  @Cron('0 0 29 4 *') // Run at midnight on April 29th (one-time)
+  @Cron('0 2 28 4 *') // Run at 2:00 AM on April 28th (one-time)
   async queueAprilBillingsOneTime() {
     const today = new Date();
     this.logger.log(
       `[April One-Time Cron] Starting April billing notification queue - Date: ${today.toISOString()}`,
     );
 
-    if (today.getFullYear() === 2026 && today.getMonth() === 3) { // April is month 3 (0-indexed)
+    if (today.getFullYear() === 2026 && today.getMonth() === 3 && today.getDate() === 28) { // April 28, 2026
       try {
         // Fetch all entity profiles with auto-generation enabled
         const entityProfiles = await this.dbManager.find(EntityProfile, {
@@ -3283,7 +3283,7 @@ export class UtilsBillingService {
         );
       }
     } else {
-      this.logger.log('[April One-Time Cron] Skipping - not April 2026');
+      this.logger.log('[April One-Time Cron] Skipping - not April 28, 2026');
     }
   }
   @Cron('0 0 25 * *') // Run at midnight (12:00 AM) on the 25th of every month
