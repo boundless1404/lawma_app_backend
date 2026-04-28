@@ -66,19 +66,23 @@ export class NotificationService {
     recipientEmail?: string;
     recipientName: string;
     amount: number;
+    arrears: number;
+    totalBilling: number;
     month: string;
     year: string;
     propertyAddress: string;
+    companyName: string;
     channel?: NotificationChannel;
   }): Promise<NotificationQueue> {
-    // Truncate name and address to keep SMS under 160 characters
-    const name = this.truncateString(params.recipientName, 20);
-    const address = this.truncateString(params.propertyAddress, 30);
-
-    // SMS message format: ~130-150 characters
-    const message = `Dear ${name}, your LAWMA bill for ${params.month} ${
-      params.year
-    } is ₦${params.amount.toLocaleString()}. Property: ${address}. Thank you.`;
+    // Format amounts
+    const formatAmt = (amt: number) => amt.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    
+    // Truncate company name to fit message
+    const company = this.truncateString(params.companyName, 15);
+    
+    // SMS message format: Keep under 160 characters
+    // Format: "Bill ₦X, Arrears ₦Y, Total ₦Z for [Month] via wastepro for [Company]"
+    const message = `Bill ₦${formatAmt(params.amount)}, Arrears ₦${formatAmt(params.arrears)}, Total ₦${formatAmt(params.totalBilling)} for ${params.month} via wastepro for ${company}`;
 
     const notification = this.dataSource.manager.create(NotificationQueue, {
       type: NotificationType.BILLING_GENERATED,
@@ -90,9 +94,12 @@ export class NotificationService {
       message,
       metadata: {
         amount: params.amount,
+        arrears: params.arrears,
+        totalBilling: params.totalBilling,
         month: params.month,
         year: params.year,
         propertyAddress: params.propertyAddress,
+        companyName: params.companyName,
       },
       status: NotificationStatus.PENDING,
       smsUnitDeducted: false,
