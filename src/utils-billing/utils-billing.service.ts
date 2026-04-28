@@ -197,7 +197,7 @@ export class UtilsBillingService {
     // Find the subscription with all relations
     const subscription = await this.dbManager.findOne(PropertySubscription, {
       where: { id: subscriptionId, entityProfileId },
-      relations: ['street', 'entitySubscriberProfile'],
+      relations: ['street', 'entitySubscriberProfile', 'billingAccount'],
     });
 
     if (!subscription) {
@@ -219,6 +219,17 @@ export class UtilsBillingService {
       subscription.street?.name || 'Unknown Street'
     }`.trim();
 
+    // Get entity profile for company name
+    const entityProfile = await this.dbManager.findOne(EntityProfile, {
+      where: { id: entityProfileId },
+    });
+
+    // Calculate arrears and total billing
+    const billingAccount = subscription.billingAccount;
+    const totalBilling = parseFloat(billingAccount.totalBillings) || 0;
+    const totalPayments = parseFloat(billingAccount.totalPayments) || 0;
+    const arrears = Math.max(0, totalBilling - totalPayments - parseFloat(billing.amount));
+
     // Queue the notification with test phone number
     await this.notificationService.queueBillingNotification({
       recipientPhone: phoneNumber,
@@ -228,9 +239,12 @@ export class UtilsBillingService {
           ' ' +
           subscription.entitySubscriberProfile?.lastName || 'Test User',
       amount: parseFloat(billing.amount) || 0,
+      arrears: arrears,
+      totalBilling: totalBilling,
       month: billing.month,
       year: billing.year,
       propertyAddress,
+      companyName: entityProfile?.name || 'Company',
       entityProfileId,
     });
 
@@ -3144,92 +3158,144 @@ export class UtilsBillingService {
     }
     return operatorMetrics;
   }
-  @Cron('0 11 * * *') // Run at 11:00 AM every day
-  async sendBillingSmsNotifications() {
+  /**
+   * ONE-TIME CRON: Queue April 2026 billing notifications
+   * This will queue SMS for all April 2026 billings that haven't been sent
+   * Run once and can be removed after May 2026
+   */
+  @Cron('0 0 29 4 *') // Run at midnight on April 29th (one-time)
+  async queueAprilBillingsOneTime() {
     const today = new Date();
     this.logger.log(
-      `[SMS Notification Cron] Starting daily SMS check - Date: ${today.toISOString()}, Day: ${today.getDate()}`,
+      `[April One-Time Cron] Starting April billing notification queue - Date: ${today.toISOString()}`,
     );
 
-    if (today.getDate() === 26) {
-      this.logger.log(
-        '[SMS Notification Cron] Date is 26th - proceeding with SMS notifications',
-      );
+    if (today.getFullYear() === 2026 && today.getMonth() === 3) { // April is month 3 (0-indexed)
       try {
-        // Fetch all property subscriptions with their related entities
-        const propertySubscriptions = await this.dbManager.find(
-          PropertySubscription,
-          {
-            relations: ['entitySubscriberProfile', 'billings'],
-          },
+        // Fetch all entity profiles with auto-generation enabled
+        const entityProfiles = await this.dbManager.find(EntityProfile, {
+          relations: ['entityProfilePreference'],
+        });
+
+        const enabledEntityProfiles = entityProfiles.filter(
+          (profile) => profile.entityProfilePreference?.autoGenerateBills,
         );
 
-        // Send SMS notifications to each subscriber
-        await Promise.all(
-          propertySubscriptions.map(async (subscription) => {
-            // Get the entity subscriber details
-            const subscriber = subscription.entitySubscriberProfile;
-            const subscriberName = `${subscriber.firstName} ${subscriber.lastName}`;
-            const subscriberPhone = subscriber.phone;
-
-            // Get the latest billing for the current month and year
-            const currentMonth = getCurrentMonth();
-            const currentYear = getCurrentYear();
-            const latestBilling = subscription.billings.find(
-              (billing) =>
-                billing.month === currentMonth && billing.year === currentYear,
-            );
-
-            if (!latestBilling) {
-              Logger.warn(
-                `No billing found for subscription ${subscription.id} for ${currentMonth} ${currentYear}.`,
-              );
-              return;
-            }
-
-            // Generate the SMS message
-            const smsMessage = generateBillingSmsMessage(
-              subscriberName,
-              currentMonth,
-              currentYear,
-              latestBilling.amount,
-            );
-
-            // Send the SMS
-            const termiiSms = {
-              to: subscriberPhone,
-              sms: smsMessage,
-            };
-
-            await this.sharedService.sendTermiiSms(termiiSms);
-          }),
-        );
         this.logger.log(
-          `[SMS Notification Cron] Completed sending SMS notifications`,
+          `[April One-Time Cron] Found ${enabledEntityProfiles.length} entities with auto-billing enabled`,
         );
+
+        for (const entityProfile of enabledEntityProfiles) {
+          // Get all April 2026 billings for this entity
+          const aprilBillings = await this.dbManager.find(Billing, {
+            where: {
+              month: 'April',
+              year: '2026',
+              is_duplicate: false,
+              propertySubscription: {
+                entityProfileId: entityProfile.id,
+                isBillingActive: true,
+                deletedAt: IsNull(),
+              },
+            },
+            relations: {
+              propertySubscription: {
+                entitySubscriberProfile: {
+                  phoneCode: true,
+                },
+                street: true,
+                billingAccount: true,
+              },
+            },
+          });
+
+          this.logger.log(
+            `[April One-Time Cron] Found ${aprilBillings.length} April billings for ${entityProfile.name}`,
+          );
+
+          // Queue notifications for each billing
+          for (const billing of aprilBillings) {
+            try {
+              const subscription = billing.propertySubscription;
+              const subscriber = subscription.entitySubscriberProfile;
+
+              if (!subscriber) continue;
+
+              // Get property address
+              const street = subscription.street;
+              const propertyAddress = `${subscription.streetNumber || ''} ${street?.name || 'Unknown Street'}`.trim();
+
+              // Get billing account for arrears calculation
+              const billingAccount = subscription.billingAccount;
+              const totalBilling = parseFloat(billingAccount.totalBillings) || 0;
+              const totalPayments = parseFloat(billingAccount.totalPayments) || 0;
+              const arrears = Math.max(0, totalBilling - totalPayments - parseFloat(billing.amount));
+
+              // Combine phone code and phone number
+              const fullPhoneNumber =
+                subscriber.phoneCode && subscriber.phone
+                  ? `+${subscriber.phoneCode.name}${subscriber.phone}`
+                  : subscriber.phone;
+
+              if (!fullPhoneNumber) {
+                Logger.warn(
+                  `[April One-Time Cron] No phone number for subscription ${subscription.id}`,
+                );
+                continue;
+              }
+
+              // Queue notification
+              await this.notificationService.queueBillingNotification({
+                recipientPhone: fullPhoneNumber,
+                recipientEmail: null,
+                recipientName: `${subscriber.firstName} ${subscriber.lastName}`,
+                amount: parseFloat(billing.amount) || 0,
+                arrears: arrears,
+                totalBilling: totalBilling,
+                month: billing.month,
+                year: billing.year,
+                propertyAddress,
+                companyName: entityProfile.name,
+                entityProfileId: entityProfile.id,
+              });
+
+              Logger.log(
+                `[April One-Time Cron] Queued for ${subscriber.firstName} ${subscriber.lastName} - Amount: ₦${billing.amount}`,
+              );
+            } catch (error) {
+              Logger.error(
+                `[April One-Time Cron] Error queuing notification: ${(error as { message: string }).message}`,
+              );
+            }
+          }
+
+          this.logger.log(
+            `[April One-Time Cron] Completed queuing for ${entityProfile.name}`,
+          );
+        }
+
+        this.logger.log('[April One-Time Cron] Completed April billing notification queue');
       } catch (error) {
         Logger.error(
-          '[SMS Notification Cron] Error sending SMS notifications:',
+          '[April One-Time Cron] Error:',
           (error as { message: '' }).message,
           (error as { stack: '' }).stack,
         );
       }
     } else {
-      this.logger.log(
-        `[SMS Notification Cron] Skipping - not the 26th (current day: ${today.getDate()})`,
-      );
+      this.logger.log('[April One-Time Cron] Skipping - not April 2026');
     }
   }
-  @Cron('0 11 * * *') // Run at 11:00 AM every day
+  @Cron('0 0 25 * *') // Run at midnight (12:00 AM) on the 25th of every month
   async generateBillingsForAllEntitySubscribers() {
     const today = new Date();
     this.logger.log(
       `[Billing Cron] Starting daily billing check - Date: ${today.toISOString()}, Day: ${today.getDate()}`,
     );
 
-    if (today.getDate() === 26) {
+    if (today.getDate() === 25) {
       this.logger.log(
-        '[Billing Cron] Date is 26th - proceeding with billing generation',
+        '[Billing Cron] Date is 25th - proceeding with billing generation',
       );
       try {
         // Fetch all entity profiles with auto-generation enabled
@@ -3270,6 +3336,7 @@ export class UtilsBillingService {
                     phoneCode: true,
                   },
                   street: true,
+                  billingAccount: true,
                 },
               },
             );
@@ -3349,7 +3416,7 @@ export class UtilsBillingService {
       }
     } else {
       this.logger.log(
-        `[Billing Cron] Skipping - not the 26th (current day: ${today.getDate()})`,
+        `[Billing Cron] Skipping - not the 25th (current day: ${today.getDate()})`,
       );
     }
   }
@@ -3397,15 +3464,25 @@ export class UtilsBillingService {
           continue;
         }
 
+        // Get billing account for arrears calculation
+        const billingAccount = subscription.billingAccount;
+        const totalBilling = parseFloat(billingAccount.totalBillings) || 0;
+        const totalPayments = parseFloat(billingAccount.totalPayments) || 0;
+        // Arrears = previous outstanding (total billing before this month - payments)
+        const arrears = Math.max(0, totalBilling - totalPayments - parseFloat(billing.amount));
+
         // Queue notification
         await this.notificationService.queueBillingNotification({
           recipientPhone: fullPhoneNumber,
           recipientEmail: subscriber.email,
           recipientName: `${subscriber.firstName} ${subscriber.lastName}`,
           amount: parseFloat(billing.amount) || 0,
+          arrears: arrears,
+          totalBilling: totalBilling,
           month: billing.month,
           year: billing.year,
           propertyAddress,
+          companyName: entityProfile.name,
           entityProfileId: entityProfile.id,
         });
 
