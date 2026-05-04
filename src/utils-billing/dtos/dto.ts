@@ -373,7 +373,7 @@ export class UpdateAccontRecordDto {
   @IsNumberString()
   propertySubscriptionId: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   reason: string;
 }

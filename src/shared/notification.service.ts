@@ -34,25 +34,25 @@ export class NotificationService {
    */
   private formatPhoneNumber(phone: string): string {
     if (!phone) return phone;
-    
+
     // Remove any spaces, dashes, or parentheses
     let cleaned = phone.replace(/[\s\-\(\)]/g, '');
-    
+
     // If it starts with 0, replace with +234 (Nigeria)
     if (cleaned.startsWith('0')) {
       return '+234' + cleaned.substring(1);
     }
-    
+
     // If it starts with 234, add +
     if (cleaned.startsWith('234')) {
       return '+' + cleaned;
     }
-    
+
     // If it already starts with +, return as is
     if (cleaned.startsWith('+')) {
       return cleaned;
     }
-    
+
     // Default: assume it's a Nigerian number without country code
     return '+234' + cleaned;
   }
@@ -75,14 +75,19 @@ export class NotificationService {
     channel?: NotificationChannel;
   }): Promise<NotificationQueue> {
     // Format amounts
-    const formatAmt = (amt: number) => amt.toLocaleString('en-US', { maximumFractionDigits: 0 });
-    
+    const formatAmt = (amt: number) =>
+      amt.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
     // Truncate company name to fit message
     const company = this.truncateString(params.companyName, 15);
-    
+
     // SMS message format: Keep under 160 characters
     // Format: "Bill ₦X, Arrears ₦Y, Total ₦Z for [Month] via wastepro for [Company]"
-    const message = `Bill ₦${formatAmt(params.amount)}, Arrears ₦${formatAmt(params.arrears)}, Total ₦${formatAmt(params.totalBilling)} for ${params.month} via wastepro for ${company}`;
+    const message = `Bill ₦${formatAmt(params.amount)}, Arrears ₦${formatAmt(
+      params.arrears,
+    )}, Total ₦${formatAmt(params.totalBilling)} for ${
+      params.month
+    } via wastepro for ${company}`;
 
     const notification = this.dataSource.manager.create(NotificationQueue, {
       type: NotificationType.BILLING_GENERATED,
@@ -213,8 +218,10 @@ export class NotificationService {
     notification: NotificationQueue,
   ): Promise<void> {
     try {
-      this.logger.log(`[DEBUG] Processing notification ${notification.id} for entity ${notification.entityProfileId}`);
-      
+      this.logger.log(
+        `[DEBUG] Processing notification ${notification.id} for entity ${notification.entityProfileId}`,
+      );
+
       // Get entity profile with preferences using raw query to avoid TypeORM issues
       const entityProfiles = await this.dataSource.query(
         `SELECT 
@@ -250,8 +257,10 @@ export class NotificationService {
         notification.recipientPhone
       ) {
         // Format phone number to international format
-        const formattedPhone = this.formatPhoneNumber(notification.recipientPhone);
-        
+        const formattedPhone = this.formatPhoneNumber(
+          notification.recipientPhone,
+        );
+
         // Always send SMS regardless of units or preferences (for testing)
         promises.push(
           this.termiiService.sendSms({
@@ -309,7 +318,11 @@ export class NotificationService {
           `UPDATE notification_queue 
            SET status = $1, "errorMessage" = $2 
            WHERE id = $3`,
-          [NotificationStatus.FAILED, 'Notifications disabled or no SMS units available', notification.id],
+          [
+            NotificationStatus.FAILED,
+            'Notifications disabled or no SMS units available',
+            notification.id,
+          ],
         );
         return;
       }
@@ -334,8 +347,11 @@ export class NotificationService {
 
       // Update retry count and error message
       const newRetryCount = notification.retryCount + 1;
-      const newStatus = newRetryCount >= 3 ? NotificationStatus.FAILED : NotificationStatus.PENDING;
-      
+      const newStatus =
+        newRetryCount >= 3
+          ? NotificationStatus.FAILED
+          : NotificationStatus.PENDING;
+
       await this.dataSource.query(
         `UPDATE notification_queue 
          SET "retryCount" = $1, "errorMessage" = $2, status = $3 
