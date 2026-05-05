@@ -228,7 +228,10 @@ export class UtilsBillingService {
     const billingAccount = subscription.billingAccount;
     const totalBilling = parseFloat(billingAccount.totalBillings) || 0;
     const totalPayments = parseFloat(billingAccount.totalPayments) || 0;
-    const arrears = Math.max(0, totalBilling - totalPayments - parseFloat(billing.amount));
+    const arrears = Math.max(
+      0,
+      totalBilling - totalPayments - parseFloat(billing.amount),
+    );
 
     // Queue the notification with test phone number
     await this.notificationService.queueBillingNotification({
@@ -3170,7 +3173,12 @@ export class UtilsBillingService {
       `[April One-Time Cron] Starting April billing notification queue - Date: ${today.toISOString()}`,
     );
 
-    if (today.getFullYear() === 2026 && today.getMonth() === 3 && today.getDate() === 28) { // April 28, 2026
+    if (
+      today.getFullYear() === 2026 &&
+      today.getMonth() === 3 &&
+      today.getDate() === 28
+    ) {
+      // April 28, 2026
       try {
         // Fetch all entity profiles with auto-generation enabled
         const entityProfiles = await this.dbManager.find(EntityProfile, {
@@ -3223,13 +3231,20 @@ export class UtilsBillingService {
 
               // Get property address
               const street = subscription.street;
-              const propertyAddress = `${subscription.streetNumber || ''} ${street?.name || 'Unknown Street'}`.trim();
+              const propertyAddress = `${subscription.streetNumber || ''} ${
+                street?.name || 'Unknown Street'
+              }`.trim();
 
               // Get billing account for arrears calculation
               const billingAccount = subscription.billingAccount;
-              const totalBilling = parseFloat(billingAccount.totalBillings) || 0;
-              const totalPayments = parseFloat(billingAccount.totalPayments) || 0;
-              const arrears = Math.max(0, totalBilling - totalPayments - parseFloat(billing.amount));
+              const totalBilling =
+                parseFloat(billingAccount.totalBillings) || 0;
+              const totalPayments =
+                parseFloat(billingAccount.totalPayments) || 0;
+              const arrears = Math.max(
+                0,
+                totalBilling - totalPayments - parseFloat(billing.amount),
+              );
 
               // Combine phone code and phone number
               const fullPhoneNumber =
@@ -3264,7 +3279,9 @@ export class UtilsBillingService {
               );
             } catch (error) {
               Logger.error(
-                `[April One-Time Cron] Error queuing notification: ${(error as { message: string }).message}`,
+                `[April One-Time Cron] Error queuing notification: ${
+                  (error as { message: string }).message
+                }`,
               );
             }
           }
@@ -3274,7 +3291,9 @@ export class UtilsBillingService {
           );
         }
 
-        this.logger.log('[April One-Time Cron] Completed April billing notification queue');
+        this.logger.log(
+          '[April One-Time Cron] Completed April billing notification queue',
+        );
       } catch (error) {
         Logger.error(
           '[April One-Time Cron] Error:',
@@ -3469,7 +3488,10 @@ export class UtilsBillingService {
         const totalBilling = parseFloat(billingAccount.totalBillings) || 0;
         const totalPayments = parseFloat(billingAccount.totalPayments) || 0;
         // Arrears = previous outstanding (total billing before this month - payments)
-        const arrears = Math.max(0, totalBilling - totalPayments - parseFloat(billing.amount));
+        const arrears = Math.max(
+          0,
+          totalBilling - totalPayments - parseFloat(billing.amount),
+        );
 
         // Queue notification
         await this.notificationService.queueBillingNotification({
